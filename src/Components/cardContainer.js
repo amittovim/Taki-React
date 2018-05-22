@@ -1,14 +1,13 @@
 import React from 'react' ;
 import ReactDOM from 'react-dom';
-import FlippingCard from './flippingCard';
 
 
-/*
+
 const CardContainer = () => {
     return (<p>this is a template</p>);
 ;}
-*/
 
+/*
 
 class CardContainer extends React.Component {
     constructor(args) {
@@ -40,5 +39,6 @@ class CardContainer extends React.Component {
         return (<FlippingCard />);
     }
 }
+*/
 
 export default CardContainer;

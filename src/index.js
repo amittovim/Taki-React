@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import "./style.css";
-import CardContainer from './Components/cardContainer';
 
+import CardApp from './Components/cardApp';
+
+import "./css/style.css";
+// import "./css/card.css";
 
 /*
 /!* Directly adding react element *!/
@@ -13,7 +15,9 @@ ReactDOM.render(
 */
 
 const App = () => {
-    return ( <CardContainer /> );
+    return (
+        <CardApp />
+    );
 };
 
 ReactDOM.render(

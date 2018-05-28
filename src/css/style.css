@@ -19,33 +19,14 @@ button {
 
 .card {
     cursor: pointer;
-    /*height: inherit;*/
-    /*width: inherit;*/
     background: white;
     border: 1px solid black;
-}
-
-.front-card,
-.back-card {
-    /*height: inherit;*/
-    /*width: inherit;*/
-
 }
 
 .front-card {
     position: relative;
     z-index: 1;
-    /*
-    display: flex;
-    flex-direction: column;
-    padding-left: 5%;
-    padding-right: 5%;
-    text-shadow: 1px -1px 2px black;
-    backface-visibility: hidden;
-    overflow: hidden;
-    */
 }
-
 
 .back-card {
     position: relative;

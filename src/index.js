@@ -1,19 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import "./style.css";
-import CardContainer from './Components/cardContainer';
-
-
-/*
-/!* Directly adding react element *!/
-ReactDOM.render(
-    React.createElement('div',null, 'hello world'), 
-    document.getElementById("root")
-);
-*/
+import Taki from "./app/taki.component";
 
 const App = () => {
-    return ( <CardContainer /> );
+    return (<Taki />);
 };
 
 ReactDOM.render(

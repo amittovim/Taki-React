@@ -11,8 +11,8 @@ class CardContainer extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            cardShown: false,
-            isBackSide: true,
+            cardShown: true,
+            onBackSide: true,
             isClicked: false
         };
         this.flipCard = this.flipCard.bind(this);
@@ -20,15 +20,16 @@ class CardContainer extends Component {
 
     flipCard() {
         this.setState( prevState => ({
-            isBackSide: !prevState.isBackSide,
-            isClicked: true
+            onBackSide: !prevState.onBackSide,
+            // isClicked: true
         }) ) ;
-
+//        this.setState( () => ({ isClicked: true }) ) ;
 }
     render() {
-        let flippedCss = this.state.isBackSide ? " card-back-flip" : " card-front-flip";
-        if (this.state.clicked) {
+        let flippedCss = this.state.onBackSide ? " flip-card-2-back" : " flip-card-2-front";
+        if (this.state.isClicked) {
             flippedCss = "";
+
         }
         return (
             <div title="TAKI card" className="card-container">

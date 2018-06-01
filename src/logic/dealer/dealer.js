@@ -16,7 +16,8 @@ function dealHands() {
         for (let player in GameState.players.list) {
             const currentPlayer = GameState.players.list[player];
             const card = takiUtils.getTopOfPile(GameState.drawPile);
-            handleMoveCard(card, GameState.drawPile.cards, currentPlayer.hand.pile.cards);
+            debugger;
+            handleMoveCard(card, GameState.drawPile, currentPlayer.hand.pile);
         }
     }
 }
@@ -46,7 +47,7 @@ export function handleMoveCard(card, sourcePile, destinationPile) {
 }
 
 function moveCard(card, sourcePile, destinationPile) {
-    utils.pullItemFromArray(card, sourcePile);
+    utils.pullItemFromArray(card, sourcePile.cards);
     utils.insertToEndOfArray(card, destinationPile.cards);
 }
 

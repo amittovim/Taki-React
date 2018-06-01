@@ -24,7 +24,7 @@ export function swap(x, y, arr) {
 // }
 
 export function insertToEndOfArray(item, array) {
-    array.push(item[0]);
+    array.push(item);
 }
 
 export function pullItemFromArray(item, array) {

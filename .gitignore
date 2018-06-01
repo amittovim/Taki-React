@@ -4,5 +4,5 @@
 # IDEs and editors
 /.idea
 
+# Public
 /public
-!/public/index.html

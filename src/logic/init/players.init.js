@@ -1,4 +1,4 @@
-import Player from '../../app/api-models/player.class';
+import PlayerModel from '../../app/api-models/player.class';
 import {GameState} from "../state";
 import * as utils from '../utils/model.utils';
 
@@ -11,12 +11,12 @@ export default function initPlayers() {
 
 function createPlayers() {
     GameState.players.list = {
-        bot: new Player('bot'),
-        human: new Player('human')
+        bot: new PlayerModel('bot'),
+        human: new PlayerModel('human')
     };
 }
 
 function pickFirstPlayer() {
     const randomNumber = utils.getRandomInt(0, 1);
-    GameState.players.currentPlayer = randomNumber === 0 ? GameState.players.bot : GameState.players.human;
+    GameState.players.currentPlayer = randomNumber === 0 ? GameState.players.list.bot : GameState.players.list.human;
 }

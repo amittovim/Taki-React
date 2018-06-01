@@ -8,6 +8,10 @@ class Taki extends Component {
         super(props);
     }
 
+    componentWillMount() {
+        this.props.service.initGame();
+    }
+
     render() {
         return (
             <div style={style}>

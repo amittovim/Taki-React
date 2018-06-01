@@ -1,11 +1,11 @@
-import Hand from "../board/hand/hand.component";
+import HandModel from "./hand.class";
 
-class Player {
+class PlayerModel {
     constructor(name) {
         this.name = name;
-        this.hand = new Hand(name);
+        this.hand = new HandModel(name);
         this.singleCardCounter = 0;
     }
 }
 
-export default Player;
+export default PlayerModel;

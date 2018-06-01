@@ -1,7 +1,7 @@
-import {PileEnum} from "../../app/api-models/enums/pile.enum";
-import {CardNumberEnum} from "../../app/api-models/enums/card-number.enum";
-import {ColorEnum} from "../../app/api-models/enums/color.enum";
-import {CardActionEnum} from "../../app/api-models/enums/card-action-enum";
+import {PileEnum} from "../../app/enums/pile.enum";
+import {CardNumberEnum} from "../../app/enums/card-number.enum";
+import {CardColorEnum} from "../../app/enums/card-color.enum";
+import {CardActionEnum} from "../../app/enums/card-action-enum";
 import * as utils from '../utils/model.utils';
 import {GameState} from "../state";
 import PileModel from "../../app/api-models/pile.class";

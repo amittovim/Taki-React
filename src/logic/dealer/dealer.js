@@ -2,7 +2,7 @@ import {GameState} from "../state";
 import * as consts from "../consts";
 import * as utils from '../utils/model.utils';
 import * as takiUtils from "../utils/taki.utils";
-import {CardActionEnum} from "../../app/api-models/enums/card-action-enum";
+import {CardActionEnum} from "../../app/enums/card-action-enum";
 
 // == Deal Hands ==
 

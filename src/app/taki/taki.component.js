@@ -5,22 +5,23 @@ import Board from "./board/board.component";
 
 class Taki extends Component {
     constructor(props) {
-        super(props)
-        {
-
-        }
+        super(props);
     }
 
     render() {
         return (
-            <div>
+            <div style={style}>
                 <Navbar />
                 <Board />
-                <Console message={"test"}/>
+                <Console message={"test"} />
             </div>
         );
     }
 }
+
+const style = {
+    background: 'red'
+};
 
 export default Taki;
 

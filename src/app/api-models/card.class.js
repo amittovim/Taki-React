@@ -1,4 +1,4 @@
-class Card {
+export class CardModel {
     constructor(id, color, number = null, action = null, isHidden = true) {
         this.id = id;
         this.color = color;
@@ -7,3 +7,5 @@ class Card {
         this.isHidden = isHidden;
     }
 }
+
+export default CardModel;

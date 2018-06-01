@@ -24,17 +24,17 @@ export function swap(x, y, arr) {
 // }
 
 export function insertToEndOfArray(item, array) {
-    array.push(item[0]);
+    array.push(item);
 }
 
 export function pullItemFromArray(item, array) {
-    array.splice(findIndexOfItemInArray(item, array), 1);
+    return array.splice(findIndexOfItemInArray(item, array), 1)[0];
 }
 
 export function pullItemFromEndOfArray(array) {
-    pullItemFromArray(array[array.length - 1], array);
+    return pullItemFromArray(array[array.length - 1], array);
 }
 
-export function findIndexOfItemInArray(targetItem, array){
+export function findIndexOfItemInArray(targetItem, array) {
     return array.findIndex(item => targetItem === item);
 }

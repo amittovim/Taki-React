@@ -14,8 +14,9 @@ export function dealCards() {
 function dealHands() {
     for (let i = 1; i <= consts.NUMBER_OF_STARTING_CARDS_IN_PLAYERS_HAND; i++) {
         for (let player in GameState.players.list) {
-            const card = takiUtils.getTopOfPile(GameState.drawPile.cards);
-            handleMoveCard(card, GameState.drawPile.cards, player.hand.pile.cards);
+            const currentPlayer = GameState.players.list[player];
+            const card = takiUtils.getTopOfPile(GameState.drawPile);
+            handleMoveCard(card, GameState.drawPile, currentPlayer.hand.pile);
         }
     }
 }
@@ -45,13 +46,13 @@ export function handleMoveCard(card, sourcePile, destinationPile) {
 }
 
 function moveCard(card, sourcePile, destinationPile) {
-    utils.pullItemFromArray(card, sourcePile);
+    utils.pullItemFromArray(card, sourcePile.cards);
     utils.insertToEndOfArray(card, destinationPile.cards);
 }
 
 function setLeadingCard(card, destinationPile) {
     if (destinationPile === GameState.discardPile) {
-        GameState.leadingCard = card;
+        GameState.discardPile.leadingCard = card;
     }
 }
 

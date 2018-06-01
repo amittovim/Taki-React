@@ -1,8 +1,10 @@
-import Pile from "./pile.class";
+import PileModel from "./pile.class";
 
-class Hand {
+class HandModel {
     constructor(name) {
         this.name = name; // TODO: this is not necessarily needed
-        this.pile = new Pile(`${name}'s hand`);
+        this.pile = new PileModel(`${name}'s hand`);
     }
 }
+
+export default HandModel;

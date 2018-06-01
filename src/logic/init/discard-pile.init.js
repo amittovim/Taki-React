@@ -1,5 +1,6 @@
 import {PileEnum} from "../../app/api-models/enums/pile.enum";
-import Pile from "../../app/api-models/pile.class";
+import PileModel from "../../app/api-models/pile.class";
+import {GameState} from "../state";
 
 // == Create Draw Pile ==
 
@@ -8,5 +9,5 @@ export default function initDiscardPile() {
 }
 
 function createDiscardPile() {
-    GameState.discardPile = new Pile(PileEnum.DiscardPile);
+    GameState.discardPile = new PileModel(PileEnum.DiscardPile);
 }

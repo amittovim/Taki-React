@@ -1,8 +1,8 @@
-class Pile {
+class PileModel {
     constructor(name){
         this.name = name;
         this.cards = [];
     }
 }
 
-export default Pile;
+export default PileModel;

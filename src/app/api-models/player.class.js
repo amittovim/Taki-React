@@ -1,3 +1,5 @@
+import Hand from "../board/hand/hand.component";
+
 class Player {
     constructor(name) {
         this.name = name;

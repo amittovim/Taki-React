@@ -1,4 +1,4 @@
-let GameState = {
+export const GameState = {
     discardPile: {
         cards: [],
         leadingCard: null,

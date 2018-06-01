@@ -16,7 +16,6 @@ function dealHands() {
         for (let player in GameState.players.list) {
             const currentPlayer = GameState.players.list[player];
             const card = takiUtils.getTopOfPile(GameState.drawPile);
-            debugger;
             handleMoveCard(card, GameState.drawPile, currentPlayer.hand.pile);
         }
     }
@@ -26,7 +25,7 @@ function drawStartingCard() {
     let topCard;
     do {
         // It draws another card if the card drawn is CHANGE COLOR because you cannot start a game with this card
-        topCard = takiUtils.getTopOfPile(GameState.drawPile.cards);
+        topCard = takiUtils.getTopOfPile(GameState.drawPile);
         handleMoveCard(topCard, GameState.drawPile, GameState.discardPile);
     } while (topCard.action && topCard.action === CardActionEnum.ChangeColor);
 
@@ -53,7 +52,7 @@ function moveCard(card, sourcePile, destinationPile) {
 
 function setLeadingCard(card, destinationPile) {
     if (destinationPile === GameState.discardPile) {
-        GameState.leadingCard = card;
+        GameState.discardPile.leadingCard = card;
     }
 }
 

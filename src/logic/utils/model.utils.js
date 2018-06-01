@@ -18,3 +18,23 @@ export function swap(x, y, arr) {
     arr[y] = arr[x];
     arr[x] = tmp;
 }
+
+// export function insertToBeginningOfArray(item, array) {
+//     array.unshift(item[0]);
+// }
+
+export function insertToEndOfArray(item, array) {
+    array.push(item[0]);
+}
+
+export function pullItemFromArray(item, array) {
+    array.splice(findIndexOfItemInArray(item, array), 1);
+}
+
+export function pullItemFromEndOfArray(array) {
+    pullItemFromArray(array[array.length - 1], array);
+}
+
+export function findIndexOfItemInArray(targetItem, array){
+    return array.findIndex(item => targetItem === item);
+}

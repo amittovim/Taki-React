@@ -11,3 +11,8 @@ body {
     min-height: 768px;
     min-width: 680px;
 }
+
+#root {
+    display: flex;
+    flex: 1;
+}

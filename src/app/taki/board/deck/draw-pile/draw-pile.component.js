@@ -1,20 +1,20 @@
 import React, {Component} from 'react';
+import './draw-pile.component.css';
 
 class DrawPile extends Component {
     constructor(props) {
-        super(props)
-        {
+        super(props);
 
-        }
+        this.state = {}
     }
 
     render() {
-        const message = 'DrawPile works';
         return (
-            <div>Hello {message}</div>
+            <div className="draw-pile-component">
+                draw pile
+            </div>
         );
     }
 }
 
 export default DrawPile;
-

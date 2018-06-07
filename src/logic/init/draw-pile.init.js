@@ -1,7 +1,7 @@
-import {PileEnum} from "../../app/api-models/enums/pile.enum";
-import {CardNumberEnum} from "../../app/api-models/enums/card-number.enum";
-import {ColorEnum} from "../../app/api-models/enums/color.enum";
-import {CardActionEnum} from "../../app/api-models/enums/card-action-enum";
+import {PileEnum} from "../../app/enums/pile.enum";
+import {CardNumberEnum} from "../../app/enums/card-number.enum";
+    import {CardColorEnum} from "../../app/enums/card-color.enum";
+import {CardActionEnum} from "../../app/enums/card-action-enum";
 import * as utils from '../utils/model.utils';
 import {GameState} from "../state";
 import PileModel from "../../app/api-models/pile.class";
@@ -29,8 +29,8 @@ function createNumberCards() {
         }
         for (let i = 1; i <= 2; i++) {
 
-            for (let color in ColorEnum) {
-                const card = new CardModel(cardId++, ColorEnum[color], CardNumberEnum[number]);
+            for (let color in CardColorEnum) {
+                const card = new CardModel(cardId++, CardColorEnum[color], CardNumberEnum[number]);
                 GameState.drawPile.cards.push(card);
             }
         }
@@ -41,8 +41,8 @@ function createActionCards() {
     for (const action in CardActionEnum) {
         if (CardActionEnum[action] !== CardActionEnum.ChangeColor) {
             for (let i = 1; i <= 2; i++) {
-                for (let color in ColorEnum) {
-                    GameState.drawPile.cards.push(new CardModel(cardId++, ColorEnum[color], null, CardActionEnum[action]));
+                for (let color in CardColorEnum) {
+                    GameState.drawPile.cards.push(new CardModel(cardId++, CardColorEnum[color], null, CardActionEnum[action]));
                 }
             }
         } else {

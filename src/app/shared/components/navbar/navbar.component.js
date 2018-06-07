@@ -9,8 +9,8 @@ class Navbar extends Component {
 
     render() {
         return (
-            <div className="navbar-component">
-
+            <div>
+                <Logo />
             </div>
         );
     }

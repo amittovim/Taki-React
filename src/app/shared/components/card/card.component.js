@@ -30,8 +30,7 @@ class Card extends Component {
 
     render() {
         return (
-            <div style={css.style}
-                 className={'card-container'}
+            <div className="card-component"
                  id={`card-${this.props.card.id}`}>
 
                 <img className="front-card-img"

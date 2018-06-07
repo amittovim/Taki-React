@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
+import './taki.component.css';
 import Console from "./console/console.component";
 import Navbar from "./navbar/navbar.component";
 import Board from "./board/board.component";
-import Card from "../shared/components/card/card.component";
 import CardModel from "../api-models/card.class";
 import {CardColorEnum} from "../enums/card-color.enum";
 import {CardActionEnum} from "../enums/card-action-enum";
@@ -21,8 +21,7 @@ class Taki extends Component {
 
     render() {
         return (
-            <div style={style}>
-                <Card card={this.state.testCard} />
+            <div className="taki-component">
                 <Navbar />
                 <Board />
                 <Console message={"test"} />

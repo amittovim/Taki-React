@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
+import './board.component.css';
 import Hand from "./hand/hand.component";
-import DrawPile from "./draw-pile/draw-pile.component";
-import DiscardPile from "./discard-pile/discard-pile.component";
+import Deck from "./deck/deck.component";
+
 
 class Board extends Component {
     constructor(props) {
@@ -13,12 +14,9 @@ class Board extends Component {
 
     render() {
         return (
-            <div>
+            <div className="board-component">
                 <Hand />
-                <div>
-                    <DiscardPile />
-                    <DrawPile />
-                </div>
+                <Deck />
                 <Hand />
             </div>
         );

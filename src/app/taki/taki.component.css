@@ -1,0 +1,22 @@
+
+.taki-component {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.taki-component .navbar-component {
+    display: flex;
+    flex: 1;
+}
+
+.taki-component .board-component {
+    display: flex;
+    flex: 8;
+}
+
+.taki-component .console-component {
+    display: flex;
+    flex: 1;
+}
+

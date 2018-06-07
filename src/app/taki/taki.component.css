@@ -12,6 +12,7 @@
 
 .taki-component .board-component {
     display: flex;
+    flex-direction: column;
     flex: 8;
 }
 

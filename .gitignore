@@ -4,7 +4,7 @@
 # IDEs and editors
 /.idea
 
-// TODO: this doesn't work:
 # Public
+!public
 /public/*
 !/public/index.html

@@ -1,0 +1,35 @@
+.navbar-component {
+    min-width: 680px;
+    padding: 0 20px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.3);
+    background: #0e9ac8;
+    border: none;
+
+}
+
+.navbar-component .logo {
+    background: url("../../../assets/images/logo.png") no-repeat;
+    height: 66px;
+    width: 130px;
+}
+
+/* Statistics */
+
+.navbar-component .record {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.navbar-component .value {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.navbar-component .label {
+    font-size: 12px;
+}
+
+.navbar-component .current-player, .navbar-component .active-action {
+    color: yellow;
+}

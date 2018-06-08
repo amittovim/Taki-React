@@ -15,9 +15,9 @@ class Board extends Component {
     render() {
         return (
             <div className="board-component">
-                <Hand />
+                <Hand playerName="Bot" />
                 <Deck />
-                <Hand />
+                <Hand playerName="Human" />
             </div>
         );
     }

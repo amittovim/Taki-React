@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import './console.component.css';
 
 class Console extends Component {
     constructor(props) {

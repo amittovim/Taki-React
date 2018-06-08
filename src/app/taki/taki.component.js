@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import './taki.component.css';
-import Console from "./console/console.component";
 import Navbar from "./navbar/navbar.component";
+import Separator from "../shared/components/loader/loader.component";
 import Board from "./board/board.component";
+import Console from "./console/console.component";
 import CardModel from "../api-models/card.class";
 import {CardColorEnum} from "../enums/card-color.enum";
 import {CardActionEnum} from "../enums/card-action-enum";
+
 
 class Taki extends Component {
     constructor(props) {
@@ -23,6 +25,7 @@ class Taki extends Component {
         return (
             <div className="taki-component">
                 <Navbar />
+                <Separator isLoading={true}/>
                 <Board />
                 <Console message={"test"} />
             </div>

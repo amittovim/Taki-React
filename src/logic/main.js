@@ -11,10 +11,7 @@ export function initGame() {
     initDrawPile();
     initDiscardPile();
     dealer.dealCards();
-}
-
-export function getDrawPile() {
-    return GameState.drawPile;
+    return GameState;
 }
 
 

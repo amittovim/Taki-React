@@ -13,12 +13,7 @@ class Deck extends Component {
 
         this.moveCard = this.moveCard.bind(this);
     }
-
-
-    // componentWillMount() {
-    //     this.setState((prevState) => ({...this.props}))
-    // }
-
+    
     render() {
         return (
             <div className="deck-component">

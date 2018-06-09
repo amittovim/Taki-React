@@ -1,20 +1,20 @@
 import React, {Component} from 'react';
+import './discard-pile.component.css'
 
 class DiscardPile extends Component {
     constructor(props) {
-        super(props)
-        {
+        super(props);
 
-        }
+        this.state = {}
     }
 
     render() {
-        const message = 'DiscardPile works';
         return (
-            <div>Hello {message}</div>
+            <div className="discard-pile-component">
+                discard pile
+            </div>
         );
     }
 }
 
 export default DiscardPile;
-

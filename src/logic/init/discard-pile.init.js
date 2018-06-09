@@ -1,4 +1,4 @@
-import {PileEnum} from "../../app/api-models/enums/pile.enum";
+import {PileEnum} from "../../app/enums/pile.enum";
 import PileModel from "../../app/api-models/pile.class";
 import {GameState} from "../state";
 

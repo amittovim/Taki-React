@@ -1,20 +1,20 @@
 import React, {Component} from 'react';
+import './hand.component.css';
 
 class Hand extends Component {
     constructor(props) {
-        super(props)
-        {
+        super(props);
 
-        }
+        this.state = {}
     }
 
     render() {
-        const message = 'Hand works';
         return (
-            <div>Hello {message}</div>
+            <div className="hand-component">
+
+            </div>
         );
     }
 }
 
 export default Hand;
-

@@ -16,18 +16,21 @@ class Card extends Component {
     }
 
     get action() {
-        return this.props.card.action;
+        return this.props.action;
     }
 
     get display() {
-        return this.props.card.action ? this.props.card.action : this.props.card.number;
+        return this.props.action ? this.props.action : this.props.number;
     };
 
     get source() {
+        if (!this.display) {
+            debugger;
+        }
         if (this.action === CardActionEnum.ChangeColor || this.action === CardActionEnum.SuperTaki) {
             return `${this.display}.jpg`;
         } else {
-            return `${this.display}-${this.props.card.color}.jpg`;
+            return `${this.display}-${this.props.color}.jpg`;
         }
     }
 
@@ -40,12 +43,12 @@ class Card extends Component {
     render() {
         return (
             <div className="card-component"
-                id={`card-${this.props.card.id}`}
-                onClick={this.handleClick} >
+                 id={`card-${this.props.id}`}
+                 onClick={this.handleClick}>
                 {this.state.isOnBackSide
                     ? (<img className="back-card-img"
-                         src={backImage}
-                         alt={this.display} />)
+                            src={backImage}
+                            alt={this.display} />)
 
                     : (<img className="front-card-img"
                             src={require(`../../../../assets/images/${this.source}`)} // TODO: ask Offer if this is ok?

@@ -6,16 +6,35 @@ import DrawPile from "./draw-pile/draw-pile.component";
 class Deck extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            discardPile: this.props.discardPile,
+            drawPile: this.props.drawPile
+        };
+
+        this.moveCard = this.moveCard.bind(this);
     }
+
+
+    // componentWillMount() {
+    //     this.setState((prevState) => ({...this.props}))
+    // }
 
     render() {
         return (
             <div className="deck-component">
-                <DiscardPile cards={this.props.discardPile.cards} />
-                <DrawPile cards={this.props.drawPile.cards} />
+                <DiscardPile name="discardPile"
+                             cards={this.state.discardPile.cards} />
+                <DrawPile name="drawPile"
+                          cards={this.state.drawPile.cards}
+                          onCardClick={this.moveCard} />
             </div>
         );
+    }
+
+    moveCard(card, sourcePile) {
+        this.props.service.moveCard(card, this.state[sourcePile], this.state['discardPile']);
+        console.log(this.state);
+        this.forceUpdate(); // TODO: ask Offer how to avoid this?
     }
 }
 

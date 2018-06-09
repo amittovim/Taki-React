@@ -7,6 +7,9 @@ class DrawPile extends Component {
         super(props);
 
         this.state = {}
+
+        this.onCardClick = this.onCardClick.bind(this);
+
     }
 
     render() {
@@ -15,12 +18,17 @@ class DrawPile extends Component {
                 {
                     this.props.cards.map(card => {
                         return <Card key={card.id}
-                                     {...card} />
+                                     card={card}
+                                     onCardClick={this.onCardClick} />
                     })
                 }
             </div>
         );
     }
+
+    onCardClick(clickedCard) {
+        this.props.onCardClick(clickedCard, this.props.name);
+    };
 }
 
 export default DrawPile;

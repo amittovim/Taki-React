@@ -21,13 +21,20 @@ class Taki extends Component {
         this.props.service.initGame();
     }
 
+    getDrawPile() {
+        this.setState((prevState) => {
+            this.props.service.getDrawPile();
+        })
+    }
+
     render() {
         return (
             <div className="taki-component">
                 <Navbar />
                 <Separator isLoading={true}/>
-                <Board />
+                <Board drawPile={} />
                 <Console message={"test"} />
+
             </div>
         );
     }

@@ -15,9 +15,11 @@ class Board extends Component {
     render() {
         return (
             <div className="board-component">
-                <Hand />
-                <Deck />
-                <Hand />
+                <Hand {...this.props.botHand} />
+
+                <Deck drawPile={this.props.drawPile}
+                      discardPile={this.props.discardPile} />
+                <Hand {...this.props.humanHand} />
             </div>
         );
     }

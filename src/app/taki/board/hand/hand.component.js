@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './hand.component.css';
+import Card from "../../../shared/components/card/card.component";
 
 class Hand extends Component {
     constructor(props) {
@@ -9,11 +10,15 @@ class Hand extends Component {
     }
 
     render() {
+        const message = 'Hand works';
         return (
             <div className="hand-component">
-
+                {
+                    this.props.cards.map((card) => (<Card key={card.id}
+                                                          card={card} />))
+                }
             </div>
-        );
+        )
     }
 }
 

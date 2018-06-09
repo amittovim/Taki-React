@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import "./style.css";
-import Taki from "./app/taki/taki.component";
-import * as takiService from './app/taki/taki.service';
+import Game from "./app/taki/game.component";
+import * as gameService from './app/taki/game.service';
 
 const App = () => {
-    return (<Taki service={takiService} />);
+    return (<Game service={gameService} />);
 };
 
 ReactDOM.render(

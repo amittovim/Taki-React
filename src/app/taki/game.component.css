@@ -7,7 +7,12 @@
 
 .taki-component .navbar-component {
     display: flex;
-    flex: 1;
+    flex: 0.9;
+}
+
+.taki-component .separator-component {
+    display: flex;
+    flex: 0.1;
 }
 
 .taki-component .board-component {

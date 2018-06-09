@@ -24,7 +24,7 @@ function dealHands() {
 function drawStartingCard() {
     let topCard;
     do {
-        // It draws another card if the card drawn is CHANGE COLOR because you cannot start a game with this card
+        // It draws another card if the card drawn is CHANGE COLOR because you cannot start a taki with this card
         topCard = takiUtils.getTopOfPile(GameState.drawPile);
         handleMoveCard(topCard, GameState.drawPile, GameState.discardPile);
     } while (topCard.action && topCard.action === CardActionEnum.ChangeColor);

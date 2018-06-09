@@ -8,34 +8,13 @@ import Console from "./console/console.component";
 class Game extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            discardPile: {
-                cards: [],
-                leadingCard: null,
-            },
-            drawPile: {
-                cards: [],
-            },
-            players: {
-                list: null,
-                currentPlayer: null,
-            },
-            selectedCard: null,
-            activeAction: null,
-            turnNumber: 0,
-            isLoading: false
-        };
+        this.state = {};
         debugger;
         console.log(this.props);
     }
 
     componentWillMount() {
-        // debugger;
-        // this.setInitialState();
-        const initialState = this.props.service.initGame();
-        this.setState((prevState) => ({
-            ...initialState
-        }))
+        this.defineInitialState();
     }
 
     render() {
@@ -50,12 +29,13 @@ class Game extends Component {
         );
     }
 
-    // setInitialState() {
-    //     const initialState = this.props.service.initGame();
-    //     this.setState((prevState) => ({
-    //         ...initialState
-    //     }))
-    // }
+    defineInitialState() {
+        const initialState = this.props.service.getInitialState();
+        this.setState((prevState) => ({
+            ...initialState
+        }));
+        console.log(initialState);
+    }
 }
 
 export default Game;

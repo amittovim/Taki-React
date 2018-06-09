@@ -6,15 +6,14 @@ import DrawPile from "./draw-pile/draw-pile.component";
 class Deck extends Component {
     constructor(props) {
         super(props);
-
         this.state = {}
     }
 
     render() {
         return (
             <div className="deck-component">
-                <DiscardPile />
-                <DrawPile />
+                <DiscardPile cards={this.props.discardPile.cards} />
+                <DrawPile cards={this.props.drawPile.cards} />
             </div>
         );
     }

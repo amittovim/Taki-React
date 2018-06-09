@@ -15,7 +15,7 @@ class DiscardPile extends Component {
                 {
                     this.props.cards.map(card => {
                         return <Card key={card.id}
-                                     {...card} />
+                                     card={card} />
                     })
                 }
             </div>

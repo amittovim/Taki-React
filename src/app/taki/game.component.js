@@ -9,13 +9,6 @@ class Game extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            discardPile: {
-                cards: [],
-                leadingCard: null,
-            },
-            drawPile: {
-                cards: [],
-            },
             players: {
                 list: null,
                 currentPlayer: null,

@@ -15,35 +15,10 @@ class Card extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    get action() {
-        return this.props.action;
-    }
-
-    get display() {
-        return this.props.action ? this.props.action : this.props.number;
-    };
-
-    get source() {
-        if (!this.display) {
-            debugger;
-        }
-        if (this.action === CardActionEnum.ChangeColor || this.action === CardActionEnum.SuperTaki) {
-            return `${this.display}.jpg`;
-        } else {
-            return `${this.display}-${this.props.color}.jpg`;
-        }
-    }
-
-    handleClick() {
-        this.setState(prevState => ({
-            isOnBackSide: !this.state.isOnBackSide
-        }));
-    };
-
     render() {
         return (
             <div className="card-component"
-                 id={`card-${this.props.id}`}
+                 id={`card-${this.props.card.id}`}
                  onClick={this.handleClick}>
                 {this.state.isOnBackSide
                     ? (<img className="back-card-img"
@@ -57,6 +32,31 @@ class Card extends Component {
             </div>
         );
     }
+
+    get action() {
+        return this.props.card.action;
+    }
+
+    get display() {
+        return this.props.card.action ? this.props.card.action : this.props.card.number;
+    };
+
+    get source() {
+        if (this.action === CardActionEnum.ChangeColor || this.action === CardActionEnum.SuperTaki) {
+            return `${this.display}.jpg`;
+        } else {
+            return `${this.display}-${this.props.card.color}.jpg`;
+        }
+    }
+
+    handleClick() {
+        this.props.onCardClick(this.props.card);
+        // this.setState(prevState => ({
+        //     isOnBackSide: !this.state.isOnBackSide
+        // }));
+    };
+
+
 }
 
 export default Card;

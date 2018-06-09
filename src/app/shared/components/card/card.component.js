@@ -32,14 +32,14 @@ class Card extends Component {
         return (
             <div className="card-component"
                  id={`card-${this.props.card.id}`}>
-
-                <img className="front-card-img"
-                     src={require(`../../../../assets/images/${this.source}`)} // TODO: ask Offer if this is ok?
-                     alt={this.display} />
-
-                <img className="back-card-img"
-                     src={backImage}
-                     alt={this.display} />
+                {this.state.isOnBackSide
+                    ? (<img className="back-card-img"
+                         src={backImage}
+                         alt={this.display} />
+                    : (<img className="front-card-img"
+                            src={require(`../../../../assets/images/${this.source}`)} // TODO: ask Offer if this is ok?
+                            alt={this.display} />)
+                }
             </div>
         );
     }

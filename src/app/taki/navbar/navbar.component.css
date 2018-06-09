@@ -4,11 +4,13 @@
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.3);
     background: #0e9ac8;
     border: none;
-
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-transform: uppercase;
 }
 
 .navbar-component .logo {
-    background: url("../../../assets/images/logo.png") no-repeat;
     height: 66px;
     width: 130px;
 }

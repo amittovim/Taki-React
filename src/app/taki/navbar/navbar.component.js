@@ -8,9 +8,7 @@ import Timer from '../../../app/shared/components/timer/timer.component';
 class Navbar extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-
-        }
+        this.state = {}
     }
 
     render() {

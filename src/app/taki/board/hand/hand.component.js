@@ -10,6 +10,7 @@ class Hand extends Component {
     }
 
     render() {
+        const message = 'Hand works';
         return (
             <div className="hand-component">
                 {

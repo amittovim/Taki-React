@@ -17,6 +17,7 @@ class Game extends Component {
             activeAction: null,
             turnNumber: 0,
         };
+        this.defineInitialState = this.defineInitialState.bind(this);
     }
 
     get humanHand() {

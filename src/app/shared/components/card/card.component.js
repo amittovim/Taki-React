@@ -50,7 +50,9 @@ class Card extends Component {
     }
 
     handleClick() {
-        this.props.onCardClick(this.props.card);
+        debugger;
+        this.props.moveCardDriver2(this.props.card);
+        // this.props.onCardClick(this.props.card);
         // this.setState(prevState => ({
         //     isOnBackSide: !this.state.isOnBackSide
         // }));

@@ -7,7 +7,12 @@ class DiscardPile extends Component {
         super(props);
 
         this.state = {}
+        this.moveCardDriver2 = this.moveCardDriver2.bind(this);
     }
+
+    moveCardDriver2(card) {
+        this.props.moveCardDriver1(card, this.props.discardPile);
+    };
 
     render() {
         return (
@@ -15,7 +20,10 @@ class DiscardPile extends Component {
                 {
                     this.props.cards.map(card => {
                         return <Card key={card.id}
-                                     card={card} />
+                                     card={card}
+                                     moveCardDriver2={this.moveCardDriver2}
+
+                        />
                     })
                 }
             </div>

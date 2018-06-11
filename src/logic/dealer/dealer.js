@@ -3,6 +3,9 @@ import * as consts from "../consts";
 import * as utils from '../utils/model.utils';
 import * as takiUtils from "../utils/taki.utils";
 import {CardActionEnum} from "../../app/enums/card-action-enum";
+import {PileEnum} from "../../app/enums/pile.enum";
+import Game from "../../app/game/game.component";
+import {PlayerEnum} from "../../app/enums/player.enum";
 
 // == Deal Hands ==
 
@@ -16,7 +19,7 @@ function dealHands() {
         for (let player in GameState.players.list) {
             const currentPlayer = GameState.players.list[player];
             const card = takiUtils.getTopOfPile(GameState.drawPile);
-            handleMoveCard(card, GameState.drawPile, currentPlayer.hand.pile);
+            moveCard(card, GameState.drawPile, currentPlayer.hand.pile);
         }
     }
 }
@@ -26,7 +29,9 @@ function drawStartingCard() {
     do {
         // It draws another card if the card drawn is CHANGE COLOR because you cannot start a taki with this card
         topCard = takiUtils.getTopOfPile(GameState.drawPile);
-        handleMoveCard(topCard, GameState.drawPile, GameState.discardPile);
+        topCard.isHidden=false;
+        moveCard(topCard, GameState.drawPile, GameState.discardPile);
+
     } while (topCard.action && topCard.action === CardActionEnum.ChangeColor);
 
     // TODO: move this:
@@ -39,10 +44,49 @@ function drawStartingCard() {
 
 // == Move Card ==
 
+/*
 export function handleMoveCard(card, sourcePile, destinationPile) {
     moveCard(card, sourcePile, destinationPile);
     setLeadingCard(card, destinationPile);
     // rollOverCard();
+}
+*/
+
+export function handleMoveCard(card, sourcePile) {
+    let destinationPile;
+    debugger;
+    switch (sourcePile.name) {
+        case (PileEnum.DrawPile): {
+            if (PlayerEnum.Human === GameState.players.currentPlayer.name) {
+                destinationPile = GameState.players.list.human.hand.pile;     //PileEnum.HumanHand;
+                card.isHidden=false;
+            } else {
+                destinationPile = GameState.players.list.bot.hand.pile;    //PileEnum.BotHand;
+                card.isHidden=true;
+            }
+            break;
+        }
+        case (PileEnum.DiscardPile): {
+            destinationPile = GameState.drawPile;
+            card.isHidden=true;
+            break;
+        }
+        case (PileEnum.HumanHand): {
+            destinationPile = GameState.discardPile;
+            card.isHidden=false;
+            break;
+        }
+        case (PileEnum.BotHand): {
+            destinationPile = GameState.discardPile;
+            card.isHidden=false;
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+    moveCard(card, sourcePile, destinationPile);
+    setLeadingCard(card, destinationPile);
 }
 
 function moveCard(card, sourcePile, destinationPile) {

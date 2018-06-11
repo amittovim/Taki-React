@@ -1,27 +1,27 @@
 
-.taki-component {
+.game-component {
     display: flex;
     flex: 1;
     flex-direction: column;
 }
 
-.taki-component .navbar-component {
+.game-component .navbar-component {
     display: flex;
     flex: 0.9;
 }
 
-.taki-component .separator-component {
+.game-component .separator-component {
     display: flex;
     flex: 0.1;
 }
 
-.taki-component .board-component {
+.game-component .board-component {
     display: flex;
     flex-direction: column;
     flex: 8;
 }
 
-.taki-component .console-component {
+.game-component .console-component {
     display: flex;
     flex: 1;
 }

@@ -11,26 +11,39 @@ class Deck extends Component {
             drawPile: this.props.drawPile
         };
 
-        this.moveCard = this.moveCard.bind(this);
+    /*    this.moveCard = this.moveCard.bind(this);*/
+        this.moveCardDriver1 = this.moveCardDriver1.bind(this);
     }
     
     render() {
         return (
             <div className="deck-component">
                 <DiscardPile name="discardPile"
-                             cards={this.state.discardPile.cards} />
+                             discardPile={this.props.discardPile}
+                             cards={this.state.discardPile.cards}
+                             moveCardDriver1={this.moveCardDriver1}
+                />
                 <DrawPile name="drawPile"
+                          drawPile={this.props.drawPile}
                           cards={this.state.drawPile.cards}
-                          onCardClick={this.moveCard} />
+                          // onCardClick={this.moveCard}
+                          moveCardDriver1={this.moveCardDriver1}
+                />
             </div>
         );
     }
 
+    moveCardDriver1(card, sourcePile) {
+        this.props.moveCardDriver0(card, sourcePile);
+    }
+/*
     moveCard(card, sourcePile) {
         this.props.service.moveCard(card, this.state[sourcePile], this.state['discardPile']);
         console.log(this.state);
         this.forceUpdate(); // TODO: ask Offer how to avoid this?
     }
+*/
+
 }
 
 export default Deck;

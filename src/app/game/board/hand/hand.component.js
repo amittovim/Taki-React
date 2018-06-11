@@ -11,7 +11,7 @@ class Hand extends Component {
     }
 
     moveCardDriver2(card, sourcePile) {
-        this.props.moveCardDriver1(Card, this.props.hand)
+        this.props.moveCardDriver1(card, this.props.hand)
     }
 
 

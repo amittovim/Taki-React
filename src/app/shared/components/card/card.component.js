@@ -51,6 +51,9 @@ class Card extends Component {
         if (this.action === CardActionEnum.ChangeColor || this.action === CardActionEnum.SuperTaki) {
             return `${this.display}.jpg`;
         } else {
+            if ( this.display === undefined || this.props.card.color === undefined) {
+                debugger;
+            }
             return `${this.display}-${this.props.card.color}.jpg`;
         }
     }

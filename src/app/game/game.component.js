@@ -27,6 +27,7 @@ class Game extends Component {
             turnNumber: 0,
         };
         this.defineInitialState = this.defineInitialState.bind(this);
+        this.moveCard = this.moveCard.bind(this);
     }
 
     get humanHand() {
@@ -50,6 +51,18 @@ class Game extends Component {
         console.log(initialState);
     }
 
+    moveCard(card, sourcePile) {
+        debugger;
+
+        BoardService.moveCard(card, sourcePile);
+        this.setState((prevState) => ({
+            ...this.props.service.getGameState()
+        }));
+        console.log(this.state);
+        // this.forceUpdate(); // TODO: ask Offer how to avoid this?
+    }
+
+
     render() {
         return (
             <div className="game-component">
@@ -60,6 +73,7 @@ class Game extends Component {
                        discardPile={this.state.discardPile}
                        humanHand={this.humanHand}
                        botHand={this.botHand}
+                       moveCardDriver={this.moveCard}
 
                 />
                 <Console message={"test"} />

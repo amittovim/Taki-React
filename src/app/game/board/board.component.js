@@ -14,34 +14,40 @@ class Board extends Component {
             humanHandPile: this.props.humanHand,
             botHandPile: this.props.botHand
         }
-        this.moveCard = this.moveCard.bind(this);
+        // this.moveCard = this.moveCard.bind(this);
+        this.moveCardDriver_1=this.moveCardDriver_1.bind(this);
+    }
+
+    moveCardDriver_1(card, sourcePile) {
+        this.props.moveCardDriver(card, sourcePile);
     }
 
     render() {
         return (
             <div className="board-component">
                 <Hand hand={this.props.botHand}
-                      moveCardDriver1={this.moveCard}
+                      moveCardDriver1={this.moveCardDriver_1}
                 />
 
                 <Deck service={DeckService}
                       drawPile={this.props.drawPile}
                       discardPile={this.props.discardPile}
-                      moveCardDriver0={this.moveCard}
+                      moveCardDriver0={this.moveCardDriver_1}
 
                 />
                 <Hand hand={this.props.humanHand}
-                      moveCardDriver1={this.moveCard}
+                      moveCardDriver1={this.moveCardDriver_1}
                 />
             </div>
         );
     }
 
-    moveCard(card, sourcePile) {
-        this.props.boardService.moveCard(card, this.state[sourcePile.name]);
-        console.log(this.state);
-        this.forceUpdate(); // TODO: ask Offer how to avoid this?
-    }
+
+    // moveCard(card, sourcePile) {
+    //     this.props.boardService.moveCard(card, this.state[sourcePile.name]);
+    //     console.log(this.state);
+    //     this.forceUpdate(); // TODO: ask Offer how to avoid this?
+    // }
 
 }
 

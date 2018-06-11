@@ -42,7 +42,6 @@ class Game extends Component {
         this.defineInitialState();
     }
 
-
     defineInitialState() {
         const initialState = this.props.service.getInitialState();
         this.setState((prevState) => ({
@@ -52,14 +51,11 @@ class Game extends Component {
     }
 
     moveCard(card, sourcePile) {
-        debugger;
-
         BoardService.moveCard(card, sourcePile);
         this.setState((prevState) => ({
             ...this.props.service.getGameState()
         }));
         console.log(this.state);
-        // this.forceUpdate(); // TODO: ask Offer how to avoid this?
     }
 
 

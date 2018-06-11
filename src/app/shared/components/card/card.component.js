@@ -8,6 +8,17 @@ class Card extends Component {
     constructor(props) {
 
         super(props);
+/*
+        if (this.props.card.isHidden) {
+            this.state = {
+                isOnBackSide: true,
+            };
+        } else {
+            this.state = {
+                isOnBackSide: false,
+            };
+        }
+*/
         this.state = {
             isOnBackSide: true,
         };

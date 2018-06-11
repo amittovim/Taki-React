@@ -19,6 +19,9 @@ function dealHands() {
         for (let player in GameState.players.list) {
             const currentPlayer = GameState.players.list[player];
             const card = takiUtils.getTopOfPile(GameState.drawPile);
+            ( currentPlayer.name === GameState.players.list.human.name )
+                ? card.isHidden=false
+                : card.isHidden=true;
             moveCard(card, GameState.drawPile, currentPlayer.hand.pile);
         }
     }
@@ -54,6 +57,7 @@ export function handleMoveCard(card, sourcePile, destinationPile) {
 
 export function handleMoveCard(card, sourcePile) {
     let destinationPile;
+    debugger;
     switch (sourcePile.name) {
         case (PileEnum.DrawPile): {
             if (PlayerEnum.Human === GameState.players.currentPlayer.name) {

@@ -23,7 +23,7 @@ class Hand extends Component {
                     this.props.hand.cards.map((card) => (<Card key={card.id}
                                                           card={card}
                                                           moveCardDriver2={this.moveCardDriver2}
-                                                    />))
+                                                         />))
                 }
             </div>
         )

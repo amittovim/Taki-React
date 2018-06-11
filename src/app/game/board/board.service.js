@@ -5,7 +5,8 @@ export default class BoardService {
 
     static moveCard(card, sourcePile) {
         dealer.handleMoveCard(card, sourcePile);
-        debugger;
+
+        // TODO: remove this from here. its temporary just to see that the moves are working
         if (GameState.players.currentPlayer.name === GameState.players.list.bot.name) {
             GameState.players.currentPlayer = GameState.players.list.human
         }else {

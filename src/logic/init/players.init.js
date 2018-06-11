@@ -18,7 +18,6 @@ function createPlayers() {
 }
 
 function pickFirstPlayer() {
-    debugger;
     const randomNumber = utils.getRandomInt(0, 1);
     GameState.players.currentPlayer = randomNumber === 0 ? GameState.players.list.bot : GameState.players.list.human;
 

@@ -6,24 +6,18 @@ import {CardActionEnum} from "../../../enums/card-action-enum";
 
 class Card extends Component {
     constructor(props) {
-
         super(props);
-/*
-        if (this.props.card.isHidden) {
-            this.state = {
-                isOnBackSide: true,
-            };
-        } else {
-            this.state = {
-                isOnBackSide: false,
-            };
-        }
-*/
         this.state = {
             isOnBackSide: true,
         };
 
         this.handleClick = this.handleClick.bind(this);
+
+    }
+
+    componentWillMount() {
+        (!this.props.card.isHidden)
+            ? this.flipCard() : false ;
     }
 
     render() {
@@ -68,6 +62,9 @@ class Card extends Component {
         // }));
     };
 
+    flipCard() {
+        this.setState({isOnBackSide: !this.state.isOnBackSide})
+    }
 
 }
 

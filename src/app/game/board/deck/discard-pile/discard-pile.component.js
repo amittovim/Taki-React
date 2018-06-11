@@ -5,8 +5,9 @@ import Card from "../../../../shared/components/card/card.component";
 class DiscardPile extends Component {
     constructor(props) {
         super(props);
+        this.state = {
 
-        this.state = {}
+        }
         this.moveCardDriver2 = this.moveCardDriver2.bind(this);
     }
 

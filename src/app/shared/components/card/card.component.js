@@ -8,7 +8,7 @@ class Card extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isOnBackSide: true,
+            isOnBackSide: false,
         };
 
         this.handleClick = this.handleClick.bind(this);
@@ -16,8 +16,9 @@ class Card extends Component {
     }
 
     componentWillMount() {
-        (!this.props.card.isHidden)
-            ? this.flipCard() : false ;
+        // todo: unremark these two lines to enable  flipping cards
+        // (!this.props.card.isHidden)
+        //     ? this.flipCard() : false ;
     }
 
     render() {

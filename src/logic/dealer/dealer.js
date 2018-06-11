@@ -19,9 +19,10 @@ function dealHands() {
         for (let player in GameState.players.list) {
             const currentPlayer = GameState.players.list[player];
             const card = takiUtils.getTopOfPile(GameState.drawPile);
-            ( currentPlayer.name === GameState.players.list.human.name )
-                ? card.isHidden=false
-                : card.isHidden=true;
+            // todo : unremark these lines to enable flipping cards
+            // ( currentPlayer.name === GameState.players.list.human.name )
+            //     ? card.isHidden=false
+            //     : card.isHidden=true;
             moveCard(card, GameState.drawPile, currentPlayer.hand.pile);
         }
     }
@@ -32,7 +33,8 @@ function drawStartingCard() {
     do {
         // It draws another card if the card drawn is CHANGE COLOR because you cannot start a taki with this card
         topCard = takiUtils.getTopOfPile(GameState.drawPile);
-        topCard.isHidden=false;
+        //TODO: unremark this line to enable flipping cards
+        // topCard.isHidden=false;
         moveCard(topCard, GameState.drawPile, GameState.discardPile);
 
     } while (topCard.action && topCard.action === CardActionEnum.ChangeColor);

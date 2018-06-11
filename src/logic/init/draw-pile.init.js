@@ -20,8 +20,7 @@ function createDrawPile() {
     createNumberCards();
     createActionCards();
 
-    //TODO : unremark the following line
-    //utils.shuffleArray(GameState.drawPile.cards);
+    utils.shuffleArray(GameState.drawPile.cards);
 }
 
 function createNumberCards() {

@@ -14,4 +14,8 @@ export function initGame() {
     return GameState;
 }
 
+export function getGameState() {
+    return GameState;
+}
+
 

@@ -67,7 +67,7 @@ export function handleMoveCard(card, sourcePile) {
                 card.isHidden=false;
             } else {
                 destinationPile = GameState.players.list.bot.hand.pile;    //PileEnum.BotHand;
-                card.isHidden=true;
+                // card.isHidden=true;   //TODO: unremark this line when enabling flipping cards
             }
             break;
         }

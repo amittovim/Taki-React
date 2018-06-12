@@ -41,14 +41,6 @@ class Board extends Component {
             </div>
         );
     }
-
-
-    // moveCard(card, sourcePile) {
-    //     this.props.boardService.moveCard(card, this.state[sourcePile.name]);
-    //     console.log(this.state);
-    //     this.forceUpdate(); // TODO: ask Offer how to avoid this?
-    // }
-
 }
 
 export default Board;

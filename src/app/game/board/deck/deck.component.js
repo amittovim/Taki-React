@@ -36,14 +36,6 @@ class Deck extends Component {
     moveCardDriver1(card, sourcePile) {
         this.props.moveCardDriver0(card, sourcePile);
     }
-/*
-    moveCard(card, sourcePile) {
-        this.props.service.moveCard(card, this.state[sourcePile], this.state['discardPile']);
-        console.log(this.state);
-        this.forceUpdate(); // TODO: ask Offer how to avoid this?
-    }
-*/
-
 }
 
 export default Deck;

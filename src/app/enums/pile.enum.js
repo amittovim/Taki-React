@@ -1,4 +1,6 @@
 export const PileEnum = {
-    DrawPile: 'Draw Pile',
-    DiscardPile: 'Discard Pile',
+    DrawPile: 'drawPile',
+    DiscardPile: 'discardPile',
+    HumanHand: 'humanHandPile',
+    BotHand: 'botHandPile'
 };

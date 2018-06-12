@@ -8,7 +8,8 @@ class DrawPile extends Component {
 
         this.state = {}
 
-        this.onCardClick = this.onCardClick.bind(this);
+        // this.onCardClick = this.onCardClick.bind(this);
+        this.moveCardDriver2 = this.moveCardDriver2.bind(this);
 
     }
 
@@ -19,15 +20,21 @@ class DrawPile extends Component {
                     this.props.cards.map(card => {
                         return <Card key={card.id}
                                      card={card}
-                                     onCardClick={this.onCardClick} />
+                                     // onCardClick={this.onCardClick}
+                                     moveCardDriver2={this.moveCardDriver2}
+                        />
                     })
                 }
             </div>
         );
     }
 
-    onCardClick(clickedCard) {
-        this.props.onCardClick(clickedCard, this.props.name);
+    // onCardClick(clickedCard) {
+    //     this.props.onCardClick(clickedCard, this.props.name);
+    // };
+
+    moveCardDriver2(card) {
+        this.props.moveCardDriver1(card, this.props.drawPile);
     };
 }
 

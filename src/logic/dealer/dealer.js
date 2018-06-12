@@ -59,7 +59,6 @@ export function handleMoveCard(card, sourcePile, destinationPile) {
 
 export function handleMoveCard(card, sourcePile) {
     let destinationPile;
-    debugger;
     switch (sourcePile.name) {
         case (PileEnum.DrawPile): {
             if (PlayerEnum.Human === GameState.players.currentPlayer.name) {

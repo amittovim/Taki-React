@@ -10,8 +10,6 @@ class Deck extends Component {
             discardPile: this.props.discardPile,
             drawPile: this.props.drawPile
         };
-
-    /*    this.moveCard = this.moveCard.bind(this);*/
         this.moveCardDriver1 = this.moveCardDriver1.bind(this);
     }
     

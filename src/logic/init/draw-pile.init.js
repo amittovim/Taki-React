@@ -25,9 +25,6 @@ function createDrawPile() {
 
 function createNumberCards() {
     for (const number in CardNumberEnum) {
-        // if (number === CardNumberEnum.Two) {
-        //     continue;
-        // }
         for (let i = 1; i <= 2; i++) {
             for (let color in CardColorEnum) {
                 const card = new CardModel(cardId++, CardColorEnum[color], CardNumberEnum[number]);

@@ -14,7 +14,6 @@ class Board extends Component {
             humanHandPile: this.props.humanHand,
             botHandPile: this.props.botHand
         }
-        // this.moveCard = this.moveCard.bind(this);
         this.moveCardDriver_1=this.moveCardDriver_1.bind(this);
     }
 

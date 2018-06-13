@@ -6,3 +6,8 @@
     flex: 2;
     flex-wrap: wrap;
 }
+
+.hand-component .card-component {
+    margin-left: 10px;
+}
+

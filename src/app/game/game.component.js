@@ -5,11 +5,46 @@ import Separator from "../shared/components/loader/loader.component";
 import Board from "./board/board.component";
 import Console from "./console/console.component";
 import BoardService from './board/board.service';
+import * as GameService from './game.service';
 
+// TODO: schema
+// Inputs
+// render
+// Constructor
+// Life Cycle Hooks
+// Gettes & Setters
+// methods
+
+// public
+// private
+
+// Inputs:
+// service
 
 class Game extends Component {
+    // TODO: convention add inputs (props)
+
+    render() {
+        return (
+            <div className="game-component">
+                <Navbar turnNumber={this.state.turnNumber} />
+                <Separator isLoading={this.state.isLoading} />
+                <Board boardService={BoardService}
+                       drawPile={this.state.drawPile}
+                       discardPile={this.state.discardPile}
+                       humanHand={this.humanHand}
+                       botHand={this.botHand}
+                       moveCardDriver={this.handleMoveCard}
+                />
+                <Console message={"test"} />
+            </div>
+        );
+    }
+
     constructor(props) {
         super(props);
+
+        // TODO: flatten
         this.state = {
             discardPile: {
                 cards: [],
@@ -26,8 +61,13 @@ class Game extends Component {
             activeAction: null,
             turnNumber: 0,
         };
-        this.defineInitialState = this.defineInitialState.bind(this);
+
+        // TODO: find a way to remove this
         this.handleMoveCard = this.handleMoveCard.bind(this);
+    }
+
+    componentWillMount() {
+        this.setState(GameService.getInitialState());
     }
 
     get humanHand() {
@@ -38,44 +78,12 @@ class Game extends Component {
         return this.state.players.list.bot.hand.pile
     }
 
-    componentWillMount() {
-        this.defineInitialState();
-    }
-
-    defineInitialState() {
-        const initialState = this.props.service.getInitialState();
-        this.setState((prevState) => ({
-            ...initialState
-        }));
-        console.log(initialState);
-    }
-
     handleMoveCard(card, sourcePile) {
         BoardService.moveCard(card, sourcePile);
         this.setState((prevState) => ({
             ...this.props.service.getGameState()
         }));
         console.log(this.state);
-    }
-
-
-    render() {
-        return (
-            <div className="game-component">
-                <Navbar turnNumber={this.state.turnNumber} />
-                <Separator isLoading={this.state.isLoading} />
-                <Board boardService={BoardService}
-                       drawPile={this.state.drawPile}
-                       discardPile={this.state.discardPile}
-                       humanHand={this.humanHand}
-                       botHand={this.botHand}
-                       moveCardDriver={this.handleMoveCard}
-
-                />
-                <Console message={"test"} />
-            </div>
-        )
-            ;
     }
 }
 

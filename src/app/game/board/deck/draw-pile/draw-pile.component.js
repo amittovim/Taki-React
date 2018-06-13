@@ -17,10 +17,10 @@ class DrawPile extends Component {
         return (
             <div className="draw-pile-component">
                 {
-                    this.props.cards.map(card => {
+                    this.props.cards.map((card, index) => {
                         return <Card key={card.id}
                                      card={card}
-                                     // onCardClick={this.onCardClick}
+                                     hoverEnabled={index === this.props.cards.length - 1}
                                      moveCardDriver2={this.moveCardDriver2}
                         />
                     })

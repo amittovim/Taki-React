@@ -16,9 +16,9 @@ class Hand extends Component {
 
 
     render() {
-        const message = 'Hand works';
+        const classes = `hand-component ${this.props.hand.name}`
         return (
-            <div className="hand-component">
+            <div className={classes} >
                 {
                     this.props.hand.cards.map((card) => (<Card key={card.id}
                                                           card={card}

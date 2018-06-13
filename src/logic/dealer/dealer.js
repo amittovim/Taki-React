@@ -50,7 +50,6 @@ function drawStartingCard() {
 // == Move Card ==
 
 export function handleMoveCard(card, sourcePile) {
-    debugger;
     let destinationPile;
     switch (sourcePile.name) {
         case (PileEnum.DrawPile): {

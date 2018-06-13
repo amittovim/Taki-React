@@ -1,15 +1,10 @@
 export const GameState = {
-    discardPile: {
-        cards: [],
-        leadingCard: null,
-    },
-    drawPile: {
-        cards: [],
-    },
-    players: {
-        list: null,
-        currentPlayer: null,
-    },
+    drawPile: null,
+    discardPile: null,
+    human: null,
+    bot: null,
+    leadingCard: null,
+    currentPlayer: null,
     selectedCard: null,
     activeAction: null,
     turnNumber: 0,

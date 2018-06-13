@@ -1,4 +1,4 @@
 export const PlayerEnum = {
-    Bot: 'bot',
-    Human: 'human'
+    Bot: 'Bot',
+    Human: 'Human'
 };

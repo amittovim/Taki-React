@@ -1,11 +1,11 @@
-import HandModel from "./hand.class";
+import PileModel from "./pile.class";
+import {PileTypeEnum} from "../enums/pile-type.enum";
+import {PlayerEnum} from "../enums/player.enum";
 
-class PlayerModel {
-    constructor(name) {
-        this.name = name;
-        this.hand = new HandModel(name);
-        this.singleCardCounter = 0;
+export class PlayerModel {
+    constructor(playerType) {
+        this.playerType = playerType;
+        const owner = playerType === PlayerEnum.Human ? PileTypeEnum.HumanPile : PileTypeEnum.BotPile;
+        this.pile = new PileModel(owner, true);
     }
 }
-
-export default PlayerModel;

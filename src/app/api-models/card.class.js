@@ -9,3 +9,4 @@ export class CardModel {
 }
 
 export default CardModel;
+

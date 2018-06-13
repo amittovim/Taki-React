@@ -2,43 +2,43 @@ import React, {Component} from 'react';
 import './board.component.css';
 import Hand from "./hand/hand.component";
 import Deck from "./deck/deck.component";
-import DeckService from "./deck/deck.service";
+import {PlayerEnum} from "../../enums/player.enum";
 
+// drawPile: Pile
+// discardPile: Pile
+// humanPile: Pile
+// botPile: Pile
+// moveCardDriver: function
 
 class Board extends Component {
-    constructor(props) {
-        super(props);
-        this.state={
-            discardPile: this.props.discardPile,
-            drawPile: this.props.drawPile,
-            humanHandPile: this.props.humanHand,
-            botHandPile: this.props.botHand
-        }
-        this.moveCardDriver_1=this.moveCardDriver_1.bind(this);
-    }
-
-    moveCardDriver_1(card, sourcePile) {
-        this.props.moveCardDriver(card, sourcePile);
-    }
 
     render() {
         return (
             <div className="board-component">
-                <Hand hand={this.props.botHand}
+                <Hand owner={PlayerEnum.Bot}
+                      pile={this.props.botPile}
                       moveCardDriver1={this.moveCardDriver_1}
                 />
-
-                <Deck service={DeckService}
-                      drawPile={this.props.drawPile}
+                <Deck drawPile={this.props.drawPile}
                       discardPile={this.props.discardPile}
                       moveCardDriver0={this.moveCardDriver_1}
 
                 />
-                <Hand hand={this.props.humanHand}
+                <Hand owner={PlayerEnum.Human}
+                      pile={this.props.humanPile}
                       moveCardDriver1={this.moveCardDriver_1}
                 />
             </div>
         );
+    }
+
+    constructor(props) {
+        super(props);
+        this.moveCardDriver_1 = this.moveCardDriver_1.bind(this);
+    }
+
+    moveCardDriver_1(card, sourcePile) {
+        this.props.moveCardDriver(card, sourcePile);
     }
 }
 

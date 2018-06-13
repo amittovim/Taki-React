@@ -1,4 +1,4 @@
-import {PileEnum} from "../../app/enums/pile.enum";
+import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import PileModel from "../../app/api-models/pile.class";
 import {GameState} from "../state";
 
@@ -9,5 +9,5 @@ export default function initDiscardPile() {
 }
 
 function createDiscardPile() {
-    GameState.discardPile = new PileModel(PileEnum.DiscardPile);
+    GameState.discardPile = new PileModel(PileTypeEnum.DiscardPile);
 }

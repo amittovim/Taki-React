@@ -1,6 +1,6 @@
-import {PileEnum} from "../../app/enums/pile.enum";
+import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import {CardNumberEnum} from "../../app/enums/card-number.enum";
-    import {CardColorEnum} from "../../app/enums/card-color.enum";
+import {CardColorEnum} from "../../app/enums/card-color.enum";
 import {CardActionEnum} from "../../app/enums/card-action-enum";
 import * as utils from '../utils/model.utils';
 import {GameState} from "../state";
@@ -16,7 +16,7 @@ export default function initDrawPile() {
 let cardId = 0;
 
 function createDrawPile() {
-    GameState.drawPile = new PileModel(PileEnum.DrawPile);
+    GameState.drawPile = new PileModel(PileTypeEnum.DrawPile);
     createNumberCards();
     createActionCards();
 
@@ -36,9 +36,8 @@ function createNumberCards() {
 
 function createActionCards() {
     for (const action in CardActionEnum) {
-        if ( (CardActionEnum[action] !== CardActionEnum.ChangeColor) &&
-             (CardActionEnum[action] !== CardActionEnum.SuperTaki) )
-        {
+        if ((CardActionEnum[action] !== CardActionEnum.ChangeColor) &&
+            (CardActionEnum[action] !== CardActionEnum.SuperTaki)) {
             for (let i = 1; i <= 2; i++) {
                 for (let color in CardColorEnum) {
                     GameState.drawPile.cards.push(new CardModel(cardId++, CardColorEnum[color], null, CardActionEnum[action]));
@@ -56,5 +55,3 @@ function createActionCards() {
     }
 
 }
-
-// TODO: @Amit: consider converting this in to a static class

@@ -3,7 +3,7 @@ import * as consts from "../consts";
 import * as utils from '../utils/model.utils';
 import * as takiUtils from "../utils/taki.utils";
 import {CardActionEnum} from "../../app/enums/card-action-enum";
-import {PileEnum} from "../../app/enums/pile.enum";
+import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import Game from "../../app/game/game.component";
 import {PlayerEnum} from "../../app/enums/player.enum";
 
@@ -16,27 +16,28 @@ export function dealCards() {
 
 function dealHands() {
     for (let i = 1; i <= consts.NUMBER_OF_STARTING_CARDS_IN_PLAYERS_HAND; i++) {
-        for (let player in GameState.players.list) {
-            const currentPlayer = GameState.players.list[player];
-            const card = takiUtils.getTopOfPile(GameState.drawPile);
-            // todo : unremark these lines to enable flipping cards
-            // ( currentPlayer.name === GameState.players.list.human.name )
-            //     ? card.isHidden=false
-            //     : card.isHidden=true;
-            moveCard(card, GameState.drawPile, currentPlayer.hand.pile);
-        }
+        let card = takiUtils.getTopOfPile(GameState.drawPile);
+        moveCard(card, GameState.drawPile, GameState.human.pile);
+        card = takiUtils.getTopOfPile(GameState.drawPile);
+        moveCard(card, GameState.drawPile, GameState.bot.pile);
     }
 }
+
+
+// TODO: FLIP CARD
+// todo : unremark these lines to enable flipping cards
+// ( currentPlayer.name === GameState.players.list.human.name )
+//     ? card.isHidden=false
+//     : card.isHidden=true;
+//TODO: unremark this line to enable flipping cards
+// topCard.isHidden=false;
 
 function drawStartingCard() {
     let topCard;
     do {
         // It draws another card if the card drawn is CHANGE COLOR because you cannot start a taki with this card
         topCard = takiUtils.getTopOfPile(GameState.drawPile);
-        //TODO: unremark this line to enable flipping cards
-        // topCard.isHidden=false;
-        moveCard(topCard, GameState.drawPile, GameState.discardPile);
-
+        handleMoveCard(topCard, GameState.drawPile, GameState.discardPile);
     } while (topCard.action && topCard.action === CardActionEnum.ChangeColor);
 
     // TODO: move this:
@@ -49,48 +50,32 @@ function drawStartingCard() {
 
 // == Move Card ==
 
-/*
 export function handleMoveCard(card, sourcePile, destinationPile) {
-    moveCard(card, sourcePile, destinationPile);
-    setLeadingCard(card, destinationPile);
-    // rollOverCard();
-}
-*/
-
-export function handleMoveCard(card, sourcePile) {
-    let destinationPile;
-    switch (sourcePile.name) {
-        case (PileEnum.DrawPile): {
-            if (PlayerEnum.Human === GameState.players.currentPlayer.name) {
-                destinationPile = GameState.players.list.human.hand.pile;     //PileEnum.HumanHand;
-                card.isHidden=false;
-            } else {
-                destinationPile = GameState.players.list.bot.hand.pile;    //PileEnum.BotHand;
-                // card.isHidden=true;   //TODO: unremark this line when enabling flipping cards
-            }
-            break;
-        }
-        case (PileEnum.DiscardPile): {
-            destinationPile = GameState.drawPile;
-            // card.isHidden=true;   //TODO: unremark this line when enabling flipping cards
-            break;
-        }
-        case (PileEnum.HumanHand): {
-            destinationPile = GameState.discardPile;
-            card.isHidden=false;
-            break;
-        }
-        case (PileEnum.BotHand): {
-            destinationPile = GameState.discardPile;
-            card.isHidden=false;
-            break;
-        }
-        default: {
-            break;
-        }
+    if (!destinationPile) {
+        destinationPile = getDestinationPile(sourcePile);
     }
+    card.isHidden = isCardHidden();
     moveCard(card, sourcePile, destinationPile);
     setLeadingCard(card, destinationPile);
+}
+
+function getDestinationPile(sourcePile) {
+    switch (sourcePile.type) {
+        case PileTypeEnum.DrawPile:
+            return GameState.currentPlayer === PlayerEnum.Human ? GameState.human.pile : GameState.bot.pile;
+        case PileTypeEnum.DiscardPile:
+            return GameState.drawPile;
+        case PileTypeEnum.HumanHand:
+        case PileTypeEnum.BotHand:
+            return GameState.discardPile;
+        default:
+            break;
+    }
+}
+
+function isCardHidden(sourcePile) {
+    return ((sourcePile === PileTypeEnum.DrawPile && GameState.currentPlayer === PlayerEnum.Bot)
+        || sourcePile === PileTypeEnum.DiscardPile);
 }
 
 function moveCard(card, sourcePile, destinationPile) {
@@ -99,14 +84,8 @@ function moveCard(card, sourcePile, destinationPile) {
 }
 
 function setLeadingCard(card, destinationPile) {
-    if (destinationPile === GameState.discardPile) {
-        GameState.discardPile.leadingCard = card;
+    if (destinationPile.type === PileTypeEnum.DiscardPile) {
+        GameState.leadingCard = card;
     }
 }
 
-// TODO: is this needed?
-function rollOverCard() {
-    // if (shouldFlipCard(sourcePile, destinationPile)) {
-    //     rollOverCard(card);
-    // }
-}

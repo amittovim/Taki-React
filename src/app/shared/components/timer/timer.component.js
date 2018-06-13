@@ -6,8 +6,9 @@ class Timer extends Component {
         super(props);
         this.state = {
             elapsed: 0
-        }
+        };
 
+        this.tick = this.tick.bind(this);
     }
 
     componentDidMount() {
@@ -23,6 +24,7 @@ class Timer extends Component {
             elapsed : (new Date() - this.props.start)
         });
     }
+
     render() {
 
         // Calculate elapsed to tenth of a second:

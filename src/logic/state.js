@@ -1,4 +1,4 @@
-const innerGameState = {
+export const GameState = {
     discardPile: {
         cards: [],
         leadingCard: null,
@@ -15,15 +15,15 @@ const innerGameState = {
     turnNumber: 0,
 };
 
-let validator = {
-    set: function (obj, prop, value) {
-        if (!obj.hasOwnProperty(prop)) {
-            throw new TypeError(`Object does not have a ${prop} property`);
-        }
-        obj[prop] = value;
-        console.log(obj);
-        return true;
-    }
-};
+// let validator = {
+//     set: function (obj, prop, value) {
+//         if (!obj.hasOwnProperty(prop)) {
+//             throw new TypeError(`Object does not have a ${prop} property`);
+//         }
+//         obj[prop] = value;
+//         console.log(obj);
+//         return true;
+//     }
+// };
 
-export const GameState = new Proxy(innerGameState, validator);
+// export const GameState = new Proxy(innerGameState, validator);

@@ -1,15 +1,29 @@
 import React, {Component} from 'react';
+import './card.component.css'
 import backImage from '../../../../assets/images/card-backside.jpeg';
 import * as css from './card.style';
 import {CardActionEnum} from "../../../enums/card-action-enum";
 
 class Card extends Component {
     constructor(props) {
-        debugger;
         super(props);
-        this.state = {
-            isOnBackSide: true,
-        };
+        this.state = {};
+        this.handleClick = this.handleClick.bind(this);
+
+    }
+
+    componentWillMount() {
+    }
+
+    render() {
+        return (
+            <div className="card-component"
+                 id={`card-${this.props.card.id}`}
+                 onClick={this.handleClick}>
+                {this.showCard()}
+
+            </div>
+        );
     }
 
     get action() {
@@ -28,21 +42,22 @@ class Card extends Component {
         }
     }
 
-    render() {
-        return (
-            <div className="card-component"
-                 id={`card-${this.props.card.id}`}>
-                {this.state.isOnBackSide
-                    ? (<img className="back-card-img"
+    handleClick() {
+        this.props.moveCardDriver2(this.props.card);
+    };
+
+    showCard() {
+        if (this.props.card.isHidden) {
+            return (<img className="back-card-img"
                          src={backImage}
-                         alt={this.display} />
-                    : (<img className="front-card-img"
-                            src={require(`../../../../assets/images/${this.source}`)} // TODO: ask Offer if this is ok?
-                            alt={this.display} />)
-                }
-            </div>
-        );
+                         alt={this.display} />);
+        } else {
+            return (<img className="front-card-img"
+                         src={require(`../../../../assets/images/${this.source}`)} // TODO: ask Offer if this is ok?
+                         alt={this.display} />);
+        }
     }
+
 }
 
 export default Card;

@@ -1,0 +1,22 @@
+.deck-component {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    background: var(--board-color);
+}
+
+.deck-component .discard-pile-component,
+.deck-component .draw-pile-component {
+    flex: 1;
+    border-right: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.deck-component .discard-pile-component .card-component,
+.deck-component .draw-pile-component .card-component {
+    position: relative;
+    margin-left: -76px;
+
+}

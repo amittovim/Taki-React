@@ -27,7 +27,7 @@ class Game extends Component {
             turnNumber: 0,
         };
         this.defineInitialState = this.defineInitialState.bind(this);
-        this.moveCard = this.moveCard.bind(this);
+        this.handleMoveCard = this.handleMoveCard.bind(this);
     }
 
     get humanHand() {
@@ -50,7 +50,7 @@ class Game extends Component {
         console.log(initialState);
     }
 
-    moveCard(card, sourcePile) {
+    handleMoveCard(card, sourcePile) {
         BoardService.moveCard(card, sourcePile);
         this.setState((prevState) => ({
             ...this.props.service.getGameState()
@@ -69,7 +69,7 @@ class Game extends Component {
                        discardPile={this.state.discardPile}
                        humanHand={this.humanHand}
                        botHand={this.botHand}
-                       moveCardDriver={this.moveCard}
+                       moveCardDriver={this.handleMoveCard}
 
                 />
                 <Console message={"test"} />

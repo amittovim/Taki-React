@@ -72,7 +72,7 @@ export function handleMoveCard(card, sourcePile) {
         }
         case (PileEnum.DiscardPile): {
             destinationPile = GameState.drawPile;
-            card.isHidden=true;
+            // card.isHidden=true;   //TODO: unremark this line when enabling flipping cards
             break;
         }
         case (PileEnum.HumanHand): {

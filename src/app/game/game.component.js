@@ -16,7 +16,6 @@ class Game extends Component {
                 />
             </div>
         );
-
     }
 
     constructor(props) {

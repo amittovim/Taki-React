@@ -8,3 +8,4 @@ class HandModel {
 }
 
 export default HandModel;
+

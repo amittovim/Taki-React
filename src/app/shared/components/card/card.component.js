@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import './card.component.css'
 import backImage from '../../../../assets/images/card-backside.jpeg';
-import * as css from './card.style';
 import {CardActionEnum} from "../../../enums/card-action-enum";
 
 class Card extends Component {
@@ -17,11 +16,10 @@ class Card extends Component {
 
     render() {
         return (
-            <div className="card-component"
+            <div className={`card-component ${this.props.hoverEnabled ? 'hover-enabled' : ''}`}
                  id={`card-${this.props.card.id}`}
                  onClick={this.handleClick}>
                 {this.showCard()}
-
             </div>
         );
     }

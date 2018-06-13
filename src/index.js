@@ -5,7 +5,7 @@ import Game from "./app/game/game.component";
 import * as gameService from './app/game/game.service';
 
 const App = () => {
-    return (<Game service={gameService} />);
+    return (<Game />);
 };
 
 ReactDOM.render(

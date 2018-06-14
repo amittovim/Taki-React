@@ -30,6 +30,16 @@ interface Card {
     isHidden: boolean;
 }
 
+interface GameStepObject {
+    srcPile: Pile;
+    dstPile: Pile;
+    leadingCard: Card;
+    activeAction: CardActionEnum;
+    currentPlayer: PlayerEnum;
+    turnNumber: number;
+    shouldSwitchPlayers: boolean;
+}
+
 enum CardColorEnum {
     Green = 'green',
     Red = 'red',
@@ -68,3 +78,4 @@ enum PlayerEnum {
     Bot = 'Bot',
     Human = 'Human'
 }
+

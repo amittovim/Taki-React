@@ -4,16 +4,12 @@ import DiscardPile from "./discard-pile/discard-pile.component";
 import DrawPile from "./draw-pile/draw-pile.component";
 
 // Props:
-// DrawPile
-// DiscardPile
-// moveCardDriver0
+
+// DrawPile: pile
+// DiscardPile : pile
+// moveCardDriver0: function
 
 class Deck extends Component {
-    constructor(props) {
-        super(props);
-        this.moveCardDriver1 = this.moveCardDriver1.bind(this);
-    }
-
     render() {
         return (
             <div className="deck-component">
@@ -27,6 +23,11 @@ class Deck extends Component {
                 />
             </div>
         );
+    }
+
+    constructor(props) {
+        super(props);
+        this.moveCardDriver1 = this.moveCardDriver1.bind(this);
     }
 
     moveCardDriver1(card, sourcePile) {

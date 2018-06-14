@@ -38,3 +38,7 @@ export function pullItemFromEndOfArray(array) {
 export function findIndexOfItemInArray(targetItem, array) {
     return array.findIndex(item => targetItem === item);
 }
+
+export function getKey(obj, index) {
+    return Object.keys(obj)[index]
+}

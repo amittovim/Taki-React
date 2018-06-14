@@ -3,6 +3,8 @@ import './hand.component.css';
 import Card from "../../../shared/components/card/card.component";
 import {PlayerEnum} from "../../../enums/player.enum";
 
+// props
+
 // owner: PlayerEnum
 // pile: Pile
 // moveCardDriver1

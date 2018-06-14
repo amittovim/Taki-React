@@ -4,6 +4,8 @@ import Hand from "./hand/hand.component";
 import Deck from "./deck/deck.component";
 import {PlayerEnum} from "../../enums/player.enum";
 
+// props:
+
 // DrawPile: Pile
 // DiscardPile: Pile
 // humanPile: Pile
@@ -11,7 +13,6 @@ import {PlayerEnum} from "../../enums/player.enum";
 // moveCardDriver: function
 
 class Board extends Component {
-
     render() {
         return (
             <div className="board-component">

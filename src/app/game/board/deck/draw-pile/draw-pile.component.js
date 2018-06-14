@@ -2,19 +2,13 @@ import React, {Component} from 'react';
 import './draw-pile.component.css';
 import Card from "../../../../shared/components/card/card.component";
 
+// props
+
+// name: string
 // drawPile: Pile
+// moveCardDriver1: function
 
 class DrawPile extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {}
-
-        // this.onCardClick = this.onCardClick.bind(this);
-        this.moveCardDriver2 = this.moveCardDriver2.bind(this);
-
-    }
-
     render() {
         return (
             <div className="draw-pile-component">
@@ -31,9 +25,14 @@ class DrawPile extends Component {
         );
     }
 
-    // onCardClick(clickedCard) {
-    //     this.props.onCardClick(clickedCard, this.props.name);
-    // };
+    constructor(props) {
+        super(props);
+
+        this.state = {}
+
+        this.moveCardDriver2 = this.moveCardDriver2.bind(this);
+
+    }
 
     moveCardDriver2(card) {
         this.props.moveCardDriver1(card, this.props.drawPile);

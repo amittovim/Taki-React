@@ -10,7 +10,6 @@ import {CardActionEnum} from "../../../enums/card-action-enum";
 // Driver: function
 
 class Card extends Component {
-
     render() {
         return (
             <div className={`card-component

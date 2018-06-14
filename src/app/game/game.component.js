@@ -5,9 +5,12 @@ import Board from "./board/board.component";
 import * as utils from "../../logic/utils/model.utils";
 import {PlayerEnum} from "../enums/player.enum";
 import {handleMoveCard} from "../../logic/dealer/dealer";
+import {PileTypeEnum} from "../enums/pile-type.enum";
+
+// Props:
+//
 
 class Game extends Component {
-
     render() {
         return (
             <div className="game-component">
@@ -15,33 +18,14 @@ class Game extends Component {
                        discardPile={this.state.DiscardPile}
                        humanPile={this.state.HumanPile}
                        botPile={this.state.BotPile}
-                       moveCardDriver={this.playMove} // TODO: replace to context
+                       // moveCardDriver={this.playMove} // TODO: replace to context
+                       moveCardDriver={this.handlePlayMove()}
                 />
             </div>
         );
     }
 
     constructor(props) {
-        //
-        // // client => server
-        //
-        // makeMove(body)
-        // {
-        //     body: {
-        //         sourcePileEnum: Pile,
-        //             destinationPileEnum
-        //     :
-        //         Pile
-        //     }
-        // }
-        //
-        // // server => client
-        //
-        // makeBotMove()
-        // {
-
-        // }
-
         super(props);
         this.state = {
             DrawPile: null,
@@ -59,7 +43,6 @@ class Game extends Component {
         this.playMove = this.playMove.bind(this);
     }
 
-
     componentWillMount() {
         this.setState(GameService.getInitialState());
         if (this.state.currentPlayer === PlayerEnum.Bot) {
@@ -68,18 +51,26 @@ class Game extends Component {
         }
     }
 
-    playMove(card, sourcePile) {
-        debugger;
-        if (GameService.isMoveLegal()) {
-            this.handleMoveCard(card, sourcePile);
-        } else {
-            alert('Error!');
+    handlePlayMove(card, sourcePile) {
+        let myGameStep; //of type GameStepObject
+        //   if ( (/*card belongs to humanPile*/) || (/*card belongs to top card of drawpile*/) ) {
+        if ( (myGameStep.srcPile.type === PileTypeEnum.HumanPile) ||
+            ( (myGameStep.srcPile.type === PileTypeEnum.DrawPile)&& (myGameStep.srcPile) ) ) {   //todo finish this "if"
+            myGameStep.currentPlayer = this.state.currentPlayer;
+            myGameStep.activeAction = this.state.activeAction;
+            myGameStep.activeCard = card;
+            myGameStep.srcPile =  sourcePile;
+            nextMove = GameService.playMove(myGameStep);
         }
+
     }
 
+/*
     handleMoveCard(card, sourcePile) {
-        const destinationPile = GameService.getDestinationPile(sourcePile);
-        const updatedPiles = this.moveCard(card, sourcePile, destinationPile);
+        let GameStepObject myGameStep ;
+        myGameStep.srcPile = sourcePile;
+        myGameStep.dstPile = GameService.getDestinationPile(sourcePile);
+        const updatedPiles = GameService.moveCard(card, sourcePile, destinationPile);
         GameService.requestMove(updatedPiles)
             .then((successMessage) => {
                 debugger;
@@ -89,14 +80,7 @@ class Game extends Component {
                 }))
             });
     }
-
-
-    moveCard(card, sourcePile, destinationPile) {
-        return {
-            ['sourcePile.type']: utils.pullItemFromArray(card, sourcePile.cards),
-            ['destinationPile.type']: utils.insertToEndOfArray(card, destinationPile.cards)
-        }
-    }
+*/
 }
 
 export default Game;

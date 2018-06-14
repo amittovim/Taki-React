@@ -17,9 +17,9 @@ export function dealCards() {
 function dealHands() {
     for (let i = 1; i <= consts.NUMBER_OF_STARTING_CARDS_IN_PLAYERS_HAND; i++) {
         let card = takiUtils.getTopOfPile(GameState.drawPile);
-        moveCard(card, GameState.drawPile, GameState.human.pile);
+        handleMoveCard(card, GameState.drawPile, GameState.human.pile);
         card = takiUtils.getTopOfPile(GameState.drawPile);
-        moveCard(card, GameState.drawPile, GameState.bot.pile);
+        handleMoveCard(card, GameState.drawPile, GameState.bot.pile);
     }
 }
 
@@ -54,7 +54,7 @@ export function handleMoveCard(card, sourcePile, destinationPile) {
     if (!destinationPile) {
         destinationPile = getDestinationPile(sourcePile);
     }
-    card.isHidden = isCardHidden();
+    card.isHidden = isCardHidden(sourcePile,destinationPile);
     moveCard(card, sourcePile, destinationPile);
     setLeadingCard(card, destinationPile);
 }
@@ -65,17 +65,17 @@ function getDestinationPile(sourcePile) {
             return GameState.currentPlayer === PlayerEnum.Human ? GameState.human.pile : GameState.bot.pile;
         case PileTypeEnum.DiscardPile:
             return GameState.drawPile;
-        case PileTypeEnum.HumanHand:
-        case PileTypeEnum.BotHand:
+        case PileTypeEnum.HumanPile:
+        case PileTypeEnum.BotPile:
             return GameState.discardPile;
         default:
             break;
     }
 }
 
-function isCardHidden(sourcePile) {
-    return ((sourcePile === PileTypeEnum.DrawPile && GameState.currentPlayer === PlayerEnum.Bot)
-        || sourcePile === PileTypeEnum.DiscardPile);
+function isCardHidden(sourcePile,destinationPile) {
+    return ((sourcePile.type === PileTypeEnum.DrawPile && destinationPile.type === PileTypeEnum.BotPile )
+        || sourcePile.type === PileTypeEnum.DiscardPile);
 }
 
 function moveCard(card, sourcePile, destinationPile) {

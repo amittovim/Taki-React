@@ -31,8 +31,8 @@ class Hand extends Component {
         this.moveCardDriver2 = this.moveCardDriver2.bind(this);
     }
 
-    moveCardDriver2(card, sourcePile) {
-        this.props.moveCardDriver1(card, this.props.hand)
+    moveCardDriver2(card) {
+        this.props.moveCardDriver1(card, this.props.pile)
     }
 }
 

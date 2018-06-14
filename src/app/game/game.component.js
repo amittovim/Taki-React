@@ -41,6 +41,7 @@ class Game extends Component {
     }
 
     handleMoveCard(card, sourcePile) {
+        debugger;
         GameService.moveCard(card, sourcePile);
         this.setState((prevState) => ({
             ...prevState

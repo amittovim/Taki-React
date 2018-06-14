@@ -3,6 +3,11 @@ import './deck.component.css';
 import DiscardPile from "./discard-pile/discard-pile.component";
 import DrawPile from "./draw-pile/draw-pile.component";
 
+// Props:
+// drawPile
+// discardPile
+// moveCardDriver0
+
 class Deck extends Component {
     constructor(props) {
         super(props);
@@ -24,7 +29,6 @@ class Deck extends Component {
                 <DrawPile name="drawPile"
                           drawPile={this.props.drawPile}
                           cards={this.state.drawPile.cards}
-                          // onCardClick={this.moveCard}
                           moveCardDriver1={this.moveCardDriver1}
                 />
             </div>

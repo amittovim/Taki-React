@@ -5,7 +5,7 @@ import {CardActionEnum} from "../../../enums/card-action-enum";
 
 
 // key: number
-// card: Card
+// card: card
 // hoverEnabled: boolean
 // Driver: function
 
@@ -48,6 +48,7 @@ class Card extends Component {
     }
 
     handleClick() {
+        debugger;
         this.props.moveCardDriver2(this.props.card);
     };
 }

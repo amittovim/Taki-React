@@ -60,11 +60,18 @@ class Game extends Component {
             myGameStep.activeAction = this.state.activeAction;
             myGameStep.activeCard = card;
             myGameStep.srcPile =  sourcePile;
-            nextMove = GameService.playMove(myGameStep);
+            let nextMove = GameService.playMove(myGameStep);
+            GameService.requestMove(nextMove )
+                .then((successMessage) => {
+                    debugger;
+                    console.log("Yay! " + successMessage);
+                    this.setState((prevState) => ({
+                        ...nextMove
+                    }))
+                });
         }
 
     }
-
 /*
     handleMoveCard(card, sourcePile) {
         let GameStepObject myGameStep ;
@@ -85,3 +92,16 @@ class Game extends Component {
 
 export default Game;
 
+// what i wrote on thursday night :
+// 1. went over all files and added  the "props" lines and refactored the structure of all
+// react components.
+// 2. build a flow of data from the beginning of the game.
+
+
+// 1. if the current player isn't me : request an array (or just one object) of gameStepsRequests (each index is a move of one card)
+// 2. else (current player is me ) {
+// when a card is clicked run the function handlePlayMove:
+//      this function build a GameStepRequestObject. fills it up while checking if a move is legit.
+//      if so, finish filling the GameStepRequestObject and send it to server.
+// waiting for server ok response than apply setState with the approved GameStepRequestObject
+//      -

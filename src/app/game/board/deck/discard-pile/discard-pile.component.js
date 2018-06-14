@@ -24,8 +24,6 @@ class DiscardPile extends Component {
             </div>
         );
     }
-}
-
     constructor(props) {
         super(props);
         this.moveCardDriver2 = this.moveCardDriver2.bind(this);
@@ -34,5 +32,6 @@ class DiscardPile extends Component {
     moveCardDriver2(card) {
         this.props.moveCardDriver1(card, this.props.discardPile);
     };
+}
 
 export default DiscardPile;

@@ -30,7 +30,7 @@ interface Card {
     isHidden: boolean;
 }
 
-interface GameStepObject {
+interface GameStepRequestObject { //or GameStepObject
     srcPile: Pile;
     dstPile: Pile;
     leadingCard: Card;

@@ -122,6 +122,44 @@ export function pickRandomColor() {
     return myGameStep;
 }*/
 
+/*
+function playNextBotMove(myGameStep) {
+    // delay();
+    let leadingCard = myGameStep.leadingCard;
+    let activeAction = myGameStep.activeAction;
+    let bot = PlayerEnum.Bot;
+    let matchedCard;
+
+    // if you have CC card and you're allowed to put it - mark it as the active card.
+    if (matchedCard = getCardInHand(bot, [{action: CardActionEnum.ChangeColor}])) {
+        myGameStep.activeCard = matchedCard;
+    }
+    // if you have a Stop card and its the same color as the leading card - mark it as the active card.
+    else if (matchedCard = getCardInHand(bot, [{action: CardActionEnum.Stop}, {color: leadingCard.color}])) {
+        myGameStep.activeCard = matchedCard;
+    }
+    // else if (matchedCard = getCardInHand(bot, [{action: CardActionEnum.Plus}, {color: leadingCard.color}])) {
+    //     GameState.activeCard = matchedCard;
+    // }
+    // if you have a taki card and it has the same color as the leading card - mark it as the active card.
+    else if (matchedCard = getCardInHand(bot, [{action: CardActionEnum.Taki}, {color: leadingCard.color}])) {
+        myGameStep.activeCard = matchedCard;
+    }
+    // if you have a card with the same color as the leading card - mark it as the active card.
+    else if (matchedCard = getCardInHand(bot, [{color: leadingCard.color}])) {
+        myGameStep.activeCard = matchedCard;
+    }
+    // if you have a card with the same number as the leading card - mark it as the active card.
+    else if ( ( leadingCard.number !== null) && (matchedCard = getCardInHand(bot, [{number: leadingCard.number}])) ) {
+        myGameStep.activeCard = matchedCard;
+    }
+    // if none of the conditions above happen - mark the top card of the draw pile as the active card.
+    else {
+        myGameStep.activeCard = GameState.drawPile.getTop();
+    }
+    playMove();
+}
+*/
 
 
 

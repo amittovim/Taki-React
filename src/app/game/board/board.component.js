@@ -39,6 +39,7 @@ class Board extends Component {
     }
 
     moveCardDriver_1(card, sourcePile) {
+        debugger;
         this.props.moveCardDriver(card, sourcePile);
     }
 }

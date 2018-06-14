@@ -3,13 +3,8 @@ interface Player {
     pile: Pile;
 }
 
-enum PlayerEnum {
-    Bot = 'Bot',
-    Human = 'Human'
-}
-
 interface Pile {
-    type: PileEnum;
+    type: PileTypeEnum;
     cards: Card[];
     isHand: boolean;
     singleCardCounter: number;
@@ -23,17 +18,53 @@ interface State {
     leadingCard: Card;
     currentPlayer: PlayerEnum;
     selectedCard: Card;
-    activeAction: ActionEnum;
+    activeAction: CardActionEnum;
     turnNumber: number;
 }
 
 interface Card {
     id: number;
-    color: ColorEnum;
-    number: NumberEnum;
-    action: ActionEnum;
+    color: CardColorEnum;
+    number: CardNumberEnum;
+    action: CardActionEnum;
     isHidden: boolean;
 }
 
+enum CardColorEnum {
+    Green = 'green',
+    Red = 'red',
+    Yellow = 'yellow',
+    Blue = 'blue'
+}
 
+enum CardNumberEnum {
+    One = 1,
+    Three = 3,
+    Four = 4,
+    Five = 5,
+    Six = 6,
+    Seven = 7,
+    Eight = 8,
+    Nine = 9
+}
 
+enum CardActionEnum {
+    Taki = 'taki',
+    SuperTaki = 'super-taki',
+    Stop = 'stop',
+    ChangeColor = 'change-color',
+    Plus = 'plus',
+    TwoPlus = 'two-plus'
+}
+
+enum PileTypeEnum {
+    DrawPile = 'DrawPile',
+    DiscardPile = 'DiscardPile',
+    HumanPile = 'HumanPile',
+    BotPile = 'BotPile'
+}
+
+enum PlayerEnum {
+    Bot = 'Bot',
+    Human = 'Human'
+}

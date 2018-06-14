@@ -7,10 +7,10 @@ export default class BoardService {
         dealer.handleMoveCard(card, sourcePile);
 
         // TODO: remove this from here. its temporary just to see that the moves are working
-        if (GameState.players.currentPlayer.name === GameState.players.list.bot.name) {
-            GameState.players.currentPlayer = GameState.players.list.human
+        if (GameState.players.currentPlayer.name === GameState.players.list.BotPile.name) {
+            GameState.players.currentPlayer = GameState.players.list.HumanPile
         }else {
-            GameState.players.currentPlayer = GameState.players.list.bot;
+            GameState.players.currentPlayer = GameState.players.list.BotPile;
         }
         console.log(GameState);
     }

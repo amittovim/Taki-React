@@ -16,17 +16,17 @@ export function dealCards() {
 
 function dealHands() {
     for (let i = 1; i <= consts.NUMBER_OF_STARTING_CARDS_IN_PLAYERS_HAND; i++) {
-        let card = takiUtils.getTopOfPile(GameState.drawPile);
-        handleMoveCard(card, GameState.drawPile, GameState.human.pile);
-        card = takiUtils.getTopOfPile(GameState.drawPile);
-        handleMoveCard(card, GameState.drawPile, GameState.bot.pile);
+        let card = takiUtils.getTopOfPile(GameState.DrawPile);
+        handleMoveCard(card, GameState.DrawPile, GameState.HumanPile);
+        card = takiUtils.getTopOfPile(GameState.DrawPile);
+        handleMoveCard(card, GameState.DrawPile, GameState.BotPile);
     }
 }
 
 
 // TODO: FLIP CARD
 // todo : unremark these lines to enable flipping cards
-// ( currentPlayer.name === GameState.players.list.human.name )
+// ( currentPlayer.name === GameState.players.list.HumanPile.name )
 //     ? card.isHidden=false
 //     : card.isHidden=true;
 //TODO: unremark this line to enable flipping cards
@@ -36,8 +36,8 @@ function drawStartingCard() {
     let topCard;
     do {
         // It draws another card if the card drawn is CHANGE COLOR because you cannot start a taki with this card
-        topCard = takiUtils.getTopOfPile(GameState.drawPile);
-        handleMoveCard(topCard, GameState.drawPile, GameState.discardPile);
+        topCard = takiUtils.getTopOfPile(GameState.DrawPile);
+        handleMoveCard(topCard, GameState.DrawPile, GameState.DiscardPile);
     } while (topCard.action && topCard.action === CardActionEnum.ChangeColor);
 
     // TODO: move this:
@@ -54,27 +54,27 @@ export function handleMoveCard(card, sourcePile, destinationPile) {
     if (!destinationPile) {
         destinationPile = getDestinationPile(sourcePile);
     }
-    card.isHidden = isCardHidden(sourcePile,destinationPile);
+    card.isHidden = isCardHidden(sourcePile, destinationPile);
     moveCard(card, sourcePile, destinationPile);
     setLeadingCard(card, destinationPile);
 }
 
-function getDestinationPile(sourcePile) {
+export function getDestinationPile(sourcePile) {
     switch (sourcePile.type) {
         case PileTypeEnum.DrawPile:
-            return GameState.currentPlayer === PlayerEnum.Human ? GameState.human.pile : GameState.bot.pile;
+            return GameState.currentPlayer === PlayerEnum.Human ? GameState.HumanPile : GameState.BotPile;
         case PileTypeEnum.DiscardPile:
-            return GameState.drawPile;
+            return GameState.DrawPile;
         case PileTypeEnum.HumanPile:
         case PileTypeEnum.BotPile:
-            return GameState.discardPile;
+            return GameState.DiscardPile;
         default:
             break;
     }
 }
 
-function isCardHidden(sourcePile,destinationPile) {
-    return ((sourcePile.type === PileTypeEnum.DrawPile && destinationPile.type === PileTypeEnum.BotPile )
+function isCardHidden(sourcePile, destinationPile) {
+    return ((sourcePile.type === PileTypeEnum.DrawPile && destinationPile.type === PileTypeEnum.BotPile)
         || sourcePile.type === PileTypeEnum.DiscardPile);
 }
 
@@ -87,5 +87,6 @@ function setLeadingCard(card, destinationPile) {
     if (destinationPile.type === PileTypeEnum.DiscardPile) {
         GameState.leadingCard = card;
     }
+    return GameState.leadingCard;
 }
 

@@ -48,7 +48,6 @@ class Card extends Component {
     }
 
     handleClick() {
-        debugger;
         this.props.moveCardDriver2(this.props.card);
     };
 }

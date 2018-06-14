@@ -4,8 +4,8 @@ import Hand from "./hand/hand.component";
 import Deck from "./deck/deck.component";
 import {PlayerEnum} from "../../enums/player.enum";
 
-// drawPile: Pile
-// discardPile: Pile
+// DrawPile: Pile
+// DiscardPile: Pile
 // humanPile: Pile
 // botPile: Pile
 // moveCardDriver: function

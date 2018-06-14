@@ -1,8 +1,8 @@
 export const GameState = {
-    drawPile: null,
-    discardPile: null,
-    human: null,
-    bot: null,
+    DrawPile: null,
+    DiscardPile: null,
+    HumanPile: null,
+    BotPile: null,
     leadingCard: null,
     currentPlayer: null,
     selectedCard: null,

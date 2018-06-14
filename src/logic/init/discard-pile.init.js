@@ -9,5 +9,5 @@ export default function initDiscardPile() {
 }
 
 function createDiscardPile() {
-    GameState.discardPile = new PileModel(PileTypeEnum.DiscardPile);
+    GameState.DiscardPile = new PileModel(PileTypeEnum.DiscardPile);
 }

@@ -16,11 +16,11 @@ export default function initDrawPile() {
 let cardId = 0;
 
 function createDrawPile() {
-    GameState.drawPile = new PileModel(PileTypeEnum.DrawPile);
+    GameState.DrawPile = new PileModel(PileTypeEnum.DrawPile);
     createNumberCards();
     createActionCards();
 
-    utils.shuffleArray(GameState.drawPile.cards);
+    utils.shuffleArray(GameState.DrawPile.cards);
 }
 
 function createNumberCards() {
@@ -28,7 +28,7 @@ function createNumberCards() {
         for (let i = 1; i <= 2; i++) {
             for (let color in CardColorEnum) {
                 const card = new CardModel(cardId++, CardColorEnum[color], CardNumberEnum[number]);
-                GameState.drawPile.cards.push(card);
+                GameState.DrawPile.cards.push(card);
             }
         }
     }
@@ -40,16 +40,16 @@ function createActionCards() {
             (CardActionEnum[action] !== CardActionEnum.SuperTaki)) {
             for (let i = 1; i <= 2; i++) {
                 for (let color in CardColorEnum) {
-                    GameState.drawPile.cards.push(new CardModel(cardId++, CardColorEnum[color], null, CardActionEnum[action]));
+                    GameState.DrawPile.cards.push(new CardModel(cardId++, CardColorEnum[color], null, CardActionEnum[action]));
                 }
             }
         } else if (CardActionEnum[action] === CardActionEnum.ChangeColor) {
             for (let j = 1; j <= 4; j++) {
-                GameState.drawPile.cards.push(new CardModel(cardId++, null, null, CardActionEnum.ChangeColor));
+                GameState.DrawPile.cards.push(new CardModel(cardId++, null, null, CardActionEnum.ChangeColor));
             }
         } else if (CardActionEnum[action] === CardActionEnum.SuperTaki) {
             for (let i = 1; i <= 2; i++) {
-                GameState.drawPile.cards.push(new CardModel(cardId++, null, null, CardActionEnum.SuperTaki));
+                GameState.DrawPile.cards.push(new CardModel(cardId++, null, null, CardActionEnum.SuperTaki));
             }
         }
     }

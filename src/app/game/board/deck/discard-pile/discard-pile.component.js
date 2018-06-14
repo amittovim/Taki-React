@@ -2,12 +2,11 @@ import React, {Component} from 'react';
 import './discard-pile.component.css'
 import Card from "../../../../shared/components/card/card.component";
 
+// discardPile: Pile
+
 class DiscardPile extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-
-        }
         this.moveCardDriver2 = this.moveCardDriver2.bind(this);
     }
 
@@ -19,7 +18,7 @@ class DiscardPile extends Component {
         return (
             <div className="discard-pile-component">
                 {
-                    this.props.cards.map(card => {
+                    this.props.discardPile.cards.map(card => {
                         return <Card key={card.id}
                                      card={card}
                                      moveCardDriver2={this.moveCardDriver2}

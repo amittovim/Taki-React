@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import './draw-pile.component.css';
 import Card from "../../../../shared/components/card/card.component";
 
+// drawPile: Pile
+
 class DrawPile extends Component {
     constructor(props) {
         super(props);
@@ -17,10 +19,10 @@ class DrawPile extends Component {
         return (
             <div className="draw-pile-component">
                 {
-                    this.props.cards.map((card, index) => {
+                    this.props.drawPile.cards.map((card, index) => {
                         return <Card key={card.id}
                                      card={card}
-                                     hoverEnabled={index === this.props.cards.length - 1}
+                                     hoverEnabled={index === this.props.drawPile.cards.length - 1}
                                      moveCardDriver2={this.moveCardDriver2}
                         />
                     })

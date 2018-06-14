@@ -11,8 +11,10 @@ export default function initPlayers() {
 }
 
 function createPlayers() {
-    GameState.human = new PlayerModel(PlayerEnum.Human);
-    GameState.bot = new PlayerModel(PlayerEnum.Bot);
+    GameState.Human = new PlayerModel(PlayerEnum.Human);
+    GameState.Bot = new PlayerModel(PlayerEnum.Bot);
+    GameState.HumanPile = GameState.Human.pile;
+    GameState.BotPile = GameState.Bot.pile;
 }
 
 function pickFirstPlayer() {

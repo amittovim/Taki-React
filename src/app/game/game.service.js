@@ -1,14 +1,28 @@
 import * as game from '../../logic/main';
 import * as dealer from '../../logic/dealer/dealer';
 
+
+// API
+
 export function getInitialState() {
     return game.initGame();
 }
 
-export function getGameState() {
-    return game.getGameState();
+export function requestMove(updatedPiles) {
+    return new Promise((resolve, reject) => {
+        setTimeout(function () {
+            resolve("Success!"); // Yay! Everything went well!
+        }, 250);
+    });
 }
 
-export function moveCard(card, sourcePile) {
-    return dealer.handleMoveCard(card, sourcePile);
+// Client
+
+
+export function getDestinationPile(sourcePile) {
+    return dealer.getDestinationPile(sourcePile);
+}
+
+export function isMoveLegal() {
+    return true;
 }

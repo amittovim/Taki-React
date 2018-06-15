@@ -28,6 +28,7 @@ interface Card {
     number: CardNumberEnum;
     action: CardActionEnum;
     isHidden: boolean;
+    parentPileType: PileTypeEnum;
 }
 
 enum CardColorEnum {

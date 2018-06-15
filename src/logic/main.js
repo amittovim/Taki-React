@@ -7,11 +7,13 @@ import {getDestinationPile} from "./dealer/dealer";
 import * as utils from "./utils/model.utils";
 import {getDestinationPileType} from "./dealer/dealer";
 import {PileTypeEnum} from "../app/enums/pile-type.enum";
+import {GameStatus} from "./game-status.enum";
 
 
 // ===== Game init functions =====
 
 export function initGame() {
+    GameState.status = GameStatus.GameInit;
     initPlayers();
     initDrawPile();
     initDiscardPile();

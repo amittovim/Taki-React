@@ -32,7 +32,6 @@ function createNumberCards() {
             }
         }
     }
-    debugger;
 }
 
 function createActionCards() {
@@ -54,6 +53,5 @@ function createActionCards() {
             }
         }
     }
-    debugger;
     console.log(GameState);
 }

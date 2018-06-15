@@ -16,20 +16,12 @@ export function dealCards() {
 }
 
 function dealHands() {
-    debugger;
     for (let i = 1; i <= consts.NUMBER_OF_STARTING_CARDS_IN_PLAYERS_HAND; i++) {
-
-//        let card = pullItemFromArray(GameState.DrawPile[GameState.DrawPile.length - 1], GameState.DrawPile)
-
-//        let card = takiUtils.getTopOfPile(GameState.DrawPile);
-//        utils.insertToEndOfArray(card, GameState.HumanPile.cards);
-        let card = GameState.DrawPile.cards[GameState.drawPile.cards.length-1];
-        debugger;
+        let topCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length-1];
         handleMoveCard(card, GameState.DrawPile, GameState.HumanPile);
-//        card = takiUtils.getTopOfPile(GameState.DrawPile);
+        topCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length-1];
         handleMoveCard(card, GameState.DrawPile, GameState.BotPile);
     }
-    debugger;
 }
 
 
@@ -45,7 +37,7 @@ function drawStartingCard() {
     let topCard;
     do {
         // It draws another card if the card drawn is CHANGE COLOR because you cannot start a taki with this card
-        topCard = takiUtils.getTopOfPile(GameState.DrawPile);
+        topCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length-1];
         handleMoveCard(topCard, GameState.DrawPile, GameState.DiscardPile);
     } while (topCard.action && topCard.action === CardActionEnum.ChangeColor);
 
@@ -64,9 +56,9 @@ export function handleMoveCard(card, sourcePile, destinationPile) {
         destinationPile = getDestinationPile(sourcePile);
     }
     card.isHidden = isCardHidden(sourcePile, destinationPile);
-    debugger;
     moveCard(card, sourcePile, destinationPile);
     setLeadingCard(card, destinationPile);
+    console.log(GameState);
 }
 
 export function getDestinationPileType(sourcePileType) {
@@ -89,9 +81,7 @@ function isCardHidden(sourcePile, destinationPile) {
 }
 
 function moveCard(card, sourcePile, destinationPile) {
-    debugger;
     utils.pullItemFromArray(card, sourcePile.cards);
-    debugger;
     utils.insertToEndOfArray(card, destinationPile.cards);
     card.parentPileType = destinationPile.type;
 }

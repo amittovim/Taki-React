@@ -47,7 +47,6 @@ class Game extends Component {
     }
 
     handlePlayMove(card) {
-        debugger;
         GameApiService.requestMoveCard(card.id)
             .then(newState => {
                 this.setState((prevState) => ({

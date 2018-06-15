@@ -6,10 +6,14 @@ import {GameState} from "./state";
 import {getDestinationPile} from "./dealer/dealer";
 import * as utils from "./utils/model.utils";
 import {getDestinationPileType} from "./dealer/dealer";
+import {PileTypeEnum} from "../app/enums/pile-type.enum";
+import {GameStatus} from "./game-status.enum";
+import {PlayerEnum} from "../app/enums/player.enum";
 
 // ===== Game init functions =====
 
 export function initGame() {
+    GameState.status = GameStatus.GameInit;
     initPlayers();
     initDrawPile();
     initDiscardPile();
@@ -43,18 +47,6 @@ function updateSelectedCard(cardId) {
     debugger;
 }
 
-function moveCard() {
-    const sourcePileType = GameState.selectedCard.parentPileType;
-    const destinationPileType = getDestinationPileType(sourcePileType);
-    GameState.selectedCard.parentPileType = destinationPileType;
-    utils.pullItemFromArray(GameState.selectedCard, GameState[sourcePileType].cards);
-    utils.insertToEndOfArray(GameState.selectedCard, GameState[destinationPileType].cards);
-    return {
-        [sourcePileType]: {
-            ...GameState[sourcePileType]
-        },
-        [destinationPileType]: {
-            ...GameState[destinationPileType]
-        }
-    };
+export function switchPlayers() {
+    GameState.currentPlayer = GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot;
 }

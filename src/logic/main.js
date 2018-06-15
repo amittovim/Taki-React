@@ -17,47 +17,33 @@ export function initGame() {
     initDiscardPile();
     dealer.dealCards();
     if (GameState.currentPlayer === PlayerEnum.Bot) {
-        debugger;
-        console.log(GameState.currentPlayer);
         playBotMove();
     }
     return GameState;
 }
 
-// export function requestMoveCard(cardId) {
-//     return new Promise((resolve, reject) => {
-//         const newState = gameMove();
-//         if (isMoveLegal()) {
-//             let newState = moveCard();
-//             resolve(newState);
-//         } else {
-//             reject('illegal move!');
-//         }
-//     });
-// }
-
 // API
 
 export function requestMoveCard(cardId) {
-    return makeGameMove(cardId);
+    return playHumanMove(cardId);
 }
 
 export function requestGameStateUpdate() {
     return new Promise((resolve, reject) => {
-        if (hasMovesAvailable()) {
+        if (humanPlayerHasAvailableMoves()) {
             resolve({
                 message: GameStatusMessageEnum.ProceedPlayersTurn
             })
         } else {
-            GameState.currentPlayer = PlayerEnum.Bot;
-            resolve(playBotMove());
+            let stateChange = playBotMove();
+            resolve(stateChange);
         }
     });
 }
 
 // Inner
 
-function hasMovesAvailable() {
+function humanPlayerHasAvailableMoves() {
     return false;
 }
 
@@ -65,21 +51,30 @@ function isMoveLegal() {
     return true;
 }
 
-
 function playBotMove() {
-    return makeGameMove(GameState.BotPile.cards[0].id);
+    GameState.currentPlayer = PlayerEnum.Bot;
+    console.log(GameState.currentPlayer);
+    return playGameMove(GameState.BotPile.cards[0].id);
 }
 
-function makeGameMove(cardId) {
+function playHumanMove(cardId) {
+    GameState.currentPlayer = PlayerEnum.Human;
+    console.log(GameState.currentPlayer);
+    return playGameMove(cardId);
+}
+
+function playGameMove(cardId) {
     updateSelectedCard(cardId);
     return new Promise((resolve, reject) => {
         if (isMoveLegal()) {
             const newState = moveCard();
             const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatusMessageEnum.CardUpdated : GameStatusMessageEnum.UpdatedGameState;
-            resolve({
-                message: message,
-                payload: newState
-            });
+            setTimeout(() => {
+                resolve({
+                    message: message,
+                    payload: newState
+                });
+            }, 500);
         } else {
             reject(new Error(`Invalid move for ${GameState.currentPlayer}`));
         }

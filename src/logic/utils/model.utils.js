@@ -28,6 +28,7 @@ export function insertToEndOfArray(item, array) {
 }
 
 export function pullItemFromArray(item, array) {
+
     return array.splice(findIndexOfItemInArray(item, array), 1)[0];
 }
 

@@ -3,15 +3,13 @@ import initDrawPile from './init/draw-pile.init';
 import initDiscardPile from './init/discard-pile.init';
 import * as dealer from './dealer/dealer';
 import {GameState} from "./state";
-import {getDestinationPile} from "./dealer/dealer";
-import * as utils from "./utils/model.utils";
-import {getDestinationPileType} from "./dealer/dealer";
-import {GameStatusMessageEnum} from "../app/game/game.component";
+import {GameStatus} from "./game-status.enum";
 import {PlayerEnum} from "../app/enums/player.enum";
 
 // ===== Game init functions =====
 
 export function initGame() {
+    GameState.status = GameStatus.GameInit;
     initPlayers();
     initDrawPile();
     initDiscardPile();
@@ -53,13 +51,11 @@ function isMoveLegal() {
 
 function playBotMove() {
     GameState.currentPlayer = PlayerEnum.Bot;
-    console.log(GameState.currentPlayer);
     return playGameMove(GameState.BotPile.cards[0].id);
 }
 
 function playHumanMove(cardId) {
     GameState.currentPlayer = PlayerEnum.Human;
-    console.log(GameState.currentPlayer);
     return playGameMove(cardId);
 }
 
@@ -67,12 +63,12 @@ function playGameMove(cardId) {
     updateSelectedCard(cardId);
     return new Promise((resolve, reject) => {
         if (isMoveLegal()) {
-            const newState = moveCard();
-            const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatusMessageEnum.CardUpdated : GameStatusMessageEnum.UpdatedGameState;
+            const stateChange = handleMoveCard();
+            const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatus.CardUpdated : GameStatus.UpdatedGameState;
             setTimeout(() => {
                 resolve({
                     message: message,
-                    payload: newState
+                    payload: stateChange
                 });
             }, 500);
         } else {
@@ -87,20 +83,9 @@ function updateSelectedCard(cardId) {
         .concat(GameState.DiscardPile.cards)
         .concat(GameState.DrawPile.cards);
     GameState.selectedCard = gameCards.filter((card) => card.id === cardId)[0];
+    debugger;
 }
 
-function moveCard() {
-    const sourcePileType = GameState.selectedCard.parentPileType;
-    const destinationPileType = getDestinationPileType(sourcePileType);
-    GameState.selectedCard.parentPileType = destinationPileType;
-    utils.pullItemFromArray(GameState.selectedCard, GameState[sourcePileType].cards);
-    utils.insertToEndOfArray(GameState.selectedCard, GameState[destinationPileType].cards);
-    return {
-        [sourcePileType]: {
-            ...GameState[sourcePileType]
-        },
-        [destinationPileType]: {
-            ...GameState[destinationPileType]
-        }
-    };
+export function switchPlayers() {
+    GameState.currentPlayer = GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot;
 }

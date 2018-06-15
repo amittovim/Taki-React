@@ -67,9 +67,3 @@ class Game extends Component {
 }
 
 export default Game;
-
-export const GameStatusMessageEnum = {
-    CardUpdated: 'CardUpdated',
-    ProceedPlayersTurn: 'ProceedPlayersTurn',
-    UpdatedGameState: 'UpdatedGameState'
-};

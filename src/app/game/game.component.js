@@ -6,6 +6,7 @@ import Board from "./board/board.component";
 import * as utils from "../../logic/utils/model.utils";
 import {PlayerEnum} from "../enums/player.enum";
 import {handleMoveCard} from "../../logic/dealer/dealer";
+import {GameStatus} from "../../logic/game-status.enum";
 
 class Game extends Component {
 
@@ -53,10 +54,10 @@ class Game extends Component {
                 return GameApiService.requestGameStateUpdate();
             })
             .then(response => {
-                if (response.message === GameStatusMessageEnum.ProceedPlayersTurn) {
+                if (response.message === GameStatus.ProceedPlayersTurn) {
                     console.log('Turn still not ended, go on');
                 }
-                else if (response.message === GameStatusMessageEnum.UpdatedGameState) {
+                else if (response.message === GameStatus.UpdatedGameState) {
                     this.setState({...response.payload});
                 }
             })

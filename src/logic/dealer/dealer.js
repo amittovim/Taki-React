@@ -58,6 +58,7 @@ export function getDestinationPileType(sourcePileType) {
 // }
 
 export function handleMoveCard() {
+    debugger;
     if (GameState.status === GameStatus.GameInit || GameState.status === GameStatus.SettingStartingCard) {
         GameState.selectedCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length - 1];
     }

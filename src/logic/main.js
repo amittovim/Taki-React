@@ -5,6 +5,7 @@ import * as dealer from './dealer/dealer';
 import {GameState} from "./state";
 import {GameStatus} from "./game-status.enum";
 import {PlayerEnum} from "../app/enums/player.enum";
+import {handleMoveCard} from "./dealer/dealer";
 
 // ===== Game init functions =====
 
@@ -17,6 +18,7 @@ export function initGame() {
     if (GameState.currentPlayer === PlayerEnum.Bot) {
         playBotMove();
     }
+    GameState.status= GameStatus.UpdatedGameState;
     return GameState;
 }
 

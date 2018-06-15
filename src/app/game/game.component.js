@@ -42,7 +42,6 @@ class Game extends Component {
         // this.handleMoveCard = this.handleMoveCard.bind(this);
         // this.playMove = this.playMove.bind(this);
         this.handlePlayMove = this.handlePlayMove.bind(this);
-        this.requestPlayMove = this.requestPlayMove.bind(this);
     }
 
     componentWillMount() {
@@ -51,43 +50,34 @@ class Game extends Component {
 
     componentDidMount() {
         debugger;
-/*
-        if (this.state.currentPlayer === PlayerEnum.Bot) {
-            let botGameStep;
-            botGameStep.leadingCard = this.state.leadingCard;
-            botGameStep.activeAction = this.state.activeAction;
-            botGameStep.currentPlayer = this.state.currentPlayer;
-            botGameStep.turnNumber = this.state.turnNumber;
+        /*
+                if (this.state.currentPlayer === PlayerEnum.Bot) {
+                    let botGameStep;
+                    botGameStep.leadingCard = this.state.leadingCard;
+                    botGameStep.activeAction = this.state.activeAction;
+                    botGameStep.currentPlayer = this.state.currentPlayer;
+                    botGameStep.turnNumber = this.state.turnNumber;
 
-            botGameStep = GameService.playNextBotMove(botGameStep);
-            this.requestPlayMove(botGameStep);
+                    botGameStep = GameService.playNextBotMove(botGameStep);
+                    this.requestPlayMove(botGameStep);
 
-        }
-*/
+                }
+        */
     }
 
     handlePlayMove(card, sourcePile) {
-        let myGameStep; //of type GameStepObject
         debugger;
-        myGameStep.srcPile = sourcePile;
-        myGameStep.activeCard = card;
-
-        //   if ( (/*card belongs to humanPile*/) || (/*card belongs to top card of drawpile*/) ) {
-        if ((myGameStep.srcPile.type === PileTypeEnum.HumanPile) ||
-            ((myGameStep.srcPile.type === PileTypeEnum.DrawPile) && (myGameStep.srcPile))) {   //todo finish this "if"
-            myGameStep.currentPlayer = this.state.currentPlayer;
-            myGameStep.activeAction = this.state.activeAction;
-
-            requestPlayMove(myGameStep);
-        }
-    }
-
-    requestPlayMove(myGameStep) {
+        let myGameStep = {
+            srcPile: sourcePile,
+            activeCard: card,
+            currentPlayer: this.state.currentPlayer
+        }; //of type GameStepObject
         let nextMove = GameService.playMove(myGameStep);
         GameService.requestMove(nextMove)
             .then((successMessage) => {
                 debugger;
                 console.log("Yay! " + successMessage);
+                GameService.moveCard(card, source, destination);
                 this.setState((prevState) => ({
                     ...nextMove
                 }))
@@ -95,22 +85,22 @@ class Game extends Component {
     }
 
 
-/*
-    handleMoveCard(card, sourcePile) {
-        let GameStepObject myGameStep ;
-        myGameStep.srcPile = sourcePile;
-        myGameStep.dstPile = GameService.getDestinationPile(sourcePile);
-        const updatedPiles = GameService.moveCard(card, sourcePile, destinationPile);
-        GameService.requestMove(updatedPiles)
-            .then((successMessage) => {
-                debugger;
-                console.log("Yay! " + successMessage);
-                this.setState((prevState) => ({
-                    ...updatedPiles
-                }))
-            });
-    }
-*/
+    /*
+        handleMoveCard(card, sourcePile) {
+            let GameStepObject myGameStep ;
+            myGameStep.srcPile = sourcePile;
+            myGameStep.dstPile = GameService.getDestinationPile(sourcePile);
+            const updatedPiles = GameService.moveCard(card, sourcePile, destinationPile);
+            GameService.requestMove(updatedPiles)
+                .then((successMessage) => {
+                    debugger;
+                    console.log("Yay! " + successMessage);
+                    this.setState((prevState) => ({
+                        ...updatedPiles
+                    }))
+                });
+        }
+    */
 }
 
 export default Game;

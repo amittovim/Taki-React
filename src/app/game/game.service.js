@@ -2,7 +2,7 @@ import * as game from '../../logic/main';
 import * as dealer from '../../logic/dealer/dealer';
 import * as utils from "../../logic/utils/model.utils";
 import {PileTypeEnum} from "../enums/pile-type.enum";
-
+import {PlayerEnum} from "../enums/player.enum";
 
 // API
 
@@ -10,77 +10,81 @@ export function getInitialState() {
     return game.initGame();
 }
 
-
+// This function check if the move is legal and prepares the game state object that will be sent to the server
 export function playMove(myGameStep) {
+    debugger;
     let card = myGameStep.activeCard;
     let source = myGameStep.srcPile;
     let destination = getDestinationPile(source);
     myGameStep.shouldSwitchPlayers = false;
-    switch (myGameStep.currentPlayer) {
-        case PlayerEnum.Bot: {
-            // moveCard(card, source, destination);
-            // shouldSwitchPlayers = playMoveManager();
-            break;
-        }
-        case PlayerEnum.Human: {
-            if (!isMoveLegal(card)) {
-                // printLogOnDom('Invalid move!');
-                return;
-            } else {
-                let myUpdatedGameStep = moveCard(card, source, destination);
-                myGameStep.shouldSwitchPlayers = playMoveManager();
-            }
-            break;
-        }
-        default: {
-            break;
-        }
+    // switch (myGameStep.currentPlayer) {
+    //     case PlayerEnum.Bot: {
+    //         // moveCard(card, source, destination);
+    //         // shouldSwitchPlayers = playMoveManager();
+    //         break;
+    //     }
+    //     case PlayerEnum.Human: {
+    //         debugger;
+    if (!isMoveLegal(card)) {
+        // printLogOnDom('Invalid move!');
+        return;
+    } else {
+        //let myGameStep = moveCard(card, source, destination);
+        // return playMoveManager(myGameStep);
+        myGameStep.shouldSwitchPlayers = true;
+        return myGameStep;
+
     }
+    // break;
+    // }
+    // default: {
+    //     break;
+    // }
 }
 
 
 export function moveCard(card, sourcePile, destinationPile) {
-    return {
-        ['sourcePile.type']: utils.pullItemFromArray(card, sourcePile.cards),
-        ['destinationPile.type']: utils.insertToEndOfArray(card, destinationPile.cards)
-    }
+    debugger;
+    const test = {
+        [sourcePile.type]: utils.pullItemFromArray(card, sourcePile.cards),
+        [destinationPile.type]: utils.insertToEndOfArray(card, destinationPile.cards)
+    };
+    return test;
 }
 
-export function playMoveManager(myGameStep) {
-    let card = myGameStep.activeCard;
-    let player = myGameStep.currentPlayer;
-    myGameStep.shouldSwitchPlayer = true;
-
-    if ( myGameStep.srcPile === PileTypeEnum.DiscardPile ) {
-        //myGameStep=raiseActionFlag(myGameStep);  todo: unremark this line once i remmember what action flag is
-    }
-
-    if ( player.pile.length === 1) {
-        player.singleCardCounter++;
-    }
-
-    if (myGameStep.activeAction === CardActionEnum.ChangeColor) {
-        if (player === PlayerEnum.Bot) {
-            let ccNewColor = pickRandomColor();
-//            change2Color(ccNewColor);     TODO: show indication of changed color (maybee give it a background)
-        } else {
-            myGameStep.shouldSwitchPlayer = false;
-            // TODO: need to show a popup to choose color
-            // loadPopUp('.choose-color-popup');
-        }
-    } else if ( (card.action === CardActionEnum.Stop) && (myGameStep.activeAction === CardActionEnum.Stop) ) {
-        myGameStep.shouldSwitchPlayer = false;
-        myGameStep.turnNumber++;
-//        $('.turn-number').textContent = GameState.turnNumber;
-        if (player === PlayerEnum.Bot) {
-        }
-    } else if (myGameStep.activeAction === CardActionEnum.Taki) {
-        myGameStep.shouldSwitchPlayer = !doesPileHaveSameColorCards();
-    }
-
-//    return shouldSwitchPlayer;
-    return myGameStep;
-}
+// export function playMoveManager(myGameStep) {
+//     let card = myGameStep.activeCard;
+//     let player = myGameStep.currentPlayer;
+//     myGameStep.shouldSwitchPlayer = true;
+//
+//     if (myGameStep.srcPile === PileTypeEnum.DiscardPile) {
+//         //myGameStep=raiseActionFlag(myGameStep);  todo: unremark this line once i remmember what action flag is
+//     }
+//
+//     if (player.pile.length === 1) {
+//         player.singleCardCounter++;
+//     }
+//
+//     if (myGameStep.activeAction === CardActionEnum.ChangeColor) {
+//         if (player === PlayerEnum.Bot) {
+//             let ccNewColor = pickRandomColor();
+// //            change2Color(ccNewColor);     TODO: show indication of changed color (maybee give it a background)
+//         } else {
+//             myGameStep.shouldSwitchPlayer = false;
+//             // TODO: need to show a popup to choose color
+//             // loadPopUp('.choose-color-popup');
+//         }
+//     } else if ((card.action === CardActionEnum.Stop) && (myGameStep.activeAction === CardActionEnum.Stop)) {
+//         myGameStep.shouldSwitchPlayer = false;
+//         myGameStep.turnNumber++;
+// //        $('.turn-number').textContent = GameState.turnNumber;
+//         if (player === PlayerEnum.Bot) {
+//         }
+//     } else if (myGameStep.activeAction === CardActionEnum.Taki) {
+//         myGameStep.shouldSwitchPlayer = !doesPileHaveSameColorCards();
+//     }
+//     return myGameStep;
+// }
 
 export function doesPileHaveSameColorCards(myGameStep) {
     let handHaveSameColor = false;
@@ -160,12 +164,6 @@ function playNextBotMove(myGameStep) {
     playMove();
 }
 */
-
-
-
-
-
-
 
 
 export function requestMove(updatedPiles) {

@@ -53,5 +53,4 @@ function createActionCards() {
             }
         }
     }
-    console.log(GameState);
 }

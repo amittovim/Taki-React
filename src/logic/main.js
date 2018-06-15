@@ -14,7 +14,6 @@ export function initGame() {
     initDrawPile();
     initDiscardPile();
     dealer.dealCards();
-    console.log(GameState);
     return GameState;
 }
 

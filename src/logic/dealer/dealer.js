@@ -6,6 +6,7 @@ import {CardActionEnum} from "../../app/enums/card-action-enum";
 import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import {PlayerEnum} from "../../app/enums/player.enum";
 import {GameStatus} from "../game-status.enum";
+import {switchPlayers} from "../main";
 
 
 // == Dealing Hands ==
@@ -17,10 +18,10 @@ export function dealCards() {
 
 function dealHands() {
     for (let i = 1; i <= consts.NUMBER_OF_STARTING_CARDS_IN_PLAYERS_HAND; i++) {
-        GameState.currentPlayer = PlayerEnum.Human;
         handleMoveCard();
-        GameState.currentPlayer = PlayerEnum.Bot;
+        switchPlayers();
         handleMoveCard();
+        switchPlayers();
     }
 }
 
@@ -59,8 +60,8 @@ export function getDestinationPileType(sourcePileType) {
 // }
 
 function handleMoveCard() {
-    if (GameState.status === GameStatus.GameInit) {
-        GameState.selectedCard = takiUtils.getTopOfPile(GameState.DrawPile);
+    if (GameState.status === GameStatus.GameInit || GameState.status === GameStatus.SettingStartingCard) {
+        GameState.selectedCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length - 1];
     }
     const sourcePileType = GameState.selectedCard.parentPileType;
     const destinationPileType = getDestinationPileType(sourcePileType);

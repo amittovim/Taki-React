@@ -8,7 +8,7 @@ import * as utils from "./utils/model.utils";
 import {getDestinationPileType} from "./dealer/dealer";
 import {PileTypeEnum} from "../app/enums/pile-type.enum";
 import {GameStatus} from "./game-status.enum";
-
+import {PlayerEnum} from "../app/enums/player.enum";
 
 // ===== Game init functions =====
 
@@ -44,4 +44,8 @@ function updateSelectedCard(cardId) {
         .concat(GameState.DiscardPile.cards)
         .concat(GameState.DrawPile.cards);
     GameState.selectedCard = gameCards.filter((card) => card.id === cardId)[0];
+}
+
+export function switchPlayers() {
+    GameState.currentPlayer = GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot;
 }

@@ -7,6 +7,7 @@ import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import {PlayerEnum} from "../../app/enums/player.enum";
 import {GameStatus} from "../game-status.enum";
 import {switchPlayers} from "../main";
+import {pullItemFromArray} from "../utils/model.utils";
 
 
 // == Dealing Hands ==

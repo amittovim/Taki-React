@@ -58,7 +58,7 @@ export function handleMoveCard(card, sourcePile, destinationPile) {
     // TODO: delete the following  line and un mark the following remark to enable cards flipping
     card.isHidden = false;
     // card.isHidden = isCardHidden(sourcePile, destinationPile);
-    moveCard(card, sourcePile, destinationPile);
+    moveCard(destinationPile);
     setLeadingCard(card, destinationPile);
 }
 
@@ -81,11 +81,45 @@ export function isCardHidden(sourcePile, destinationPile) {
         || sourcePile.type === PileTypeEnum.DiscardPile);
 }
 
-function moveCard(card, sourcePile, destinationPile) {
-    utils.pullItemFromArray(card, sourcePile.cards);
-    utils.insertToEndOfArray(card, destinationPile.cards);
-    card.parentPileType = destinationPile.type;
+function moveCard(destinationPile) {
+    debugger;
+    let resetSelectedCard;
+    if (GameState.selectedCard===null) {
+        resetSelectedCard=true;
+        GameState.selectedCard=GameState.DrawPile.cards[GameState.DrawPile.cards.length-1];
+    }
+    const sourcePileType = GameState.selectedCard.parentPileType;
+    let destinationPileType;
+    if (!destinationPile) {
+        destinationPileType = getDestinationPileType(sourcePileType);
+
+    } else {
+        destinationPileType = destinationPile.type;
+    }
+
+    GameState.selectedCard.parentPileType = destinationPileType;
+
+    //TODO : delete line below and un mark the following remark to enable card flipping
+    GameState.selectedCard.isHidden = false;
+
+    // handle card flipping
+    // GameState.selectedCard.isHidden = dealer.isCardHidden(GameState[sourcePileType], GameState[destinationPileType]);
+
+    utils.pullItemFromArray(GameState.selectedCard, GameState[sourcePileType].cards);
+    utils.insertToEndOfArray(GameState.selectedCard, GameState[destinationPileType].cards);
+    if (resetSelectedCard) {
+        GameState.selectedCard=null;
+    }
+    return {
+        [sourcePileType]: {
+            ...GameState[sourcePileType]
+        },
+        [destinationPileType]: {
+            ...GameState[destinationPileType]
+        }
+    };
 }
+
 
 function setLeadingCard(card, destinationPile) {
     if (destinationPile.type === PileTypeEnum.DiscardPile) {

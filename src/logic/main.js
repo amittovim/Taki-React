@@ -44,27 +44,3 @@ function updateSelectedCard(cardId) {
         .concat(GameState.DrawPile.cards);
     GameState.selectedCard = gameCards.filter((card) => card.id === cardId)[0];
 }
-
-function moveCard() {
-    const sourcePileType = GameState.selectedCard.parentPileType;
-    const destinationPileType = getDestinationPileType(sourcePileType);
-
-    GameState.selectedCard.parentPileType = destinationPileType;
-
-    //TODO : delete line below and un mark the following remark to enable card flipping
-    GameState.selectedCard.isHidden = false;
-
-    // handle card flipping
-    // GameState.selectedCard.isHidden = dealer.isCardHidden(GameState[sourcePileType], GameState[destinationPileType]);
-
-    utils.pullItemFromArray(GameState.selectedCard, GameState[sourcePileType].cards);
-    utils.insertToEndOfArray(GameState.selectedCard, GameState[destinationPileType].cards);
-    return {
-        [sourcePileType]: {
-            ...GameState[sourcePileType]
-        },
-        [destinationPileType]: {
-            ...GameState[destinationPileType]
-        }
-    };
-}

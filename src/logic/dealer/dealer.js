@@ -16,14 +16,12 @@ export function dealCards() {
 }
 
 function dealHands() {
-    debugger;
     for (let i = 1; i <= consts.NUMBER_OF_STARTING_CARDS_IN_PLAYERS_HAND; i++) {
         GameState.currentPlayer = PlayerEnum.Human;
         handleMoveCard();
         GameState.currentPlayer = PlayerEnum.Bot;
         handleMoveCard();
     }
-    console.log(GameState);
 }
 
 function drawStartingCard() {

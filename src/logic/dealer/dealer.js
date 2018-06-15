@@ -82,7 +82,6 @@ export function isCardHidden(sourcePile, destinationPile) {
 }
 
 function moveCard(destinationPile) {
-    debugger;
     let resetSelectedCard;
     if (GameState.selectedCard===null) {
         resetSelectedCard=true;

@@ -58,6 +58,7 @@ export function handleMoveCard(card, sourcePile, destinationPile) {
     card.isHidden = isCardHidden(sourcePile, destinationPile);
     moveCard(card, sourcePile, destinationPile);
     setLeadingCard(card, destinationPile);
+    console.log(GameState);
 }
 
 export function getDestinationPileType(sourcePileType) {

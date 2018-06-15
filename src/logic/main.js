@@ -40,6 +40,7 @@ function updateSelectedCard(cardId) {
         .concat(GameState.DiscardPile.cards)
         .concat(GameState.DrawPile.cards);
     GameState.selectedCard = gameCards.filter((card) => card.id === cardId)[0];
+    debugger;
 }
 
 function moveCard() {

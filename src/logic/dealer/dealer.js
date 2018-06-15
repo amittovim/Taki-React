@@ -59,15 +59,15 @@ export function handleMoveCard(card, sourcePile, destinationPile) {
     setLeadingCard(card, destinationPile);
 }
 
-export function getDestinationPile(sourcePile) {
-    switch (sourcePile.type) {
+export function getDestinationPileType(sourcePileType) {
+    switch (sourcePileType) {
         case PileTypeEnum.DrawPile:
-            return GameState.currentPlayer === PlayerEnum.Human ? GameState.HumanPile : GameState.BotPile;
+            return GameState.currentPlayer === PlayerEnum.Human ? PileTypeEnum.HumanPile : PileTypeEnum.BotPile;
         case PileTypeEnum.DiscardPile:
-            return GameState.DrawPile;
+            return PileTypeEnum.DrawPile;
         case PileTypeEnum.HumanPile:
         case PileTypeEnum.BotPile:
-            return GameState.DiscardPile;
+            return PileTypeEnum.DiscardPile;
         default:
             break;
     }
@@ -81,6 +81,7 @@ function isCardHidden(sourcePile, destinationPile) {
 function moveCard(card, sourcePile, destinationPile) {
     utils.pullItemFromArray(card, sourcePile.cards);
     utils.insertToEndOfArray(card, destinationPile.cards);
+    card.parentPileType = destinationPile.type;
 }
 
 function setLeadingCard(card, destinationPile) {

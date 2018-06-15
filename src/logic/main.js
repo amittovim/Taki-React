@@ -32,7 +32,59 @@ export function requestMoveCard(cardId) {
 }
 
 function isMoveLegal() {
+    let card = GameState.selectedCard;
+    let isDrawPileEmpty = !(GameState.drawPile.cards.length > 0);
+    let isAskingCardFromDrawPile = card.parentPileType === PileTypeEnum.DrawPile;
+    let drawLastCardFromDrawPile = ((!isDrawPileEmpty) &&
+        ((isAskingCardFromDrawPile) || (card === GameState.drawPile.cards[GameState.drawPile.cards.length - 1])) );
+
+    // check if player want to Put a card on discard pile (only the card owner can do it) and if so check if the active card is owned by the current player
+    if ( (!drawLastCardFromDrawPile) && ('hand ' + GameState.currentPlayer.name + '-hand player cards-container' === card.element.parentElement.className) ) {
+        return isPutCardMoveLegal(card);
+    } else {
+        // check if player want to Get a card from draw pile
+        return isGetCardMoveLegal();
+    }
+}
+
+function isPutCardMoveLegal() {
+    let isSameColor;
+    let card = GameState.selectedCard;
+
+    // if taki is invoked only cards with the same color are legal
+    if (GameState.activeAction === CardActionEnum.Taki) {
+        isSameColor = !!(card.color && GameState.leadingCard.color === card.color);
+        if (!isSameColor) {
+            return false;
+        }
+    }else {
+        isSameColor      = !!(card.color  && GameState.leadingCard.color === card.color);
+        let isSameNumber = !!(card.number && GameState.leadingCard.number === card.number);
+        let isSameAction = !!(card.action && GameState.leadingCard.action === card.action);
+        let isUnColoredActionCard = !!(card.action && !card.color);
+        if (!(isSameColor || isSameNumber || isSameAction || isUnColoredActionCard)) {
+            return false;
+        }
+    }
     return true;
+}
+
+function isGetCardMoveLegal() {
+    // checking if drawing Card From DrawPile is a legal move - only if no other move is available for player
+    if (availableMoveExist()) {
+        return false;
+    }
+    return true;
+}
+
+function availableMoveExist() {
+    let legalCards = [];
+    GameState[GameState.currentPlayer].pile.cards.forEach(function (card, index) {
+        if (isMoveLegal(card)) {
+            legalCards.push(index);
+        }
+    });
+    return (legalCards.length > 0);
 }
 
 function updateSelectedCard(cardId) {

@@ -7,6 +7,7 @@ import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import Game from "../../app/game/game.component";
 import {PlayerEnum} from "../../app/enums/player.enum";
 
+
 // == Deal Hands ==
 
 export function dealCards() {
@@ -54,7 +55,9 @@ export function handleMoveCard(card, sourcePile, destinationPile) {
     if (!destinationPile) {
         destinationPile = getDestinationPile(sourcePile);
     }
-    card.isHidden = isCardHidden(sourcePile, destinationPile);
+    // TODO: delete the following  line and un mark the following remark to enable cards flipping
+    card.isHidden = false;
+    // card.isHidden = isCardHidden(sourcePile, destinationPile);
     moveCard(card, sourcePile, destinationPile);
     setLeadingCard(card, destinationPile);
 }
@@ -73,7 +76,7 @@ export function getDestinationPileType(sourcePileType) {
     }
 }
 
-function isCardHidden(sourcePile, destinationPile) {
+export function isCardHidden(sourcePile, destinationPile) {
     return ((sourcePile.type === PileTypeEnum.DrawPile && destinationPile.type === PileTypeEnum.BotPile)
         || sourcePile.type === PileTypeEnum.DiscardPile);
 }

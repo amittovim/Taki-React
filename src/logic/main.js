@@ -6,6 +6,8 @@ import {GameState} from "./state";
 import {getDestinationPile} from "./dealer/dealer";
 import * as utils from "./utils/model.utils";
 import {getDestinationPileType} from "./dealer/dealer";
+import {PileTypeEnum} from "../app/enums/pile-type.enum";
+
 
 // ===== Game init functions =====
 
@@ -46,7 +48,15 @@ function updateSelectedCard(cardId) {
 function moveCard() {
     const sourcePileType = GameState.selectedCard.parentPileType;
     const destinationPileType = getDestinationPileType(sourcePileType);
+
     GameState.selectedCard.parentPileType = destinationPileType;
+
+    //TODO : delete line below and un mark the following remark to enable card flipping
+    GameState.selectedCard.isHidden = false;
+
+    // handle card flipping
+    // GameState.selectedCard.isHidden = dealer.isCardHidden(GameState[sourcePileType], GameState[destinationPileType]);
+
     utils.pullItemFromArray(GameState.selectedCard, GameState[sourcePileType].cards);
     utils.insertToEndOfArray(GameState.selectedCard, GameState[destinationPileType].cards);
     return {

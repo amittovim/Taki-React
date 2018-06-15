@@ -6,6 +6,7 @@ import {CardActionEnum} from "../../app/enums/card-action-enum";
 import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import Game from "../../app/game/game.component";
 import {PlayerEnum} from "../../app/enums/player.enum";
+import {pullItemFromArray} from "../utils/model.utils";
 
 // == Deal Hands ==
 
@@ -15,12 +16,20 @@ export function dealCards() {
 }
 
 function dealHands() {
+    debugger;
     for (let i = 1; i <= consts.NUMBER_OF_STARTING_CARDS_IN_PLAYERS_HAND; i++) {
-        let card = takiUtils.getTopOfPile(GameState.DrawPile);
+
+//        let card = pullItemFromArray(GameState.DrawPile[GameState.DrawPile.length - 1], GameState.DrawPile)
+
+//        let card = takiUtils.getTopOfPile(GameState.DrawPile);
+//        utils.insertToEndOfArray(card, GameState.HumanPile.cards);
+        let card = GameState.DrawPile.cards[GameState.drawPile.cards.length-1];
+        debugger;
         handleMoveCard(card, GameState.DrawPile, GameState.HumanPile);
-        card = takiUtils.getTopOfPile(GameState.DrawPile);
+//        card = takiUtils.getTopOfPile(GameState.DrawPile);
         handleMoveCard(card, GameState.DrawPile, GameState.BotPile);
     }
+    debugger;
 }
 
 
@@ -55,6 +64,7 @@ export function handleMoveCard(card, sourcePile, destinationPile) {
         destinationPile = getDestinationPile(sourcePile);
     }
     card.isHidden = isCardHidden(sourcePile, destinationPile);
+    debugger;
     moveCard(card, sourcePile, destinationPile);
     setLeadingCard(card, destinationPile);
 }
@@ -79,7 +89,9 @@ function isCardHidden(sourcePile, destinationPile) {
 }
 
 function moveCard(card, sourcePile, destinationPile) {
+    debugger;
     utils.pullItemFromArray(card, sourcePile.cards);
+    debugger;
     utils.insertToEndOfArray(card, destinationPile.cards);
     card.parentPileType = destinationPile.type;
 }

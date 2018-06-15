@@ -47,20 +47,29 @@ class Game extends Component {
     }
 
     handlePlayMove(card) {
-        debugger;
         GameApiService.requestMoveCard(card.id)
-            .then(newState => {
-                this.setState((prevState) => ({
-                    ...newState
-                }))
+            .then(response => {
+                this.setState({...response.payload});
+                return GameApiService.requestGameStateUpdate();
+            })
+            .then(response => {
+                if (response.message === GameStatusMessageEnum.ProceedPlayersTurn) {
+                    console.log('Turn still not ended, go on');
+                }
+                else if (response.message === GameStatusMessageEnum.UpdatedGameState) {
+                    this.setState({...response.payload});
+                }
             })
             .catch(error => {
                 console.error('Error', error);
             });
     }
-
-
 }
 
 export default Game;
 
+export const GameStatusMessageEnum = {
+    CardUpdated: 'CardUpdated',
+    ProceedPlayersTurn: 'ProceedPlayersTurn',
+    UpdatedGameState: 'UpdatedGameState'
+};

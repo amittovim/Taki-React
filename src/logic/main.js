@@ -6,6 +6,8 @@ import {GameState} from "./state";
 import {getDestinationPile} from "./dealer/dealer";
 import * as utils from "./utils/model.utils";
 import {getDestinationPileType} from "./dealer/dealer";
+import {GameStatusMessageEnum} from "../app/game/game.component";
+import {PlayerEnum} from "../app/enums/player.enum";
 
 // ===== Game init functions =====
 
@@ -14,25 +16,74 @@ export function initGame() {
     initDrawPile();
     initDiscardPile();
     dealer.dealCards();
-    console.log(GameState);
+    if (GameState.currentPlayer === PlayerEnum.Bot) {
+        debugger;
+        console.log(GameState.currentPlayer);
+        playBotMove();
+    }
     return GameState;
 }
 
-export function requestMoveCard(cardId) {
+// export function requestMoveCard(cardId) {
+//     return new Promise((resolve, reject) => {
+//         const newState = gameMove();
+//         if (isMoveLegal()) {
+//             let newState = moveCard();
+//             resolve(newState);
+//         } else {
+//             reject('illegal move!');
+//         }
+//     });
+// }
 
+// API
+
+export function requestMoveCard(cardId) {
+    return makeGameMove(cardId);
+}
+
+export function requestGameStateUpdate() {
     return new Promise((resolve, reject) => {
-        updateSelectedCard(cardId);
-        if (isMoveLegal()) {
-            let newState = moveCard();
-            resolve(newState);
+        if (hasMovesAvailable()) {
+            resolve({
+                message: GameStatusMessageEnum.ProceedPlayersTurn
+            })
         } else {
-            reject('illegal move!');
+            GameState.currentPlayer = PlayerEnum.Bot;
+            resolve(playBotMove());
         }
     });
 }
 
+// Inner
+
+function hasMovesAvailable() {
+    return false;
+}
+
 function isMoveLegal() {
     return true;
+}
+
+
+function playBotMove() {
+    return makeGameMove(GameState.BotPile.cards[0].id);
+}
+
+function makeGameMove(cardId) {
+    updateSelectedCard(cardId);
+    return new Promise((resolve, reject) => {
+        if (isMoveLegal()) {
+            const newState = moveCard();
+            const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatusMessageEnum.CardUpdated : GameStatusMessageEnum.UpdatedGameState;
+            resolve({
+                message: message,
+                payload: newState
+            });
+        } else {
+            reject(new Error(`Invalid move for ${GameState.currentPlayer}`));
+        }
+    });
 }
 
 function updateSelectedCard(cardId) {

@@ -81,6 +81,23 @@ export function isCardHidden(sourcePile, destinationPile) {
         || sourcePile.type === PileTypeEnum.DiscardPile);
 }
 
+// Previous:
+function moveCard() {
+    const sourcePileType = GameState.selectedCard.parentPileType;
+    const destinationPileType = getDestinationPileType(sourcePileType);
+    GameState.selectedCard.parentPileType = destinationPileType;
+    utils.pullItemFromArray(GameState.selectedCard, GameState[sourcePileType].cards);
+    utils.insertToEndOfArray(GameState.selectedCard, GameState[destinationPileType].cards);
+    return {
+        [sourcePileType]: {
+            ...GameState[sourcePileType]
+        },
+        [destinationPileType]: {
+            ...GameState[destinationPileType]
+        }
+    };
+}
+
 function moveCard(destinationPile) {
     let resetSelectedCard;
     if (GameState.selectedCard===null) {

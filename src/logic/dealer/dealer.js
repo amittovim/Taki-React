@@ -6,6 +6,7 @@ import {CardActionEnum} from "../../app/enums/card-action-enum";
 import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import Game from "../../app/game/game.component";
 import {PlayerEnum} from "../../app/enums/player.enum";
+import {pullItemFromArray} from "../utils/model.utils";
 
 // == Deal Hands ==
 
@@ -16,9 +17,9 @@ export function dealCards() {
 
 function dealHands() {
     for (let i = 1; i <= consts.NUMBER_OF_STARTING_CARDS_IN_PLAYERS_HAND; i++) {
-        let card = takiUtils.getTopOfPile(GameState.DrawPile);
+        let topCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length-1];
         handleMoveCard(card, GameState.DrawPile, GameState.HumanPile);
-        card = takiUtils.getTopOfPile(GameState.DrawPile);
+        topCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length-1];
         handleMoveCard(card, GameState.DrawPile, GameState.BotPile);
     }
 }
@@ -36,7 +37,7 @@ function drawStartingCard() {
     let topCard;
     do {
         // It draws another card if the card drawn is CHANGE COLOR because you cannot start a taki with this card
-        topCard = takiUtils.getTopOfPile(GameState.DrawPile);
+        topCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length-1];
         handleMoveCard(topCard, GameState.DrawPile, GameState.DiscardPile);
     } while (topCard.action && topCard.action === CardActionEnum.ChangeColor);
 

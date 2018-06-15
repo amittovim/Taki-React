@@ -12,6 +12,5 @@ export default class BoardService {
         }else {
             GameState.players.currentPlayer = GameState.players.list.BotPile;
         }
-        console.log(GameState);
     }
 }

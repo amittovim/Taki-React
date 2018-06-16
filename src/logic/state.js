@@ -6,7 +6,7 @@ export const GameState = {
     leadingCard: null,
     currentPlayer: null,
     selectedCard: null,
-    activeAction: null,
+    actionState: null,
     turnNumber: 0,
 };
 

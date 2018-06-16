@@ -3,9 +3,7 @@ import './game.component.css';
 import * as GameService from './game.service';
 import * as GameApiService from './game-api.service';
 import Board from "./board/board.component";
-import * as utils from "../../logic/utils/model.utils";
 import {PlayerEnum} from "../enums/player.enum";
-import {handleMoveCard} from "../../logic/dealer/dealer";
 import {GameStatus} from "../../logic/game-status.enum";
 import Loader from "../shared/components/loader/loader.component";
 
@@ -33,7 +31,7 @@ class Game extends Component {
             HumanPile: null,
             BotPile: null,
             leadingCard: null,
-            activeAction: null,
+            actionState: null,
             currentPlayer: null,
             selectedCard: null,
             turnNumber: 0,

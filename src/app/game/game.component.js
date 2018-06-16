@@ -5,12 +5,14 @@ import * as GameApiService from './game-api.service';
 import Board from "./board/board.component";
 import {PlayerEnum} from "../enums/player.enum";
 import {GameStatus} from "../../logic/game-status.enum";
+import Loader from "../shared/components/loader/loader.component";
 
 class Game extends Component {
 
     render() {
         return (
             <div className="game-component">
+                <Loader isLoading={this.state.isLoading} />
                 <Board drawPile={this.state.DrawPile}
                        discardPile={this.state.DiscardPile}
                        humanPile={this.state.HumanPile}
@@ -32,7 +34,8 @@ class Game extends Component {
             actionState: null,
             currentPlayer: null,
             selectedCard: null,
-            turnNumber: 0
+            turnNumber: 0,
+            isLoading: false
         };
         this.handlePlayMove = this.handlePlayMove.bind(this);
     }
@@ -46,12 +49,14 @@ class Game extends Component {
     }
 
     handlePlayMove(card) {
+        this.setState({isLoading: true});
         GameApiService.requestMoveCard(card.id)
             .then(response => {
                 this.setState({...response.payload});
                 return GameApiService.requestGameStateUpdate();
             })
             .then(response => {
+                this.setState({isLoading: false});
                 if (response.message === GameStatus.ProceedPlayersTurn) {
                     console.log('Turn still not ended, go on');
                 }

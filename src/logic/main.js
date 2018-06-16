@@ -63,14 +63,17 @@ function isMoveLegal() {
     }
 }
 
-function isPutCardMoveLegal() {
-    let isSameColor;
-    let card = GameState.selectedCard;
+function isPutCardMoveLegal(card) {
+    let isSameColor, isTwoPlus;
 
     // if twoPlus is invoked only other twoPlus card is legal
-    if ( GameState.actionState  GameState.selectedCard === )
-    // if taki is invoked only cards with the same color are legal
-    if (GameState.activeAction === CardActionEnum.Taki) {
+    if (GameState.actionState === CardActionEnum.TwoPlus) {
+        isTwoPlus = !!(card.action === CardActionEnum.TwoPlus)
+        if (!isTwoPlus) {
+            return false;
+        }
+    }// if taki is invoked only cards with the same color are legal
+    else if (GameState.actionState === CardActionEnum.Taki) {
         isSameColor = !!(card.color && GameState.leadingCard.color === card.color);
         if (!isSameColor) {
             return false;
@@ -97,15 +100,14 @@ function isGetCardMoveLegal() {
 
 function availableMoveExist() {
     let legalCards = [];
+    debugger;
     GameState[GameState.currentPlayer].pile.cards.forEach(function (card, index) {
-        if (isMoveLegal(card)) {
+        if (isPutCardMoveLegal(card)) {
             legalCards.push(index);
         }
     });
     return (legalCards.length > 0);
 }
-
-f
 
 function playBotMove() {
     GameState.currentPlayer = PlayerEnum.Bot;

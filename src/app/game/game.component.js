@@ -31,7 +31,7 @@ class Game extends Component {
             HumanPile: null,
             BotPile: null,
             leadingCard: null,
-            activeAction: null,
+            actionState: null,
             currentPlayer: null,
             selectedCard: null,
             turnNumber: 0

@@ -18,7 +18,7 @@ interface State {
     leadingCard: Card;
     currentPlayer: PlayerEnum;
     selectedCard: Card;
-    activeAction: CardActionEnum;
+    actionState: CardActionEnum;
     turnNumber: number;
 }
 

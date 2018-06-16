@@ -5,13 +5,9 @@ import './loader.component.css';
 // isLoading: boolean
 
 class Loader extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (
-
             <div className="loader-component">
                 {this.props.isLoading
                     ? (<div className="loader">
@@ -23,6 +19,10 @@ class Loader extends Component {
                 }
             </div>
         );
+    }
+
+    constructor(props) {
+        super(props);
     }
 }
 

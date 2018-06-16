@@ -7,9 +7,6 @@ import './loader.component.css';
 class Loader extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-
-        }
     }
 
     render() {
@@ -21,7 +18,7 @@ class Loader extends Component {
                         <div className="bar"></div>
                         <div className="bar"></div>
                         <div className="bar"></div>
-                       </div>)
+                    </div>)
                     : (<div className="separator"></div>)
                 }
             </div>

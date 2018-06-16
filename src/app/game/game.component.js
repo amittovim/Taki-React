@@ -46,6 +46,14 @@ class Game extends Component {
     }
 
     handlePlayMove(card) {
+        debugger;
+        if (GameService.isMoveLegal(card, this.state.DrawPile, this.state.actionState, this.state.leadingCard,
+            this.state[`${this.state.currentPlayer}Pile`])) {
+            console.log('move is legal')
+        } else {
+            console.log('move is NOT legal')
+        }
+        debugger;
         GameApiService.requestMoveCard(card.id)
             .then(response => {
                 this.setState({...response.payload});

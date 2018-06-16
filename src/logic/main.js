@@ -124,7 +124,6 @@ function getCardInHand(pile, conditionList) {
 function getFirstItemByMatchConditions(arr, conditionList)  {
     return arr.find(function (item) {       //TODO: change this to arrow function
         return conditionList.reduce(function (accumulator, condition) {
-            debugger;
             let key = Utils.getKey(condition, 0);
             let value = condition[key];
             return accumulator && item[key] === value;
@@ -140,22 +139,23 @@ function playHumanMove(cardId) {
 function playGameMove(cardId) {
     updateSelectedCard(cardId);
     return new Promise((resolve, reject) => {
-        if (isMoveLegal()) {
-            debugger;
-            console.log(isMoveLegal());
-            const stateChange = handleMoveCard();
-            const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatus.CardUpdated : GameStatus.UpdatedGameState;
-            setTimeout(() => {
-                resolve({
-                    message: message,
-                    payload: stateChange
-                });
-            }, 500);
-        } else {
-            console.log(isMoveLegal());
-            reject(new Error(`Invalid move for ${GameState.currentPlayer}`));
-        }
+        // we assume all move requests arriving from front-end are legal
+        // if (isMoveLegal()) {
+        debugger;
+//        console.log(isMoveLegal());
+        const stateChange = handleMoveCard();
+        const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatus.CardUpdated : GameStatus.UpdatedGameState;
+        setTimeout(() => {
+            resolve({
+                message: message,
+                payload: stateChange
+            });
+        }, 500);
     });
+        // } else {
+        //     console.log(isMoveLegal());
+        //     reject(new Error(`Invalid move for ${GameState.currentPlayer}`));
+        // }
 }
 
 

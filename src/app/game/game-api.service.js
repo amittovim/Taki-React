@@ -1,12 +1,15 @@
 // API
 
-import * as game from "../../logic/main";
-import Game from "./game.component";
+import * as logic from "../../logic/main";
 
 export function getInitialState() {
-    return game.initGame();
+    return logic.initGame();
 }
 
 export function requestMoveCard(cardId) {
-    return game.requestMoveCard(cardId)
+    return logic.requestMoveCard(cardId)
+}
+
+export function requestGameStateUpdate() {
+    return logic.requestGameStateUpdate()
 }

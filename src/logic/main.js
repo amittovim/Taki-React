@@ -33,13 +33,13 @@ export function requestMoveCard(cardId) {
 
 function isMoveLegal() {
     let card = GameState.selectedCard;
-    let isDrawPileEmpty = !(GameState.drawPile.cards.length > 0);
-    let isAskingCardFromDrawPile = card.parentPileType === PileTypeEnum.DrawPile;
-    let drawLastCardFromDrawPile = ((!isDrawPileEmpty) &&
-        ((isAskingCardFromDrawPile) || (card === GameState.drawPile.cards[GameState.drawPile.cards.length - 1])) );
+    let isDrawPileEmpty = !(GameState.DrawPile.cards.length > 0);
+    let isRequestingCardFromDrawPile = card.parentPileType === PileTypeEnum.DrawPile;
+    let drawCardFromDrawPile = ((!isDrawPileEmpty) &&
+        ((isRequestingCardFromDrawPile) || (card === GameState.DrawPile.cards[GameState.DrawPile.cards.length - 1])) );
 
     // check if player want to Put a card on discard pile (only the card owner can do it) and if so check if the active card is owned by the current player
-    if ( (!drawLastCardFromDrawPile) && ('hand ' + GameState.currentPlayer.name + '-hand player cards-container' === card.element.parentElement.className) ) {
+    if ( (!drawCardFromDrawPile) && ('hand ' + GameState.currentPlayer.name + '-hand player cards-container' === card.element.parentElement.className) ) {
         return isPutCardMoveLegal(card);
     } else {
         // check if player want to Get a card from draw pile

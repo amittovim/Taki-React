@@ -54,77 +54,69 @@ function isMoveLegal() {
     return true;
 }
 
-
-// ++++++++++++++++++BOT ALGORITHM ++++++++++++++++++++++
-
 function playBotMove() {
     GameState.currentPlayer = PlayerEnum.Bot;
     let leadingCard = GameState.leadingCard;
     let selectedCard;
     let actionState = GameState.actionState;
-    let bot = GameState[PileTypeEnum.BotPile];
+    let botPile = GameState.BotPile];
     let matchedCard;
-    debugger;
     // 4.1 if actionState is twoPlusInvoked and bot has twoPlus Card - mark it as selectedCard.
     if (actionState === `${CardActionEnum.TwoPlus}Invoked`) {
-        if (matchedCard = getCardInHand(bot, [{action: CardActionEnum.TwoPlus}])) {
+        if (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}])) {
             selectedCard = matchedCard;
 
         } // if twoPlusInvoked and bot doesn't have a two plus - mark the top card of the draw pile as the selectedCard.
         else {
-            debugger;
             selectedCard = GameState.DrawPile.getTop();
         }
     } // if actionState is takiInvoked and bot has a card with the same color of the leadingCard - mark it as selectedCard.
     else if ( (actionState === `${CardActionEnum.Taki}Invoked`) &&
-            (matchedCard = getCardInHand(bot, [{color: leadingCard.color}])) ){
+            (matchedCard = getCardInHand(botPile, [{color: leadingCard.color}])) ){
             selectedCard = matchedCard;
     } // ( if we got here no actionState was invoked)
     else
     {
         // 4.2 if bot has a twoPlus card  with the same color as the leadingCard
         // or the leadingCard is a non-active twoPlus - mark it as selectedCard.
-        if ( (matchedCard = getCardInHand(bot, [{action: CardActionEnum.TwoPlus}, {color: leadingCard.color}])) ||
-             ( (leadingCard.action === CardActionEnum.TwoPlus) && (matchedCard = getCardInHand(bot, [{action: CardActionEnum.TwoPlus}]) )) ) {
+        if ( (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}, {color: leadingCard.color}])) ||
+             ( (leadingCard.action === CardActionEnum.TwoPlus) && (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}]) )) ) {
             selectedCard = matchedCard ;
         }
         // 4.3 if bot has ChangeColor card and you're allowed to put it (actionState is none)- mark it as selectedCard.
-        else if (matchedCard = getCardInHand(bot, [{action: CardActionEnum.ChangeColor}])) {
+        else if (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.ChangeColor}])) {
             selectedCard = matchedCard;
         }
         // 4.4 if bot has  a Stop card with the same color as the leadingCard - mark it as selectedCard.
-        else if (matchedCard = getCardInHand(bot, [{action: CardActionEnum.Stop}, {color: leadingCard.color}])) {
+        else if (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.Stop}, {color: leadingCard.color}])) {
             selectedCard = matchedCard;
         }
         // 4.5 if bot has a Plus card with the same color as the leadingCard - mark it as selectedCard.
-        else if (matchedCard = getCardInHand(bot, [{action: CardActionEnum.Plus}, {color: leadingCard.color}])) {
+        else if (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.Plus}, {color: leadingCard.color}])) {
             selectedCard = matchedCard;
         }
         // 4.6 if bot has a superTaki card - mark it as selectedCard.
-        else if (matchedCard = getCardInHand(bot, [{action: CardActionEnum.SuperTaki}])) {
+        else if (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.SuperTaki}])) {
             selectedCard = matchedCard;
         }
         // 4.7 if bot has a taki card with the same color as the leadingCard - mark it as the selectedCard.
-        else if (matchedCard = getCardInHand(bot, [{action: CardActionEnum.Taki}, {color: leadingCard.color}])) {
+        else if (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.Taki}, {color: leadingCard.color}])) {
             selectedCard = matchedCard;
         }
         // 4.8 if you have a card with the same color as the leading card - mark it as the selectedCard.
-        else if (matchedCard = getCardInHand(bot, [{color: leadingCard.color}])) {
+        else if (matchedCard = getCardInHand(botPile, [{color: leadingCard.color}])) {
             selectedCard = matchedCard;
         }
         // 4.9 if you have a card with the same number as the leading card - mark it as the selectedCard.
         else if ((leadingCard.number !== null) &&
-            (matchedCard = getCardInHand(bot, [{number: leadingCard.number}]))) {
+            (matchedCard = getCardInHand(botPile, [{number: leadingCard.number}]))) {
             selectedCard = matchedCard;
         }
         // 4.10 if none of the conditions above happen - mark the top card of the draw pile as the selectedCard.
         else {
-            debugger;
             selectedCard = GameState.DrawPile.getTop();
         }
     }
-    // todo : try to see if i could use the "selectedCard = matchedCard " line only once in this function
-    debugger;
     return playGameMove(selectedCard.id);
 }
 
@@ -132,8 +124,8 @@ function getCardInHand(pile, conditionList) {
     return getFirstItemByMatchConditions(pile.cards, conditionList);
 }
 
-function getFirstItemByMatchConditions(arr, conditionList) {
-    return arr.find(function (item) {
+function getFirstItemByMatchConditions(arr, conditionList)  {
+    return arr.find(function (item) {       //TODO: change this to arrow function
         return conditionList.reduce(function (accumulator, condition) {
             let key = getKey(condition, 0);
             let value = condition[key];
@@ -141,13 +133,6 @@ function getFirstItemByMatchConditions(arr, conditionList) {
         }, true);
     });
 }
-
-function getKey(obj, index) {
-    return Object.keys(obj)[index]
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 
 function playHumanMove(cardId) {
     GameState.currentPlayer = PlayerEnum.Human;

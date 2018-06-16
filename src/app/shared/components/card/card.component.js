@@ -13,8 +13,7 @@ class Card extends Component {
 
     render() {
         return (
-            <div className={`card-component
-                            ${this.props.hoverEnabled ? 'hover-enabled' : ''}`}
+            <div className={`card-component${this.props.hoverEnabled ? ' hover-enabled' : ''}`}
                  id={`card-${this.props.card.id}`}
                  onClick={this.handleClick}>
                 <img className={`${this.props.card.isHidden ? 'back-card-img' : 'front-card-img'}`}

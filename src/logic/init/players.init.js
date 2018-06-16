@@ -12,8 +12,8 @@ export default function initPlayers() {
 
 function createPlayers() {
     GameState.Human = new PlayerModel(PlayerEnum.Human);
-    GameState.Bot = new PlayerModel(PlayerEnum.Bot);
     GameState.HumanPile = GameState.Human.pile;
+    GameState.Bot = new PlayerModel(PlayerEnum.Bot);
     GameState.BotPile = GameState.Bot.pile;
 }
 

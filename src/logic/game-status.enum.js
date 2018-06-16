@@ -1,4 +1,8 @@
 export const GameStatus = {
     GameInit: 'GameInit',
-    SettingStartingCard: 'SettingStartingCard'
+    SettingStartingCard: 'SettingStartingCard',
+    CardUpdated: 'CardUpdated',
+    ProceedPlayersTurn: 'ProceedPlayersTurn',
+    UpdatedGameState: 'UpdatedGameState'
 };
+

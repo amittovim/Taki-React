@@ -1,14 +1,11 @@
 import {GameState} from "../state";
 import * as consts from "../consts";
 import * as utils from '../utils/model.utils';
-import * as takiUtils from "../utils/taki.utils";
 import {CardActionEnum} from "../../app/enums/card-action-enum";
 import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import {PlayerEnum} from "../../app/enums/player.enum";
 import {GameStatus} from "../game-status.enum";
 import {switchPlayers} from "../main";
-import {pullItemFromArray} from "../utils/model.utils";
-
 
 // == Dealing Hands ==
 
@@ -60,7 +57,7 @@ export function getDestinationPileType(sourcePileType) {
 //         || sourcePile.type === PileTypeEnum.DiscardPile);
 // }
 
-function handleMoveCard() {
+export function handleMoveCard() {
     if (GameState.status === GameStatus.GameInit || GameState.status === GameStatus.SettingStartingCard) {
         GameState.selectedCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length - 1];
     }

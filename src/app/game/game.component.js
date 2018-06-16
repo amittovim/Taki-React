@@ -6,6 +6,7 @@ import Board from "./board/board.component";
 import * as utils from "../../logic/utils/model.utils";
 import {PlayerEnum} from "../enums/player.enum";
 import {handleMoveCard} from "../../logic/dealer/dealer";
+import {GameStatus} from "../../logic/game-status.enum";
 
 class Game extends Component {
 
@@ -48,18 +49,22 @@ class Game extends Component {
 
     handlePlayMove(card) {
         GameApiService.requestMoveCard(card.id)
-            .then(newState => {
-                this.setState((prevState) => ({
-                    ...newState
-                }))
+            .then(response => {
+                this.setState({...response.payload});
+                return GameApiService.requestGameStateUpdate();
+            })
+            .then(response => {
+                if (response.message === GameStatus.ProceedPlayersTurn) {
+                    console.log('Turn still not ended, go on');
+                }
+                else if (response.message === GameStatus.UpdatedGameState) {
+                    this.setState({...response.payload});
+                }
             })
             .catch(error => {
                 console.error('Error', error);
             });
     }
-
-
 }
 
 export default Game;
-

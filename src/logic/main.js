@@ -18,7 +18,7 @@ export function initGame() {
     if (GameState.currentPlayer === PlayerEnum.Bot) {
         playBotMove();
     }
-    GameState.status= GameStatus.UpdatedGameState;
+    GameState.status = GameStatus.UpdatedGameState;
     return GameState;
 }
 
@@ -85,7 +85,6 @@ function updateSelectedCard(cardId) {
         .concat(GameState.DiscardPile.cards)
         .concat(GameState.DrawPile.cards);
     GameState.selectedCard = gameCards.filter((card) => card.id === cardId)[0];
-    debugger;
 }
 
 export function switchPlayers() {

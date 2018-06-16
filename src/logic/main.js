@@ -8,6 +8,7 @@ import {PlayerEnum} from "../app/enums/player.enum";
 import {CardActionEnum} from "../app/enums/card-action-enum";
 import {PileTypeEnum} from "../app/enums/pile-type.enum";
 import {handleMoveCard} from "./dealer/dealer";
+import {getKey} from "./utils/model.utils";
 
 
 // ===== Game init functions =====
@@ -59,7 +60,7 @@ function playBotMove() {
     let leadingCard = GameState.leadingCard;
     let selectedCard;
     let actionState = GameState.actionState;
-    let botPile = GameState.BotPile];
+    let botPile = GameState.BotPile;
     let matchedCard;
     // 4.1 if actionState is twoPlusInvoked and bot has twoPlus Card - mark it as selectedCard.
     if (actionState === `${CardActionEnum.TwoPlus}Invoked`) {
@@ -71,17 +72,16 @@ function playBotMove() {
             selectedCard = GameState.DrawPile.getTop();
         }
     } // if actionState is takiInvoked and bot has a card with the same color of the leadingCard - mark it as selectedCard.
-    else if ( (actionState === `${CardActionEnum.Taki}Invoked`) &&
-            (matchedCard = getCardInHand(botPile, [{color: leadingCard.color}])) ){
-            selectedCard = matchedCard;
+    else if ((actionState === `${CardActionEnum.Taki}Invoked`) &&
+        (matchedCard = getCardInHand(botPile, [{color: leadingCard.color}]))) {
+        selectedCard = matchedCard;
     } // ( if we got here no actionState was invoked)
-    else
-    {
+    else {
         // 4.2 if bot has a twoPlus card  with the same color as the leadingCard
         // or the leadingCard is a non-active twoPlus - mark it as selectedCard.
-        if ( (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}, {color: leadingCard.color}])) ||
-             ( (leadingCard.action === CardActionEnum.TwoPlus) && (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}]) )) ) {
-            selectedCard = matchedCard ;
+        if ((matchedCard = getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}, {color: leadingCard.color}])) ||
+            ((leadingCard.action === CardActionEnum.TwoPlus) && (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}])))) {
+            selectedCard = matchedCard;
         }
         // 4.3 if bot has ChangeColor card and you're allowed to put it (actionState is none)- mark it as selectedCard.
         else if (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.ChangeColor}])) {
@@ -124,7 +124,7 @@ function getCardInHand(pile, conditionList) {
     return getFirstItemByMatchConditions(pile.cards, conditionList);
 }
 
-function getFirstItemByMatchConditions(arr, conditionList)  {
+function getFirstItemByMatchConditions(arr, conditionList) {
     return arr.find(function (item) {       //TODO: change this to arrow function
         return conditionList.reduce(function (accumulator, condition) {
             let key = getKey(condition, 0);

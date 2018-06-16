@@ -5,6 +5,10 @@ export class PileModel {
         this.isHand = isHand;
         this.singleCardCounter = 0;
     }
+    getTop() {
+        return this.cards[this.cards.length - 1];
+    };
+
 }
 
 export default PileModel;

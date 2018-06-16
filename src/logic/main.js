@@ -8,6 +8,7 @@ import {PlayerEnum} from "../app/enums/player.enum";
 import {CardActionEnum} from "../app/enums/card-action-enum";
 import {PileTypeEnum} from "../app/enums/pile-type.enum";
 import {handleMoveCard} from "./dealer/dealer";
+import * as Utils from "./utils/model.utils";
 
 
 // ===== Game init functions =====
@@ -104,7 +105,7 @@ function isGetCardMoveLegal() {
 function availableMoveExist() {
     let legalCards = [];
     debugger;
-    GameState[GameState.currentPlayer].pile.cards.forEach(function (card, index) {
+    GameState[`${GameState.currentPlayer}Pile`].cards.forEach(function (card, index) {
         if (isPutCardMoveLegal(card)) {
             legalCards.push(index);
         }
@@ -117,7 +118,7 @@ function playBotMove() {
     let leadingCard = GameState.leadingCard;
     let selectedCard;
     let actionState = GameState.actionState;
-    let botPile = GameState.BotPile];
+    let botPile = GameState.BotPile;
     let matchedCard;
     // 4.1 if actionState is twoPlusInvoked and bot has twoPlus Card - mark it as selectedCard.
     if (actionState === `${CardActionEnum.TwoPlus}Invoked`) {
@@ -185,7 +186,8 @@ function getCardInHand(pile, conditionList) {
 function getFirstItemByMatchConditions(arr, conditionList)  {
     return arr.find(function (item) {       //TODO: change this to arrow function
         return conditionList.reduce(function (accumulator, condition) {
-            let key = getKey(condition, 0);
+            debugger;
+            let key = Utils.getKey(condition, 0);
             let value = condition[key];
             return accumulator && item[key] === value;
         }, true);
@@ -201,6 +203,8 @@ function playGameMove(cardId) {
     updateSelectedCard(cardId);
     return new Promise((resolve, reject) => {
         if (isMoveLegal()) {
+            debugger;
+            console.log(isMoveLegal());
             const stateChange = handleMoveCard();
             const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatus.CardUpdated : GameStatus.UpdatedGameState;
             setTimeout(() => {
@@ -210,6 +214,7 @@ function playGameMove(cardId) {
                 });
             }, 500);
         } else {
+            console.log(isMoveLegal());
             reject(new Error(`Invalid move for ${GameState.currentPlayer}`));
         }
     });

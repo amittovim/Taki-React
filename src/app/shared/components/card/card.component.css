@@ -1,5 +1,5 @@
 .card-component {
-
+    pointer-events: none;
 }
 
 .card-component img {
@@ -9,10 +9,15 @@
     border-radius: 10px;
 }
 
+.hover-enabled {
+    pointer-events: initial;
+}
+
 .hover-enabled:hover {
     cursor: pointer;
     transform: scale(1.3);
     transition: all 0.7s ease;
     z-index: 5;
     overflow: initial;
+
 }

@@ -51,6 +51,8 @@ function isPutCardMoveLegal() {
     let isSameColor;
     let card = GameState.selectedCard;
 
+    // if twoPlus is invoked only other twoPlus card is legal
+    if ( GameState.actionState  GameState.selectedCard === )
     // if taki is invoked only cards with the same color are legal
     if (GameState.activeAction === CardActionEnum.Taki) {
         isSameColor = !!(card.color && GameState.leadingCard.color === card.color);

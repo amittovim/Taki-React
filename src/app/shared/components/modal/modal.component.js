@@ -49,7 +49,6 @@ class Modal extends Component {
     // }
 
     getModalData() {
-        debugger;
         switch (this.props.type) {
             case ModalTypeEnum.ColorPicker: {
                 this.setState({

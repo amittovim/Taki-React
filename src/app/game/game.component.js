@@ -21,7 +21,7 @@ class Game extends Component {
                        discardPile={this.state.DiscardPile}
                        humanPile={this.state.HumanPile}
                        botPile={this.state.BotPile}
-                       moveCardDriver={this.handlePlayMove} // TODO: replace to context
+                       moveCardDriver={this.updateSelectedCard} // TODO: replace to context
                 />
             </div>
         );
@@ -45,57 +45,34 @@ class Game extends Component {
             modalType: '',
             modalCallback: this.toggleModal
         };
+        this.updateSelectedCard = this.updateSelectedCard.bind(this);
         this.handlePlayMove = this.handlePlayMove.bind(this);
         this.openColorPicker = this.openColorPicker.bind(this);
         this.handleChangeColor = this.handleChangeColor.bind(this);
         this.handleRequestMoveCard = this.handleRequestMoveCard.bind(this);
+        this.handleIllegalMove = this.handleIllegalMove.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
     }
 
     componentWillMount() {
         this.setState(GameApiService.getInitialState());
     }
-    componentDidMount(){
-        // client asks server for game status. if the current player is human he will get a "its your turn" answer.
-        // if current player is bot it will receive the new state which will hold the move bot player did
-
-/*
-                GameApiService.requestGameStateUpdate()
-                    .then(response => {
-                        if (response.message === GameStatus.ProceedPlayersTurn) {
-                            console.log('You can start Playing now...');
-                        }
-                        else if (response.message === GameStatus.UpdatedGameState) {
-                            this.setState({...response.payload});
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error', error);
-                    });
-        */
-
-
-        //___________old code ________________________________________
-        // if (this.state.currentPlayer === PlayerEnum.Bot) {
-        //     const nextState = GameService.playBotMove();
-        //     this.setState((prevState) => ({...nextState}));
-        // }
-        //____________________________________________________________
-
-    }
 
     openColorPicker() {
-        this.setState({
-            modalType: ModalTypeEnum.ColorPicker,
-            modalCallback: this.handleChangeColor,
-            isModalOpen: true
+        this.setState((prevState) => {
+            return {
+                modalType: ModalTypeEnum.ColorPicker,
+                modalCallback: this.handleChangeColor,
+                isModalOpen: true
+            };
         });
     }
 
     handleChangeColor(selectedColor) {
-        debugger;
-        this.setState({
-            isModalOpen: false
+        this.setState((prevState) => {
+            return {
+                isModalOpen: false
+            };
         });
         this.state.selectedCard.color = selectedColor;
         this.requestMoveCard();
@@ -103,23 +80,24 @@ class Game extends Component {
 
     handleIllegalMove() {
         console.log('illeagal move');
-        this.setState((prevState) => ({
-            selectedCard: null
-        }));
+        debugger;
+        console.log(this.state);
     }
 
-    handlePlayMove(card) {
+    updateSelectedCard(card) {
+        this.setState({selectedCard: card}, this.handlePlayMove);
+    }
+
+    handlePlayMove() {
         debugger;
-        // todo: the state here doesnt change
-        this.setState((prevState) => ({
-                selectedCard: card
-        }));
+        let selectedCard = this.state.selectedCard;
+        console.log(selectedCard);
         debugger;
-        const isMoveLegal = GameService.isHumanMoveLegal(card, this.state.DrawPile, this.state.actionState,
-            this.state.leadingCard, this.state.HumanPile );
+        const isMoveLegal = GameService.isHumanMoveLegal(selectedCard, this.state.DrawPile, this.state.actionState,
+            this.state.leadingCard, this.state.HumanPile);
         if (!isMoveLegal) {
             return this.handleIllegalMove();
-        } else if (card.action === CardActionEnum.ChangeColor || card.action === CardActionEnum.SuperTaki) {
+        } else if (selectedCard.action === CardActionEnum.ChangeColor || selectedCard.action === CardActionEnum.SuperTaki) {
             this.openColorPicker();
         } else {
             this.handleRequestMoveCard();
@@ -127,7 +105,7 @@ class Game extends Component {
     }
 
     handleRequestMoveCard() {
-       GameApiService.requestMoveCard(this.state.selectedCard.id)
+        GameApiService.requestMoveCard(this.state.selectedCard.id)
             .then(response => {
                 this.setState({...response.payload});
                 return GameApiService.requestGameStateUpdate();
@@ -146,12 +124,11 @@ class Game extends Component {
     }
 
     toggleModal() {
-        debugger;
-        let card=this.state.selectedCard;
-        card.color= CardColorEnum.Red;
+        let card = this.state.selectedCard;
+        card.color = CardColorEnum.Red;
         this.setState({
             isModalOpen: !this.state.isModalOpen,
-            selectedCard : card
+            selectedCard: card
 
         });
         this.handleRequestMoveCard();

@@ -2,15 +2,14 @@ import {CardActionEnum} from "../enums/card-action-enum";
 import {PileTypeEnum} from "../enums/pile-type.enum";
 
 export function isHumanMoveLegal(card, drawPile, actionState, leadingCard, humanPile) {
-    let isWithdrawingCard = ( card.parentPileType === PileTypeEnum.DrawPile );
+    let isWithdrawingCard = (card.parentPileType === PileTypeEnum.DrawPile);
 
     // check move legality if player want to PUT a card on discard pile
-    if (!isWithdrawingCard ) {
+    if (!isWithdrawingCard) {
         return isPutCardMoveLegal(card, actionState, leadingCard);
     } else {
         // // check move legality if player want to GET (withdrawal) a card from draw pile
-        debugger;
-        return isGetCardMoveLegal(humanPile,drawPile);
+        return isGetCardMoveLegal(humanPile, drawPile, actionState, leadingCard);
     }
 }
 
@@ -41,22 +40,24 @@ function isPutCardMoveLegal(card, actionState, leadingCard) {
 }
 
 function isPileEmpty(pile) {
-    return (pile.cards.length >0)
+    return (pile.cards.length = 0)
 
 }
 
-function isGetCardMoveLegal(currentPlayerPile,drawPile) {
+function isGetCardMoveLegal(currentPlayerPile, drawPile, actionState, leadingCard) {
     // checking if withdrawing Card From DrawPile is a legal move - only if no other move is available
     // for player and drawPile is not empty
-    return ( !isPileEmpty(drawPile) && !availableMoveExist(currentPlayerPile) );
+    return (!isPileEmpty(drawPile) && !availableMoveExist(currentPlayerPile, actionState, leadingCard));
 }
 
-function availableMoveExist(currentPlayerPile) {
+function availableMoveExist(currentPlayerPile, actionState, leadingCard) {
+    debugger;
     let legalCards = [];
     currentPlayerPile.cards.forEach(function (card, index) {
-        if (isPutCardMoveLegal(card)) {
+        if (isPutCardMoveLegal(card, actionState, leadingCard)) {
             legalCards.push(index);
         }
     });
+    debugger;
     return (legalCards.length > 0);
 }

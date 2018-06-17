@@ -174,3 +174,80 @@ function updateSelectedCard(cardId) {
 export function switchPlayers() {
     GameState.currentPlayer = GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot;
 }
+
+function playMoveManager() {
+    let card = GameState.leadingCard;
+    let currentPlayer = GameState.currentPlayer;
+    let shouldSwitchPlayer = true;
+    let newGameStateInfo;
+
+    if (card.parentPileType === PileTypeEnum.DiscardPile) {
+        newGameStateInfo = raiseActionFlag(newGameStateInfo);
+    }
+    // needed for game statistics
+    if (currentPlayer.pile.cards.length === 1) {
+        let singleCardCounter = [`${currentPlayer}Pile`].singleCardCounter++;
+        newGameStateInfo= {
+            ...newGameStateInfo,
+            [`${currentPlayer}Pile`]: {
+                singleCardCounter: singleCardCounter
+                },
+            };
+
+        /*
+            [sourcePileType]: {
+                ...GameState[sourcePileType]
+            },
+            [destinationPileType]: {
+                ...GameState[destinationPileType]
+            },
+            selectedCard: null
+*/
+        };
+    }
+    // if CC was invoked and current player is BOT, pick a random color and give it to the leadingCard
+    if (GameState.actionState === CardActionEnum.ChangeColor && currentPlayer === GameState.Bot) {
+            card.color = pickRandomColor();
+            // TODO: send update to client
+    // if SuperTaki was invoked change its color to the same color of the card before it.
+    }
+    else if (GameState.actionState === CardActionEnum.SuperTaki) {
+        card.color = GameState.DiscardPile.cards[GameState.DiscardPile.cards.length-2].color;
+    }
+    // if STOP card was invoked switch player twice and increment turnCounter by 1
+    else if ( (card.action === CardActionEnum.Stop) && (GameState.activeAction === CardActionEnum.Stop) ) {
+        shouldSwitchPlayer = false;
+        GameState.turnNumber++;
+
+        if (currentPlayer === GameState.players.bot) {
+        }
+    } else if (GameState.activeAction === CardActionEnum.Taki) {
+        shouldSwitchPlayer = !doesHandHaveSameColorCards();
+    }
+
+    return shouldSwitchPlayer;
+}
+
+function raiseActionFlag() {
+    // if current card isn't an action there's nothing to raise so we leave the function
+    if (!GameState.activeCard.isActionCard()) {
+        return;
+        // if current card is an action card
+    } else {
+        // if current action-flag is DIFFERENT than TAKI then update action-flag
+        // value to be the action on our current card, in memory and on screen.
+        if ( GameState.activeAction !== CardActionEnum.Taki) {
+            GameState.activeAction = GameState.activeCard.action;
+            //  $('.active-action').textContent = GameState.activeAction;
+
+            // if current action-flag IS taki and player has no more cards with same color to put on it
+            // update the action-flag value to the action of the card we just used
+        } else {
+            let matchedCard = getCardInHand(GameState.currentPlayer, [{color: GameState.leadingCard.color}]);
+            if (matchedCard === undefined ) {  //if (!availableMoveExist()) {
+                GameState.activeAction = GameState.activeCard.action;
+                // $('.active-action').textContent = GameState.activeAction;
+            }
+        }
+    }
+}

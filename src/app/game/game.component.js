@@ -75,18 +75,22 @@ class Game extends Component {
     }
 
     handleIllegalMove() {
+        console.log('illeagal move');
+        this.setState((prevState) => ({
+            selectedCard: null
+        }));
 
     }
 
     handlePlayMove(card) {
         debugger;
         this.setState((prevState) => ({
-            ...prevState,
-            selectedCard: card,
+                selectedCard: card
         }));
+        debugger;
         const isMoveLegal = GameService.isMoveLegal(card, this.state.leadingCard, this.state.actionState);
         if (!isMoveLegal) {
-            this.handleIllegalMove();
+            return this.handleIllegalMove();
         } else if (card.action === CardActionEnum.ChangeColor || card.action === CardActionEnum.SuperTaki) {
             this.openColorPicker();
         } else {

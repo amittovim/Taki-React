@@ -1,0 +1,8 @@
+.choose-color-popup-buttons-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 105%;
+    height: 60%;
+    align-items: center;
+}

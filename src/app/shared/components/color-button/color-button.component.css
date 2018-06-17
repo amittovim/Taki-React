@@ -1,0 +1,21 @@
+
+.color-button-component button {
+    width: 100px;
+    height: 100px;
+}
+
+.color-button-component button.red {
+    background: red;
+}
+
+.color-button-component button.blue {
+    background: blue;
+}
+
+.color-button-component button.yellow {
+    background: yellow;
+}
+
+.color-button-component button.green {
+    background: green;
+}

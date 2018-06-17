@@ -69,17 +69,16 @@ function playBotMove() {
             selectedCard = GameState.DrawPile.getTop();
         }
     } // if actionState is takiInvoked and bot has a card with the same color of the leadingCard - mark it as selectedCard.
-    else if ( (actionState === `${CardActionEnum.Taki}Invoked`) &&
-            (matchedCard = getCardInHand(botPile, [{color: leadingCard.color}])) ){
-            selectedCard = matchedCard;
+    else if ((actionState === `${CardActionEnum.Taki}Invoked`) &&
+        (matchedCard = getCardInHand(botPile, [{color: leadingCard.color}]))) {
+        selectedCard = matchedCard;
     } // ( if we got here no actionState was invoked)
-    else
-    {
+    else {
         // 4.2 if bot has a twoPlus card  with the same color as the leadingCard
         // or the leadingCard is a non-active twoPlus - mark it as selectedCard.
-        if ( (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}, {color: leadingCard.color}])) ||
-             ( (leadingCard.action === CardActionEnum.TwoPlus) && (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}]) )) ) {
-            selectedCard = matchedCard ;
+        if ((matchedCard = getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}, {color: leadingCard.color}])) ||
+            ((leadingCard.action === CardActionEnum.TwoPlus) && (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}])))) {
+            selectedCard = matchedCard;
         }
         // 4.3 if bot has ChangeColor card and you're allowed to put it (actionState is none)- mark it as selectedCard.
         else if (matchedCard = getCardInHand(botPile, [{action: CardActionEnum.ChangeColor}])) {
@@ -122,7 +121,7 @@ function getCardInHand(pile, conditionList) {
     return getFirstItemByMatchConditions(pile.cards, conditionList);
 }
 
-function getFirstItemByMatchConditions(arr, conditionList)  {
+function getFirstItemByMatchConditions(arr, conditionList) {
     return arr.find(function (item) {       //TODO: change this to arrow function
         return conditionList.reduce(function (accumulator, condition) {
             let key = Utils.getKey(condition, 0);
@@ -139,17 +138,19 @@ function playHumanMove(cardId) {
 
 function playGameMove(cardId) {
     updateSelectedCard(cardId);
+    // we assume all move requests arriving from front-end are legal
+    let stateChange = handleMoveCard();
+    playMoveManager();
+
+    stateChange = {
+        ...stateChange,
+        leadingCard: GameState.leadingCard,
+        //actionState: GameState.actionState
+    };
+    const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatus.CardUpdated : GameStatus.UpdatedGameState;
+
     return new Promise((resolve, reject) => {
-        // we assume all move requests arriving from front-end are legal
-        let stateChange = handleMoveCard();
 
-        stateChange = {
-            ...stateChange,
-            leadingCard: GameState.leadingCard,
-            //actionState: GameState.actionState
-        };
-
-        const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatus.CardUpdated : GameStatus.UpdatedGameState;
         setTimeout(() => {
             resolve({
                 message: message,
@@ -157,10 +158,10 @@ function playGameMove(cardId) {
             });
         }, 500);
     });
-        // } else {
-        //     console.log(isHumanMoveLegal());
-        //     reject(new Error(`Invalid move for ${GameState.currentPlayer}`));
-        // }
+    // } else {
+    //     console.log(isHumanMoveLegal());
+    //     reject(new Error(`Invalid move for ${GameState.currentPlayer}`));
+    // }
 }
 
 
@@ -175,7 +176,9 @@ function updateSelectedCard(cardId) {
 export function switchPlayers() {
     GameState.currentPlayer = GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot;
 }
+
 //this function should run after every movecard we run
+
 function playMoveManager() {
     let card = GameState.leadingCard;
     let currentPlayer = GameState.currentPlayer;
@@ -186,8 +189,6 @@ function playMoveManager() {
     if (GameState.DrawPile.isEmpty()) {
         restockDrawPile();
     }
-
-
 
     if (card.parentPileType === PileTypeEnum.DiscardPile) {
         newGameStateInfo = raiseActionFlag(newGameStateInfo);
@@ -200,24 +201,24 @@ function playMoveManager() {
     }
     // if TWOPLUS card was invoked increment twoPlusCounter by 2 and switch player
     if (GameState.actionState === CardActionEnum.TwoPlus) {
-        twoPlusCounter=+2;
+        twoPlusCounter = +2;
         shouldSwitchPlayer = true;
     }
 
     // if CC was invoked and current player is BOT, pick a random color and give it to the
     // leadingCard and switch players
     else if (GameState.actionState === CardActionEnum.ChangeColor && currentPlayer === GameState.Bot) {
-            card.color = pickRandomColor();
+        card.color = pickRandomColor();
         shouldSwitchPlayer = true;
         // if SuperTaki was invoked change its color to the same color of the card before it.
     }
     else if (GameState.actionState === CardActionEnum.SuperTaki) {
-        card.color = GameState.DiscardPile.cards[GameState.DiscardPile.cards.length-2].color;
+        card.color = GameState.DiscardPile.cards[GameState.DiscardPile.cards.length - 2].color;
         shouldSwitchPlayer = !doesHandHaveSameColorCards();
     }
     // if STOP card was invoked switch player twice or none at all and increment turnCounter by 1
-    else if ( (card.action === CardActionEnum.Stop) && (GameState.activeAction === CardActionEnum.Stop) ) {
-        shouldSwitchPlayer=false;
+    else if ((card.action === CardActionEnum.Stop) && (GameState.activeAction === CardActionEnum.Stop)) {
+        shouldSwitchPlayer = false;
         turncounter++;
     }
     // if PLUS card was invoked do not switch players ( give current player another move )
@@ -240,7 +241,7 @@ function raiseActionFlag() {
     } else {
         // if current action-flag is DIFFERENT than TAKI then update action-flag
         // value to be the action on our current card, in memory and on screen.
-        if ( GameState.activeAction !== CardActionEnum.Taki) {
+        if (GameState.activeAction !== CardActionEnum.Taki) {
             GameState.activeAction = GameState.selectedCard.action;
             //  $('.active-action').textContent = GameState.activeAction;
 
@@ -248,13 +249,14 @@ function raiseActionFlag() {
             // update the action-flag value to the action of the card we just used
         } else {
             let matchedCard = getCardInHand(GameState.currentPlayer, [{color: GameState.leadingCard.color}]);
-            if (matchedCard === undefined ) {  //if (!availableMoveExist()) {
+            if (matchedCard === undefined) {  //if (!availableMoveExist()) {
                 GameState.actionState = GameState.selectedCard.action;
                 // $('.active-action').textContent = GameState.activeAction;
             }
         }
     }
 }
+
 function pickRandomColor() {
     let randomInt = Utils.getRandomInt(0, 3);
     let color = Utils.getKey(CardColorEnum, randomInt);

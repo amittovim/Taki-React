@@ -39,8 +39,13 @@ class Card extends Component {
     }
 
     get fileName() {
-        if (this.props.card.action === CardActionEnum.ChangeColor || this.props.card.action === CardActionEnum.SuperTaki) {
-            return `${this.display}.jpg`;
+        if (this.props.card.action === CardActionEnum.ChangeColor ||
+            this.props.card.action === CardActionEnum.SuperTaki) {
+            if (this.props.card.color === null) {
+                return `${this.display}.jpg`;
+            } else {
+                return `${this.display}-${this.props.card.color}.jpg`;
+            }
         } else {
             return `${this.display}-${this.props.card.color}.jpg`;
         }

@@ -140,10 +140,14 @@ function playGameMove(cardId) {
     updateSelectedCard(cardId);
     return new Promise((resolve, reject) => {
         // we assume all move requests arriving from front-end are legal
-        // if (isMoveLegal()) {
-        debugger;
-//        console.log(isMoveLegal());
-        const stateChange = handleMoveCard();
+        let stateChange = handleMoveCard();
+
+        stateChange = {
+            ...stateChange,
+            leadingCard: GameState.leadingCard,
+            //actionState: GameState.actionState
+        };
+
         const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatus.CardUpdated : GameStatus.UpdatedGameState;
         setTimeout(() => {
             resolve({
@@ -153,7 +157,7 @@ function playGameMove(cardId) {
         }, 500);
     });
         // } else {
-        //     console.log(isMoveLegal());
+        //     console.log(isHumanMoveLegal());
         //     reject(new Error(`Invalid move for ${GameState.currentPlayer}`));
         // }
 }

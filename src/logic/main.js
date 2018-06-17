@@ -8,6 +8,7 @@ import {PlayerEnum} from "../app/enums/player.enum";
 import {CardActionEnum} from "../app/enums/card-action-enum";
 import {PileTypeEnum} from "../app/enums/pile-type.enum";
 import {handleMoveCard} from "./dealer/dealer";
+import * as Utils from "./utils/model.utils";
 
 
 // ===== Game init functions =====
@@ -50,16 +51,12 @@ function humanPlayerHasAvailableMoves() {
     return false;
 }
 
-function isMoveLegal() {
-    return true;
-}
-
 function playBotMove() {
     GameState.currentPlayer = PlayerEnum.Bot;
     let leadingCard = GameState.leadingCard;
     let selectedCard;
     let actionState = GameState.actionState;
-    let botPile = GameState.BotPile];
+    let botPile = GameState.BotPile;
     let matchedCard;
     // 4.1 if actionState is twoPlusInvoked and bot has twoPlus Card - mark it as selectedCard.
     if (actionState === `${CardActionEnum.TwoPlus}Invoked`) {
@@ -127,7 +124,7 @@ function getCardInHand(pile, conditionList) {
 function getFirstItemByMatchConditions(arr, conditionList)  {
     return arr.find(function (item) {       //TODO: change this to arrow function
         return conditionList.reduce(function (accumulator, condition) {
-            let key = getKey(condition, 0);
+            let key = Utils.getKey(condition, 0);
             let value = condition[key];
             return accumulator && item[key] === value;
         }, true);
@@ -142,20 +139,29 @@ function playHumanMove(cardId) {
 function playGameMove(cardId) {
     updateSelectedCard(cardId);
     return new Promise((resolve, reject) => {
-        if (isMoveLegal()) {
-            const stateChange = handleMoveCard();
-            const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatus.CardUpdated : GameStatus.UpdatedGameState;
-            setTimeout(() => {
-                resolve({
-                    message: message,
-                    payload: stateChange
-                });
-            }, 500);
-        } else {
-            reject(new Error(`Invalid move for ${GameState.currentPlayer}`));
-        }
+        // we assume all move requests arriving from front-end are legal
+        let stateChange = handleMoveCard();
+
+        stateChange = {
+            ...stateChange,
+            leadingCard: GameState.leadingCard,
+            //actionState: GameState.actionState
+        };
+
+        const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatus.CardUpdated : GameStatus.UpdatedGameState;
+        setTimeout(() => {
+            resolve({
+                message: message,
+                payload: stateChange
+            });
+        }, 500);
     });
+        // } else {
+        //     console.log(isHumanMoveLegal());
+        //     reject(new Error(`Invalid move for ${GameState.currentPlayer}`));
+        // }
 }
+
 
 function updateSelectedCard(cardId) {
     const gameCards = GameState.HumanPile.cards

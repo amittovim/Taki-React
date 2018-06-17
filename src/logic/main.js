@@ -9,6 +9,7 @@ import {CardActionEnum} from "../app/enums/card-action-enum";
 import {PileTypeEnum} from "../app/enums/pile-type.enum";
 import {handleMoveCard} from "./dealer/dealer";
 import * as Utils from "./utils/model.utils";
+import Game from "../app/game/game.component";
 
 
 // ===== Game init functions =====
@@ -181,6 +182,13 @@ function playMoveManager() {
     let shouldSwitchPlayer = true;
     let newGameStateInfo;
 
+    // if drawPile is empty restock it with cards from discardPile
+    if (GameState.DrawPile.isEmpty()) {
+        restockDrawPile();
+    }
+
+
+
     if (card.parentPileType === PileTypeEnum.DiscardPile) {
         newGameStateInfo = raiseActionFlag(newGameStateInfo);
     }
@@ -260,4 +268,16 @@ function doesHandHaveSameColorCards() {
             handHaveSameColor = true;
     });
     return handHaveSameColor;
+}
+
+function restockDrawPile() {
+    let wasRestocked;
+
+    while (GameState.DiscardPile.cards.length > 1) {
+        dealer.moveCard(GameState.discardPile.cards[0], GameState.discardPile, GameState.drawPile);
+        wasRestocked = true;
+    }
+    if (wasRestocked) {
+        Utils.shuffleArray(GameState.drawPile.cards);
+    }
 }

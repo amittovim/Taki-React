@@ -88,7 +88,8 @@ class Game extends Component {
                 selectedCard: card
         }));
         debugger;
-        const isMoveLegal = GameService.isMoveLegal(card, this.state.leadingCard, this.state.actionState);
+        const isMoveLegal = GameService.isHumanMoveLegal(card, this.state.DrawPile, this.state.actionState,
+            this.state.leadingCard, this.state.HumanPile );
         if (!isMoveLegal) {
             return this.handleIllegalMove();
         } else if (card.action === CardActionEnum.ChangeColor || card.action === CardActionEnum.SuperTaki) {

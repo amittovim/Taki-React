@@ -5,6 +5,7 @@ import * as GameApiService from './game-api.service';
 import Board from "./board/board.component";
 import {PlayerEnum} from "../enums/player.enum";
 import {GameStatus} from "../../logic/game-status.enum";
+import Console from "./console/console.component";
 
 class Game extends Component {
 
@@ -17,6 +18,7 @@ class Game extends Component {
                        botPile={this.state.BotPile}
                        moveCardDriver={this.handlePlayMove} // TODO: replace to context
                 />
+                <Console text="this is the console line"/>
             </div>
         );
     }

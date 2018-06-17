@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './modal.component.css';
 import {ModalTypeEnum} from "./modal-type.enum";
 import ColorButtons from "../color-buttons/color-buttons.component";
+import Button from "../button/button.component";
 
 // <PROPS>
 // isOpen: boolean
@@ -9,15 +10,6 @@ import ColorButtons from "../color-buttons/color-buttons.component";
 // callback: Function
 
 class Modal extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            title: '',
-            subtitle: '',
-            content: null
-        };
-    }
-
     render() {
         return (
             this.props.isOpen ?
@@ -34,6 +26,17 @@ class Modal extends Component {
                     </div>
                 ) : null
         );
+    }
+    constructor(props) {
+        super(props);
+        this.state = {
+            title: '',
+            subtitle: '',
+            content: (<Button label="Close"
+                              onClick={this.props.callback}
+                              isDisabled={false}
+            >Close</Button>)
+        };
     }
 
     componentWillMount() {

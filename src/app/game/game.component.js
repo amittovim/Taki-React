@@ -68,9 +68,12 @@ class Game extends Component {
     handleChangeColor(selectedColor) {
         debugger;
         this.setState({
-            isModalOpen: false
+            isModalOpen: false,
+            selectedCard: {
+                ...this.state.selectedCard,
+                color: selectedColor
+            }
         });
-        this.state.selectedCard.color = selectedColor;
         this.requestMoveCard();
     }
 
@@ -85,16 +88,18 @@ class Game extends Component {
     handlePlayMove(card) {
         debugger;
         this.setState((prevState) => ({
-                selectedCard: card
+            ...prevState,
+            selectedCard: card,
         }));
-        debugger;
-        const isMoveLegal = GameService.isHumanMoveLegal(card, this.state.DrawPile, this.state.actionState,
-            this.state.leadingCard, this.state.HumanPile );
+        const isMoveLegal = GameService.isMoveLegal(card, this.state.leadingCard, this.state.actionState);
         if (!isMoveLegal) {
-            return this.handleIllegalMove();
-        } else if (card.action === CardActionEnum.ChangeColor || card.action === CardActionEnum.SuperTaki) {
+            this.handleIllegalMove();
+        } else if (card.action === CardActionEnum.ChangeColor) {
             this.openColorPicker();
-        } else {
+        } else if (card.action === CardActionEnum.SuperTaki) {
+            // TODO: change supertaki color to the last card color (do it in a seperate function)
+        }
+        else {
             this.requestMoveCard();
         }
     }

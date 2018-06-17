@@ -47,8 +47,8 @@ class Game extends Component {
         };
         this.updateSelectedCard = this.updateSelectedCard.bind(this);
         this.handlePlayMove = this.handlePlayMove.bind(this);
-        this.openColorPicker = this.openColorPicker.bind(this);
-        this.handleChangeColor = this.handleChangeColor.bind(this);
+        // this.openColorPicker = this.openColorPicker.bind(this);
+        // this.handleChangeColor = this.handleChangeColor.bind(this);
         this.handleRequestMoveCard = this.handleRequestMoveCard.bind(this);
         this.handleIllegalMove = this.handleIllegalMove.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
@@ -80,24 +80,21 @@ class Game extends Component {
 
     handleIllegalMove() {
         console.log('illeagal move');
-        debugger;
-        console.log(this.state);
     }
 
     updateSelectedCard(card) {
-        this.setState({selectedCard: card}, this.handlePlayMove);
+        // this.setState({selectedCard: card}, this.handlePlayMove);
+        this.setState({selectedCard: card}, () => {
+            console.log(this.state.selectedCard);
+            this.handlePlayMove();
+        });
     }
 
     handlePlayMove() {
-        debugger;
-        let selectedCard = this.state.selectedCard;
-        console.log(selectedCard);
-        debugger;
-        const isMoveLegal = GameService.isHumanMoveLegal(selectedCard, this.state.DrawPile, this.state.actionState,
-            this.state.leadingCard, this.state.HumanPile);
+        const isMoveLegal = GameService.isHumanMoveLegal(this.state.selectedCard, this.state.DrawPile, this.state.actionState, this.state.leadingCard, this.state.HumanPile);
         if (!isMoveLegal) {
             return this.handleIllegalMove();
-        } else if (selectedCard.action === CardActionEnum.ChangeColor || selectedCard.action === CardActionEnum.SuperTaki) {
+        } else if (this.state.selectedCard.action === CardActionEnum.ChangeColor || this.state.selectedCard.action === CardActionEnum.SuperTaki) {
             this.openColorPicker();
         } else {
             this.handleRequestMoveCard();

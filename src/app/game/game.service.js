@@ -40,7 +40,7 @@ function isPutCardMoveLegal(card, actionState, leadingCard) {
 }
 
 function isPileEmpty(pile) {
-    return (pile.cards.length = 0)
+    return pile.cards.length === 0;
 
 }
 

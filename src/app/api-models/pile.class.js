@@ -18,6 +18,5 @@ export class PileModel {
         return (this.cards.length === 0);
     }
 }
-
 export default PileModel;
 

@@ -120,7 +120,6 @@ function pickNextBotMove() {
             selectedCard = GameState.DrawPile.getTop();
         }
     }
-
     playGameMove(selectedCard.id);
 }
 

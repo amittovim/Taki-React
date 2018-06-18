@@ -125,13 +125,14 @@ function playGameMove(cardId) {
     updateSelectedCardInDB(cardId);
     // we assume all move requests arriving from front-end are legal
     let stateChange = handleMoveCard();
-    playMoveManager(stateChange);
+    stateChange = playMoveManager(stateChange);
 
     stateChange = {
         ...stateChange,
         leadingCard: GameState.leadingCard,
         //actionState: GameState.actionState
     };
+    debugger;
     const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatus.CardUpdated : GameStatus.UpdatedGameState;
 
     return new Promise((resolve, reject) => {
@@ -169,7 +170,7 @@ function playMoveManager(stateChange) {
     let currentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
     let shouldSwitchPlayer = GameState.shouldSwitchPlayer = true;
     let newGameStateInfo=[];
-
+    debugger;
     // if drawPile is empty restock it with cards from discardPile
     if (GameState.DrawPile.isEmpty) {
         newGameStateInfo = GameUtils.handleDrawpileRestocking(newGameStateInfo);
@@ -216,13 +217,18 @@ function playMoveManager(stateChange) {
         newGameStateInfo = GameUtils.handleInvokedTakiState(newGameStateInfo);
     }
 
-    newGameStateInfo.push('shouldSwitchPlayer',[shouldSwitchPlayer]);
-    GameState.shouldSwitchPlayer ? switchPlayers(): null;
+    //newGameStateInfo.push({'shouldSwitchPlayer':[shouldSwitchPlayer]});
+    newGameStateInfo = {
+        ...newGameStateInfo,
+        ['shouldSwitchPlayer'] : shouldSwitchPlayer
+    };
 
+    GameState.shouldSwitchPlayer ? switchPlayers(): null;
     stateChange = {
         ...stateChange,
         ...newGameStateInfo
     };
+    debugger;
     return stateChange;
 }
 
@@ -260,13 +266,11 @@ export function isGetCardMoveLegal(currentPlayerPile, drawPile, actionState, lea
 }
 
 export function availableMoveExist(currentPlayerPile, actionState, leadingCard) {
-    debugger;
     let legalCards = [];
     currentPlayerPile.cards.forEach(function (card, index) {
         if (isPutCardMoveLegal(card, actionState, leadingCard)) {
             legalCards.push(index);
         }
     });
-    debugger;
     return (legalCards.length > 0);
 }

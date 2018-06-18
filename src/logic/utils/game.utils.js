@@ -20,7 +20,12 @@ export function getCardInHand(pile, conditionList) {
 
 export function handleDrawpileRestocking(newGameStateInfo) {
     restockDrawPile();
-    newGameStateInfo.push(GameState.DrawPile);
+    newGameStateInfo = {
+        ...newGameStateInfo,
+        [PileTypeEnum.DrawPile]: {
+            ...GameState.DrawPile}
+    }
+    return newGameStateInfo;
 }
 
 export function handleActionState(newGameStateInfo) {
@@ -32,8 +37,12 @@ export function incrementSingleCardCounter(newGameStateInfo) {
     const CurrentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
     const CurrentPlayerPileName = `${GameState.currentPlayer}Pile`;
     CurrentPlayerPile.singleCardCounter++;
-    newGameStateInfo.push( (`${CurrentPlayerPileName}.singleCardCounter`),
-                            CurrentPlayerPile.singleCardCounter );
+    newGameStateInfo = {
+        ...newGameStateInfo,
+        [`${CurrentPlayerPileName}.singleCardCounter`]:
+            CurrentPlayerPile.singleCardCounter        };
+    // newGameStateInfo.push( (`${CurrentPlayerPileName}.singleCardCounter`),
+    //                         CurrentPlayerPile.singleCardCounter );
     return newGameStateInfo;
 }
 
@@ -42,15 +51,26 @@ export function handleInvokedTwoPlusState(newGameStateInfo) {
         GameState.twoPlusCounter = +2;
         GameState.shouldSwitchPlayer = true;
 
-        newGameStateInfo.push('twoPlusCounter', GameState.twoPlusCounter);
-        newGameStateInfo.push('shouldSwitchPlayer', true);
+        newGameStateInfo = {
+            ...newGameStateInfo,
+            ['twoPlusCounter']: GameState.twoPlusCounter ,
+            ['shouldSwitchPlayer']: true    };
+        // newGameStateInfo.push('twoPlusCounter', GameState.twoPlusCounter);
+        // newGameStateInfo.push('shouldSwitchPlayer', true);
     } else {
         GameState.twoPlusCounter--;
-        newGameStateInfo.push('twoPlusCounter', GameState.twoPlusCounter);
+        // newGameStateInfo.push('twoPlusCounter', GameState.twoPlusCounter);
+        newGameStateInfo = {
+            ...newGameStateInfo,
+            ['twoPlusCounter']: GameState.twoPlusCounter };
     }
     if (GameState.twoPlusCounter === 0) {
         GameState.actionState = null;
         newGameStateInfo.push('actionState', null);
+        newGameStateInfo = {
+            ...newGameStateInfo,
+            ['actionState']: null
+        };
     }
     return newGameStateInfo;
 }
@@ -60,10 +80,15 @@ export function handleInvokedCCStateByBot(newGameStateInfo) {
     GameState.shouldSwitchPlayer = true;
     GameState.actionState = null;
 
-    newGameStateInfo.push('leadingCard', GameState.leadingCard);
-    newGameStateInfo.push('shouldSwitchPlayer', true);
-    newGameStateInfo.push('actionState', null);
-
+    // newGameStateInfo.push('leadingCard', GameState.leadingCard);
+    // newGameStateInfo.push('shouldSwitchPlayer', true);
+    // newGameStateInfo.push('actionState', null);
+    newGameStateInfo = {
+        ...newGameStateInfo,
+        ['leadingCard']: GameState.leadingCard,
+        ['shouldSwitchPlayer'] : true,
+        ['actionState'] : null
+    };
     return newGameStateInfo;
 }
 
@@ -71,9 +96,13 @@ export function handleInvokedStopState(newGameStateInfo) {
     GameState.shouldSwitchPlayer = false;
     GameState.turnNumber++;
 
-    newGameStateInfo.push('shouldSwitchPlayer', false);
-    newGameStateInfo.push('turnNumber', GameState.turnNumber);
-
+    // newGameStateInfo.push('shouldSwitchPlayer', false);
+    // newGameStateInfo.push('turnNumber', GameState.turnNumber);
+    newGameStateInfo = {
+        ...newGameStateInfo,
+        ['shouldSwitchPlayer']: false,
+        ['turnNumber'] : GameState.turnNumber
+    };
     return newGameStateInfo;
 }
 
@@ -81,7 +110,10 @@ export function handleInvokedPlusState(newGameStateInfo) {
     GameState.shouldSwitchPlayer = false;
 
     newGameStateInfo.push('shouldSwitchPlayer', false);
-
+    newGameStateInfo = {
+        ...newGameStateInfo,
+        ['shouldSwitchPlayer']: false
+    };
     return newGameStateInfo;
 }
 
@@ -90,8 +122,13 @@ export function handleInvokedSuperTakiState(newGameStateInfo) {
     GameState.leadingCard.color = GameState.DiscardPile.getSecondCardFromTop().color;
     let shouldSwitchPlayer = !doesPileHaveSameColorCards(currentPlayerPile);
 
-    newGameStateInfo.push('leadingCard', GameState.leadingCard);
-    newGameStateInfo.push('shouldSwitchPlayer', shouldSwitchPlayer);
+    // newGameStateInfo.push('leadingCard', GameState.leadingCard);
+    // newGameStateInfo.push('shouldSwitchPlayer', shouldSwitchPlayer);
+    newGameStateInfo = {
+        ...newGameStateInfo,
+        ['leadingCard']: GameState.leadingCard,
+        ['shouldSwitchPlayer'] : shouldSwitchPlayer
+    };
     return newGameStateInfo;
 }
 
@@ -99,8 +136,13 @@ export function handleInvokedTakiState(newGameStateInfo) {
     let currentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
     let shouldSwitchPlayer = !doesPileHaveSameColorCards(currentPlayerPile);
 
-    newGameStateInfo.push('shouldSwitchPlayer', shouldSwitchPlayer);
+    // newGameStateInfo.push('shouldSwitchPlayer', shouldSwitchPlayer);
+    newGameStateInfo = {
+        ...newGameStateInfo,
+        ['shouldSwitchPlayer'] : shouldSwitchPlayer
+    };
     return newGameStateInfo;
+
 }
 
 function raiseActionState(newGameStateInfo) {
@@ -114,7 +156,10 @@ function raiseActionState(newGameStateInfo) {
         // value to be the action on our current card, in memory and in newGameStateInfo.
         if (GameState.actionState !== CardActionEnum.Taki) {
             GameState.actionState = GameState.selectedCard.action;
-            newGameStateInfo.push('actionState', GameState.selectedCard.action);
+            newGameStateInfo = {
+                ...newGameStateInfo,
+                ['actionState']: GameState.selectedCard.action };
+            // newGameStateInfo.push('actionState', GameState.selectedCard.action);
 
             // if current activeState IS taki and player has no more cards with same color to put on it
             // update the activeState value to the action of the card to our current card
@@ -122,7 +167,10 @@ function raiseActionState(newGameStateInfo) {
             let matchedCard = getCardInHand(GameState[`${GameState.currentPlayer}Pile`].cards, [{color: GameState.leadingCard.color}]);
             if (matchedCard === undefined) {  //if (!availableMoveExist()) {
                 GameState.actionState = GameState.selectedCard.action;
-                newGameStateInfo.push('actionState', GameState.selectedCard.action);
+                newGameStateInfo = {
+                    ...newGameStateInfo,
+                    ['actionState']: GameState.selectedCard.action };
+                //newGameStateInfo.push('actionState', GameState.selectedCard.action);
             }
         }
     }

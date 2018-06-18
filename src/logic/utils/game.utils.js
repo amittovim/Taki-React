@@ -171,7 +171,7 @@ function raiseActionState(newGameStateInfo) {
 
 function doesPileHaveSameColorCards(currentPlayerPile) {
     let foundSameColorCards = false;
-    GameState.currentPlayer.pile.cards.forEach(function (handCard) {
+    currentPlayerPile.cards.forEach(function (handCard) {
         if (handCard.color === GameState.selectedCard.color)
             foundSameColorCards = true;
     });

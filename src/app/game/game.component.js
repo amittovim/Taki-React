@@ -87,7 +87,6 @@ class Game extends Component {
 
     handlePlayMove() {
         const isMoveLegal = GameService.isHumanMoveLegal(this.state.selectedCard, this.state.DrawPile, this.state.actionState, this.state.leadingCard, this.state.HumanPile);
-        debugger;
         if (!isMoveLegal) {
             return this.handleIllegalMove();
         } else if (this.state.selectedCard.action === CardActionEnum.ChangeColor) {
@@ -102,7 +101,6 @@ class Game extends Component {
 
 
     processNewState() {
-        debugger;
         if (this.state.currentPlayer !== PlayerEnum.Human) {
             GameApiService.requestGameStateUpdate()
                 .then(response => {
@@ -118,7 +116,6 @@ class Game extends Component {
     }
 
     handleRequestMoveCard() {
-        debugger;
         const currentPlayer = this.state.currentPlayer;
         const selectedCardId = this.state.selectedCard.id;
         GameApiService.requestMoveCard(selectedCardId)

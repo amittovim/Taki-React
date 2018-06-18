@@ -31,11 +31,9 @@ export function initGame() {
 ///// API
 
 export function requestCardMove(cardId) {
-    debugger;
     const stateChange = playHumanMove(cardId);
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            debugger;
             resolve({
                 header: GameStatus.GameStateChanged,
                 body: stateChange
@@ -162,7 +160,6 @@ function playMoveManager(stateChange) {
     let currentPlayerPile = GameUtils.getPlayerPile(GameState.currentPlayer);
     let shouldSwitchPlayer = GameState.shouldSwitchPlayer = true;
     let newGameStateInfo = {};
-    debugger;
 
 
 

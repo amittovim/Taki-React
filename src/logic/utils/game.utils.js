@@ -111,7 +111,6 @@ export function handleInvokedPlusState(newGameStateInfo) {
 
 export function handleInvokedSuperTakiState(newGameStateInfo) {
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
-    debugger;
     GameState.leadingCard.color = GameState.DiscardPile.getSecondCardFromTop().color;
     GameState.actionState = CardActionEnum.Taki;
     let shouldSwitchPlayer = !doesPileHaveSameColorCards(currentPlayerPile);

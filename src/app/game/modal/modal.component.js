@@ -55,7 +55,6 @@ class Modal extends Component {
     }
 
     renderSwitch(type) {
-        debugger;
         switch (type) {
             case ModalTypeEnum.Welcome: {
                 return (<WelcomeModal />);
@@ -70,7 +69,6 @@ class Modal extends Component {
     }
 
     handleClick(value) {
-        debugger;
         this.props.callback(value);
     }
 }

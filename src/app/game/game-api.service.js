@@ -7,7 +7,7 @@ export function getInitialState() {
 }
 
 export function requestMoveCard(cardId) {
-    return logic.requestMoveCard(cardId)
+    return logic.requestCardMove(cardId)
 }
 
 export function requestGameStateUpdate() {

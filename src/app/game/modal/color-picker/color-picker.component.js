@@ -34,7 +34,6 @@ class ColorPickerModal extends Component {
     }
 
     handleClick(color) {
-        debugger;
         this.props.onColorSelect(color);
     }
 }

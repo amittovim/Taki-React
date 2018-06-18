@@ -11,10 +11,11 @@ export class PileModel {
     };
 
     getSecondCardFromTop() {
-        return this.cards[this.cards.length - 2];
+        return (this.cards[this.cards.length - 2]);
     }
-
+    isPileEmpty() {
+        return (this.cards.length === 0);
+    }
 }
-
 export default PileModel;
 

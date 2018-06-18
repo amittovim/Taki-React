@@ -28,7 +28,9 @@ function drawStartingCard() {
     do {
         // It draws another card if the card drawn is change-color because you cannot start a taki with this card
         handleMoveCard();
-    } while (GameState.selectedCard.action && GameState.selectedCard.action === CardActionEnum.ChangeColor);
+    } while ( GameState.selectedCard.action &&
+             (GameState.selectedCard.action === CardActionEnum.ChangeColor ||
+              GameState.selectedCard.action === CardActionEnum.SuperTaki      ));
 }
 
 // == Moving Cards ==
@@ -75,7 +77,7 @@ function updateLeadingCard(destinationPileType) {
     }
 }
 
-function moveCard(sourcePileType, destinationPileType) {
+export function moveCard(sourcePileType, destinationPileType) {
     utils.pullItemFromArray(GameState.selectedCard, GameState[sourcePileType].cards);
     utils.insertToEndOfArray(GameState.selectedCard, GameState[destinationPileType].cards);
     return {

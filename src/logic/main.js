@@ -167,9 +167,8 @@ function playMoveManager(stateChange) {
     let leadingCard = GameState.leadingCard;
     let currentPlayerType = GameState.currentPlayer;
     let currentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
-    let shouldSwitchPlayer = true;
+    let shouldSwitchPlayer = GameState.shouldSwitchPlayer = true;
     let newGameStateInfo=[];
-
 
     // if drawPile is empty restock it with cards from discardPile
     if (GameState.DrawPile.isEmpty) {
@@ -182,12 +181,11 @@ function playMoveManager(stateChange) {
     }
 
 
-
-
     // if needed, raise game actionState
     if (leadingCard.parentPileType === PileTypeEnum.DiscardPile) {
         newGameStateInfo = GameUtils.handleActionState(newGameStateInfo);
     }
+
 
 
     // if TWOPLUS card was invoked increment twoPlusCounter by 2 and switch player
@@ -214,10 +212,13 @@ function playMoveManager(stateChange) {
     }
     // if Taki card was invoked do not switch players until player has no cards from the
     // same color as the taki
-    if (GameState.activeAction === CardActionEnum.Taki) {
+    if (GameState.actionState === CardActionEnum.Taki) {
         newGameStateInfo = GameUtils.handleInvokedTakiState(newGameStateInfo);
     }
+
     newGameStateInfo.push('shouldSwitchPlayer',[shouldSwitchPlayer]);
+    GameState.shouldSwitchPlayer ? switchPlayers(): null;
+
     stateChange = {
         ...stateChange,
         ...newGameStateInfo

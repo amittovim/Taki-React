@@ -41,6 +41,7 @@ export function handleInvokedTwoPlusState(newGameStateInfo) {
     if (GameState.leadingCard.action === CardActionEnum.TwoPlus) {
         GameState.twoPlusCounter = +2;
         GameState.shouldSwitchPlayer = true;
+
         newGameStateInfo.push('twoPlusCounter', GameState.twoPlusCounter);
         newGameStateInfo.push('shouldSwitchPlayer', true);
     } else {

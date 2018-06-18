@@ -159,10 +159,14 @@ function playMoveManager(stateChange) {
     debugger;
     let leadingCard = GameState.leadingCard;
     let currentPlayerType = GameState.currentPlayer;
-    let currentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
+    let currentPlayerPile = GameUtils.getPlayerPile(GameState.currentPlayer);
     let shouldSwitchPlayer = GameState.shouldSwitchPlayer = true;
     let newGameStateInfo = {};
     debugger;
+
+
+
+
 
     // if drawPile is empty restock it with cards from discardPile
     if (GameState.DrawPile.isEmpty) {
@@ -176,6 +180,7 @@ function playMoveManager(stateChange) {
     }
 
     // if needed, raise game actionState
+    debugger;
     newGameStateInfo = GameUtils.handleActionState(newGameStateInfo);
 
     // if TWOPLUS card was invoked increment twoPlusCounter by 2 and switch player

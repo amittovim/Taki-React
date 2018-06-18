@@ -111,6 +111,7 @@ export function handleInvokedPlusState(newGameStateInfo) {
 
 export function handleInvokedSuperTakiState(newGameStateInfo) {
     let currentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
+    debugger;
     GameState.leadingCard.color = GameState.DiscardPile.getSecondCardFromTop().color;
     let shouldSwitchPlayer = !doesPileHaveSameColorCards(currentPlayerPile);
 
@@ -170,7 +171,8 @@ function raiseActionState(newGameStateInfo) {
 
 function doesPileHaveSameColorCards(currentPlayerPile) {
     let foundSameColorCards = false;
-    GameState.currentPlayer.pile.cards.forEach(function (handCard) {
+    debugger;
+    currentPlayerPile.cards.forEach(function (handCard) {
         if (handCard.color === GameState.selectedCard.color)
             foundSameColorCards = true;
     });
@@ -189,4 +191,7 @@ function restockDrawPile() {
     }
 }
 
+export function getPlayerPile(playerType) {
+    return GameState[`${playerType}Pile`];
+}
 

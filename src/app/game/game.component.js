@@ -87,12 +87,11 @@ class Game extends Component {
 
     handlePlayMove() {
         const isMoveLegal = GameService.isHumanMoveLegal(this.state.selectedCard, this.state.DrawPile, this.state.actionState, this.state.leadingCard, this.state.HumanPile);
+        debugger;
         if (!isMoveLegal) {
             return this.handleIllegalMove();
         } else if (this.state.selectedCard.action === CardActionEnum.ChangeColor) {
             this.openColorPicker();
-        } else if (this.state.selectedCard.action === CardActionEnum.SuperTaki) {
-            this.handleChangeColor(this.state.DiscardPile.cards.getSecondCardFromTop.color);
             debugger;
         } else {
             this.handleRequestMoveCard();

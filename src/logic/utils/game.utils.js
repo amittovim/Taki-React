@@ -53,14 +53,14 @@ export function handleInvokedTwoPlusState(newGameStateInfo) {
 
         newGameStateInfo = {
             ...newGameStateInfo,
-            ['twoPlusCounter']: GameState.twoPlusCounter,
-            ['shouldSwitchPlayer']: true
+            twoPlusCounter: GameState.twoPlusCounter,
+            shouldSwitchPlayer: true
         };
     } else {
         GameState.twoPlusCounter--;
         newGameStateInfo = {
             ...newGameStateInfo,
-            ['twoPlusCounter']: GameState.twoPlusCounter
+            twoPlusCounter: GameState.twoPlusCounter
         };
     }
     if (GameState.twoPlusCounter === 0) {
@@ -68,7 +68,7 @@ export function handleInvokedTwoPlusState(newGameStateInfo) {
         newGameStateInfo.push('actionState', null);
         newGameStateInfo = {
             ...newGameStateInfo,
-            ['actionState']: null
+            actionState: null
         };
     }
     return newGameStateInfo;
@@ -81,9 +81,9 @@ export function handleInvokedCCStateByBot(newGameStateInfo) {
 
     newGameStateInfo = {
         ...newGameStateInfo,
-        ['leadingCard']: GameState.leadingCard,
-        ['shouldSwitchPlayer']: true,
-        ['actionState']: null
+        leadingCard: GameState.leadingCard,
+        shouldSwitchPlayer: true,
+        actionState: null
     };
     return newGameStateInfo;
 }
@@ -94,8 +94,8 @@ export function handleInvokedStopState(newGameStateInfo) {
 
     newGameStateInfo = {
         ...newGameStateInfo,
-        ['shouldSwitchPlayer']: false,
-        ['turnNumber']: GameState.turnNumber
+        shouldSwitchPlayer: false,
+        turnNumber: GameState.turnNumber
     };
     return newGameStateInfo;
 }
@@ -104,21 +104,26 @@ export function handleInvokedPlusState(newGameStateInfo) {
     GameState.shouldSwitchPlayer = false;
     newGameStateInfo = {
         ...newGameStateInfo,
-        ['shouldSwitchPlayer']: false
+        shouldSwitchPlayer: false
     };
     return newGameStateInfo;
 }
 
 export function handleInvokedSuperTakiState(newGameStateInfo) {
-    let currentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
+    let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
     debugger;
     GameState.leadingCard.color = GameState.DiscardPile.getSecondCardFromTop().color;
+    GameState.actionState = CardActionEnum.Taki;
     let shouldSwitchPlayer = !doesPileHaveSameColorCards(currentPlayerPile);
+    if (shouldSwitchPlayer) {
+        GameState.actionState = null;
+    }
 
     newGameStateInfo = {
         ...newGameStateInfo,
-        ['leadingCard']: GameState.leadingCard,
-        ['shouldSwitchPlayer']: shouldSwitchPlayer
+        leadingCard: GameState.leadingCard,
+        actionState: GameState.actionState,
+        shouldSwitchPlayer: shouldSwitchPlayer
     };
     return newGameStateInfo;
 }
@@ -126,10 +131,13 @@ export function handleInvokedSuperTakiState(newGameStateInfo) {
 export function handleInvokedTakiState(newGameStateInfo) {
     let currentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
     let shouldSwitchPlayer = !doesPileHaveSameColorCards(currentPlayerPile);
-
+    if (shouldSwitchPlayer) {
+        GameState.actionState = null;
+    }
     newGameStateInfo = {
         ...newGameStateInfo,
-        ['shouldSwitchPlayer']: shouldSwitchPlayer
+        actionState: null,
+        'shouldSwitchPlayer' : shouldSwitchPlayer
     };
     return newGameStateInfo;
 

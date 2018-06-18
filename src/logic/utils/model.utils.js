@@ -45,6 +45,7 @@ export function getKey(obj, index) {
 }
 
 export function getFirstItemByMatchConditions(arr, conditionList) {
+    debugger;
     return arr.find(function (item) {       //TODO: change this to arrow function
         return conditionList.reduce(function (accumulator, condition) {
             let key = getKey(condition, 0);

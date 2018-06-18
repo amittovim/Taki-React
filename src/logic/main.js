@@ -154,6 +154,7 @@ export function switchPlayers() {
 
 //this function should run after every card movement we make
 function processGameStep(stateChange) {
+    debugger;
     let leadingCard = GameState.leadingCard;
     let currentPlayerType = GameState.currentPlayer;
     let currentPlayerPile = GameUtils.getPlayerPile(GameState.currentPlayer);

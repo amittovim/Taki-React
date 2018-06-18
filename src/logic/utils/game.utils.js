@@ -166,7 +166,8 @@ function raiseActionState(newGameStateInfo) {
             // if current activeState IS taki and player has no more cards with same color to put on it
             // update the activeState value to the action of the card to our current card
         } else {
-            let matchedCard = getCardInHand(GameState[`${GameState.currentPlayer}Pile`].cards, [{color: GameState.leadingCard.color}]);
+            debugger;
+            let matchedCard = getCardInHand(getPlayerPile(GameState.currentPlayer), [{color: GameState.leadingCard.color}]);
             if (matchedCard === undefined) {  //if (!availableMoveExist()) {
                 GameState.actionState = GameState.selectedCard.action;
                 newGameStateInfo = {

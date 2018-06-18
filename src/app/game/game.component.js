@@ -91,9 +91,6 @@ class Game extends Component {
             return this.handleIllegalMove();
         } else if (this.state.selectedCard.action === CardActionEnum.ChangeColor) {
             this.openColorPicker();
-        } else if (this.state.selectedCard.action === CardActionEnum.SuperTaki) {
-            this.handleChangeColor(this.state.DiscardPile.cards.getSecondCardFromTop.color);
-            debugger;
         } else {
             this.handleRequestMoveCard();
         }
@@ -101,11 +98,9 @@ class Game extends Component {
 
 
     processNewState() {
-        debugger;
         if (this.state.currentPlayer !== PlayerEnum.Human) {
             GameApiService.requestGameStateUpdate()
                 .then(response => {
-                    debugger;
                     this.setState({...response.body});
                 })
                 .catch(error => {
@@ -117,8 +112,6 @@ class Game extends Component {
     }
 
     handleRequestMoveCard() {
-        debugger;
-        const currentPlayer = this.state.currentPlayer;
         const selectedCardId = this.state.selectedCard.id;
         GameApiService.requestMoveCard(selectedCardId)
             .then(response => {

@@ -92,6 +92,8 @@ class Game extends Component {
             return this.handleIllegalMove();
         } else if (this.state.selectedCard.action === CardActionEnum.ChangeColor) {
             this.openColorPicker();
+        } else if (this.state.selectedCard.action === CardActionEnum.SuperTaki) {
+            this.handleChangeColor(this.state.DiscardPile.cards.getSecondCardFromTop.color);
             debugger;
         } else {
             this.handleRequestMoveCard();

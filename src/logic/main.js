@@ -31,11 +31,9 @@ export function initGame() {
 ///// API
 
 export function requestCardMove(cardId) {
-    debugger;
     const stateChange = playHumanMove(cardId);
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            debugger;
             resolve({
                 header: GameStatus.GameStateChanged,
                 body: stateChange
@@ -156,13 +154,11 @@ export function switchPlayers() {
 
 //this function should run after every card movement we make
 function playMoveManager(stateChange) {
-    debugger;
     let leadingCard = GameState.leadingCard;
     let currentPlayerType = GameState.currentPlayer;
     let currentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
     let shouldSwitchPlayer = GameState.shouldSwitchPlayer = true;
     let newGameStateInfo = {};
-    debugger;
 
     // if drawPile is empty restock it with cards from discardPile
     if (GameState.DrawPile.isEmpty) {
@@ -190,7 +186,7 @@ function playMoveManager(stateChange) {
     }
 
     // if STOP card was invoked switch player twice or none at all and increment turnCounter by 1
-    else if ((leadingCard.action === CardActionEnum.Stop) && (GameState.activeAction === CardActionEnum.Stop)) {
+    else if ((leadingCard.action === CardActionEnum.Stop) && (GameState.actionState === CardActionEnum.Stop)) {
         newGameStateInfo = GameUtils.handleInvokedStopState(newGameStateInfo);
     }
 

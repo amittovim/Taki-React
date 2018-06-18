@@ -28,9 +28,9 @@ function drawStartingCard() {
     do {
         // It draws another card if the card drawn is change-color because you cannot start a taki with this card
         handleMoveCard();
-    } while ( GameState.selectedCard.action &&
-             (GameState.selectedCard.action === CardActionEnum.ChangeColor ||
-              GameState.selectedCard.action === CardActionEnum.SuperTaki      ));
+    } while (GameState.selectedCard.action &&
+    (GameState.selectedCard.action === CardActionEnum.ChangeColor ||
+        GameState.selectedCard.action === CardActionEnum.SuperTaki));
 }
 
 // == Moving Cards ==

@@ -112,6 +112,7 @@ class Game extends Component {
     }
 
     handleRequestMoveCard() {
+        const currentPlayer = this.state.currentPlayer;
         const selectedCardId = this.state.selectedCard.id;
         GameApiService.requestMoveCard(selectedCardId)
             .then(response => {

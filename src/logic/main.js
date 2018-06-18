@@ -152,15 +152,11 @@ export function switchPlayers() {
     GameState.currentPlayer = GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot;
 }
 
-function getPlayerPile(playerType) {
-    return GameState[`${playerType}Pile`];
-}
-
 //this function should run after every card movement we make
 function processGameStep(stateChange) {
     let leadingCard = GameState.leadingCard;
     let currentPlayerType = GameState.currentPlayer;
-    let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
+    let currentPlayerPile = GameUtils.getPlayerPile(GameState.currentPlayer);
     let shouldSwitchPlayer = GameState.shouldSwitchPlayer = true;
     let newGameStateInfo = {};
 

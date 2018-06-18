@@ -105,7 +105,7 @@ class Game extends Component {
                 return GameApiService.requestGameStateUpdate();
             })
             .then(response => {
-                if (response.message === GameStatus.ProceedPlayersTurn) {
+                if (response.message === GameStatus.PlayYourNextMove) {
                     console.log('Turn still not ended, go on');
                 }
                 else if (response.message === GameStatus.UpdatedGameState) {

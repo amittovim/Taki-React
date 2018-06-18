@@ -50,9 +50,7 @@ class Card extends Component {
             return `${this.display}-${this.props.card.color}.jpg`;
         }
     }
-    isActionCard() {
-        return !!this.action;
-    }
+
     handleClick() {
         this.props.moveCardDriver2(this.props.card);
     };

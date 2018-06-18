@@ -9,6 +9,10 @@ export class CardModel {
         this.isHidden = isHidden;
         this.parentPileType = parentPileType;
     }
+
+    get isActionCard() {
+        return !!this.action;
+    }
 }
 
 export default CardModel;

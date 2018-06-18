@@ -3,6 +3,6 @@ export const GameStatus = {
     SettingStartingCard: 'SettingStartingCard',
     CardUpdated: 'CardUpdated',
     PlayYourNextMove: 'PlayYourNextMove',
-    UpdatedGameState: 'UpdatedGameState'
+    GameStateChanged: 'GameStateChanged'
 };
 

@@ -30,20 +30,30 @@ export function initGame() {
 
 ///// API
 
-export function requestMoveCard(cardId) {
-    return playHumanMove(cardId);
+export function requestCardMove(cardId) {
+    debugger;
+    const stateChange = playHumanMove(cardId);
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            debugger;
+            resolve({
+                header: GameStatus.GameStateChanged,
+                body: stateChange
+            });
+        }, 500);
+    });
 }
 
 export function requestGameStateUpdate() {
+    playBotMove();
     return new Promise((resolve, reject) => {
-        if ((true)) {   // TODO: change this condition
+        setTimeout(() => {
             resolve({
-                message: GameStatusMessageEnum.PlayYourNextMove
-            })
-        } else {
-            let stateChange = playBotMove();
-            resolve(stateChange);
-        }
+                header: GameStatus.GameStateChanged,
+                body: GameState
+            });
+        }, 500);
+
     });
 }
 
@@ -112,51 +122,32 @@ function playBotMove() {
             selectedCard = GameState.DrawPile.getTop();
         }
     }
-    return playGameMove(selectedCard.id);
+    playGameMove(selectedCard.id);
 }
 
 function playHumanMove(cardId) {
     GameState.currentPlayer = PlayerEnum.Human;
-    console.log(GameState);
     return playGameMove(cardId);
 }
 
 function playGameMove(cardId) {
-    updateSelectedCardInDB(cardId);
-    // we assume all move requests arriving from front-end are legal
+    GameState.selectedCard = getCardById(cardId);
+
+    // moving the card
     let stateChange = handleMoveCard();
+
+    // side effects
     stateChange = playMoveManager(stateChange);
-
-    stateChange = {
-        ...stateChange,
-        leadingCard: GameState.leadingCard,
-        //actionState: GameState.actionState
-    };
-    debugger;
-    const message = GameState.currentPlayer === PlayerEnum.Human ? GameStatus.CardUpdated : GameStatus.UpdatedGameState;
-
-    return new Promise((resolve, reject) => {
-
-        setTimeout(() => {
-            resolve({
-                message: message,
-                payload: stateChange
-            });
-        }, 500);
-    });
-    // } else {
-    //     console.log(isHumanMoveLegal());
-    //     reject(new Error(`Invalid move for ${GameState.currentPlayer}`));
-    // }
+    return stateChange;
 }
 
 
-function updateSelectedCardInDB(cardId) {
+function getCardById(cardId) {
     const gameCards = GameState.HumanPile.cards
         .concat(GameState.BotPile.cards)
         .concat(GameState.DiscardPile.cards)
         .concat(GameState.DrawPile.cards);
-    GameState.selectedCard = gameCards.filter((card) => card.id === cardId)[0];
+    return gameCards.filter((card) => card.id === cardId)[0];
 }
 
 export function switchPlayers() {
@@ -165,71 +156,82 @@ export function switchPlayers() {
 
 //this function should run after every card movement we make
 function playMoveManager(stateChange) {
+    debugger;
     let leadingCard = GameState.leadingCard;
     let currentPlayerType = GameState.currentPlayer;
     let currentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
     let shouldSwitchPlayer = GameState.shouldSwitchPlayer = true;
-    let newGameStateInfo=[];
+    let newGameStateInfo = {};
     debugger;
+
     // if drawPile is empty restock it with cards from discardPile
     if (GameState.DrawPile.isEmpty) {
         newGameStateInfo = GameUtils.handleDrawpileRestocking(newGameStateInfo);
     }
+
     // needed for game statistics... if player has only 1 card left we are updating
     // it in his singleCardCounter at relevant area
     if (currentPlayerPile.cards.length === 1) {
         newGameStateInfo = GameUtils.incrementSingleCardCounter(newGameStateInfo);
     }
 
-
     // if needed, raise game actionState
-    if (leadingCard.parentPileType === PileTypeEnum.DiscardPile) {
-        newGameStateInfo = GameUtils.handleActionState(newGameStateInfo);
-    }
-
-
+    newGameStateInfo = GameUtils.handleActionState(newGameStateInfo);
 
     // if TWOPLUS card was invoked increment twoPlusCounter by 2 and switch player
     if (GameState.actionState === CardActionEnum.TwoPlus) {
         newGameStateInfo = GameUtils.handleInvokedTwoPlusState(newGameStateInfo);
     }
+
     // if CC card was invoked and current player is BOT, pick a random color and
     // give it to the leadingCard and switch players
     else if (GameState.actionState === CardActionEnum.ChangeColor && currentPlayerType === GameState.Bot) {
         newGameStateInfo = GameUtils.handleInvokedCCStateByBot(newGameStateInfo);
     }
+
     // if STOP card was invoked switch player twice or none at all and increment turnCounter by 1
     else if ((leadingCard.action === CardActionEnum.Stop) && (GameState.activeAction === CardActionEnum.Stop)) {
         newGameStateInfo = GameUtils.handleInvokedStopState(newGameStateInfo);
     }
+
     // if PLUS card was invoked do not switch players ( give current player another move )
-    else if (GameState.activeAction === CardActionEnum.Plus) {
+    else if (GameState.actionState === CardActionEnum.Plus) {
         newGameStateInfo = GameUtils.handleInvokedPlusState(newGameStateInfo);
     }
+
     // if SuperTaki was invoked change its color to the same color
     // of the card before it and invoke Taki .
     else if (GameState.actionState === CardActionEnum.SuperTaki) {
         newGameStateInfo = GameUtils.handleInvokedSuperTakiState(newGameStateInfo);
     }
+
     // if Taki card was invoked do not switch players until player has no cards from the
     // same color as the taki
     if (GameState.actionState === CardActionEnum.Taki) {
         newGameStateInfo = GameUtils.handleInvokedTakiState(newGameStateInfo);
     }
 
-    //newGameStateInfo.push({'shouldSwitchPlayer':[shouldSwitchPlayer]});
-    newGameStateInfo = {
-        ...newGameStateInfo,
-        ['shouldSwitchPlayer'] : shouldSwitchPlayer
-    };
+    handleSwitchPlayers();
 
-    GameState.shouldSwitchPlayer ? switchPlayers(): null;
-    stateChange = {
+    return {
         ...stateChange,
-        ...newGameStateInfo
+        ...newGameStateInfo,
+        leadingCard: GameState.leadingCard,
+        currentPlayer: GameState.currentPlayer
     };
-    debugger;
-    return stateChange;
+}
+
+function handleSwitchPlayers() {
+    // if (shouldSwitchPlayers()) {
+    if (GameState.shouldSwitchPlayer) {
+        switchPlayers();
+        GameState.shouldSwitchPlayer = false;
+    }
+}
+
+function shouldSwitchPlayers() {
+    // TODO: Amit move all the switch player code that is inside the handleInvoked to here
+    return true;
 }
 
 export function isPutCardMoveLegal(card, actionState, leadingCard) {

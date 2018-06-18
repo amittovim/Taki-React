@@ -8,6 +8,7 @@ import Console from "./console/console.component";
 import {CardActionEnum} from "../enums/card-action-enum";
 import {ModalTypeEnum} from "./modal/modal-type.enum";
 import Modal from "./modal/modal.component";
+import {PlayerEnum} from "../enums/player.enum";
 
 class Game extends Component {
     render() {
@@ -98,24 +99,33 @@ class Game extends Component {
         }
     }
 
+
+    processNewState() {
+        debugger;
+        if (this.state.currentPlayer !== PlayerEnum.Human) {
+            GameApiService.requestGameStateUpdate()
+                .then(response => {
+                    debugger;
+                    this.setState({...response.body});
+                })
+                .catch(error => {
+                    console.error('Error', error);
+                });
+        } else {
+            console.log('Your turn still not ended, go on');
+        }
+    }
+
     handleRequestMoveCard() {
         debugger;
-        GameApiService.requestMoveCard(this.state.selectedCard.id)
+        const currentPlayer = this.state.currentPlayer;
+        const selectedCardId = this.state.selectedCard.id;
+        GameApiService.requestMoveCard(selectedCardId)
             .then(response => {
-                this.setState({...response.payload});
-                return GameApiService.requestGameStateUpdate();
-            })
-            .then(response => {
-                if (response.message === GameStatus.PlayYourNextMove) {
-                    console.log('Turn still not ended, go on');
-                }
-                else if (response.message === GameStatus.UpdatedGameState) {
-                    this.setState({...response.payload});
+                if (GameStatus.GameStateChanged) {
+                    this.setState({...response.body}, this.processNewState);
                 }
             })
-            .catch(error => {
-                console.error('Error', error);
-            });
     }
 
     handleChangeColor(selectedColor) {

@@ -8,11 +8,12 @@ export class PileModel {
 
     getTop() {
         return this.cards[this.cards.length - 1];
-    };
+    }
 
     getSecondCardFromTop() {
         return (this.cards[this.cards.length - 2]);
     }
+
     isPileEmpty() {
         return (this.cards.length === 0);
     }

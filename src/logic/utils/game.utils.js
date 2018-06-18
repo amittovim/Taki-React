@@ -3,6 +3,7 @@ import {GameState} from "../state";
 import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import {CardActionEnum} from "../../app/enums/card-action-enum";
 import * as dealer from "../dealer/dealer";
+import {CardColorEnum} from "../../app/enums/card-color.enum";
 
 export function pullTopOfPile(pile) {
     return utils.pullItemFromEndOfArray(pile.cards);
@@ -10,7 +11,7 @@ export function pullTopOfPile(pile) {
 
 export function pickRandomColor() {
     let randomInt = utils.getRandomInt(0, 3);
-    let color = Utils.getKey(CardColorEnum, randomInt);
+    let color = utils.getKey(CardColorEnum, randomInt);
     return CardColorEnum[color];
 }
 
@@ -82,8 +83,8 @@ export function handleInvokedCCStateByBot(newGameStateInfo) {
     newGameStateInfo = {
         ...newGameStateInfo,
         leadingCard: GameState.leadingCard,
-        shouldSwitchPlayer: true,
-        actionState: null
+        shouldSwitchPlayer: GameState.shouldSwitchPlayer,
+        actionState: GameState.actionState
     };
     return newGameStateInfo;
 }
@@ -181,7 +182,6 @@ function raiseActionState(newGameStateInfo) {
 
 function doesPileHaveSameColorCards(currentPlayerPile) {
     let foundSameColorCards = false;
-    debugger;
     currentPlayerPile.cards.forEach(function (handCard) {
         if (handCard.color === GameState.selectedCard.color)
             foundSameColorCards = true;

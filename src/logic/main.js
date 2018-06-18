@@ -7,7 +7,7 @@ import {GameStatus as GameStatusMessageEnum, GameStatus} from "./game-status.enu
 import {PlayerEnum} from "../app/enums/player.enum";
 import {CardActionEnum} from "../app/enums/card-action-enum";
 import {PileTypeEnum} from "../app/enums/pile-type.enum";
-import {handleMoveCard} from "./dealer/dealer";
+import {handleCardMove} from "./dealer/dealer";
 import * as Utils from "./utils/model.utils";
 import * as GameUtils from "./utils/game.utils";
 import Game from "../app/game/game.component";
@@ -22,7 +22,7 @@ export function initGame() {
     initDiscardPile();
     dealer.dealCards();
     if (GameState.currentPlayer === PlayerEnum.Bot) {
-        playBotMove();
+        pickNextBotMove();
     }
     GameState.status = GameStatus.UpdatedGameState;
     return GameState;
@@ -43,7 +43,7 @@ export function requestCardMove(cardId) {
 }
 
 export function requestGameStateUpdate() {
-    playBotMove();
+    pickNextBotMove();
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve({
@@ -58,7 +58,7 @@ export function requestGameStateUpdate() {
 ///// Inner
 
 // Bot Player algorithm to choose next move
-function playBotMove() {
+function pickNextBotMove() {
     GameState.currentPlayer = PlayerEnum.Bot;
     let leadingCard = GameState.leadingCard;
     let selectedCard;
@@ -132,10 +132,10 @@ function playGameMove(cardId) {
     GameState.selectedCard = getCardById(cardId);
 
     // moving the card
-    let stateChange = handleMoveCard();
+    let stateChange = handleCardMove();
 
     // side effects
-    stateChange = playMoveManager(stateChange);
+    stateChange = processGameStep(stateChange);
     return stateChange;
 }
 
@@ -153,17 +153,12 @@ export function switchPlayers() {
 }
 
 //this function should run after every card movement we make
-function playMoveManager(stateChange) {
-    debugger;
+function processGameStep(stateChange) {
     let leadingCard = GameState.leadingCard;
     let currentPlayerType = GameState.currentPlayer;
     let currentPlayerPile = GameUtils.getPlayerPile(GameState.currentPlayer);
     let shouldSwitchPlayer = GameState.shouldSwitchPlayer = true;
     let newGameStateInfo = {};
-
-
-
-
 
     // if drawPile is empty restock it with cards from discardPile
     if (GameState.DrawPile.isEmpty) {
@@ -177,7 +172,6 @@ function playMoveManager(stateChange) {
     }
 
     // if needed, raise game actionState
-    debugger;
     newGameStateInfo = GameUtils.handleActionState(newGameStateInfo);
 
     // if TWOPLUS card was invoked increment twoPlusCounter by 2 and switch player
@@ -185,9 +179,8 @@ function playMoveManager(stateChange) {
         newGameStateInfo = GameUtils.handleInvokedTwoPlusState(newGameStateInfo);
     }
 
-    // if CC card was invoked and current player is BOT, pick a random color and
-    // give it to the leadingCard and switch players
-    else if (GameState.actionState === CardActionEnum.ChangeColor && currentPlayerType === GameState.Bot) {
+    // if CHANGE COLOR card was invoked and the current player is BOT, pick a random color for it
+    else if (GameState.actionState === CardActionEnum.ChangeColor && currentPlayerType === PlayerEnum.Bot) {
         newGameStateInfo = GameUtils.handleInvokedCCStateByBot(newGameStateInfo);
     }
 

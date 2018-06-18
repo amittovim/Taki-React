@@ -16,9 +16,9 @@ export function dealCards() {
 
 function dealHands() {
     for (let i = 1; i <= consts.NUMBER_OF_STARTING_CARDS_IN_PLAYERS_HAND; i++) {
-        handleMoveCard();
+        handleCardMove();
         switchPlayers();
-        handleMoveCard();
+        handleCardMove();
         switchPlayers();
     }
 }
@@ -27,7 +27,7 @@ function drawStartingCard() {
     GameState.status = GameStatus.SettingStartingCard;
     do {
         // It draws another card if the card drawn is change-color because you cannot start a taki with this card
-        handleMoveCard();
+        handleCardMove();
     } while ( GameState.selectedCard.action &&
              (GameState.selectedCard.action === CardActionEnum.ChangeColor ||
               GameState.selectedCard.action === CardActionEnum.SuperTaki      ));
@@ -59,7 +59,7 @@ export function getDestinationPileType(sourcePileType) {
 //         || sourcePile.type === PileTypeEnum.DiscardPile);
 // }
 
-export function handleMoveCard() {
+export function handleCardMove() {
     if (GameState.status === GameStatus.GameInit || GameState.status === GameStatus.SettingStartingCard) {
         GameState.selectedCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length - 1];
     }

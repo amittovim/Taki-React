@@ -113,6 +113,9 @@ export function handleInvokedSuperTakiState(newGameStateInfo) {
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
     GameState.leadingCard.color = GameState.DiscardPile.getSecondCardFromTop().color;
     GameState.actionState = CardActionEnum.Taki;
+
+    // if current player has no more cards of the same color as the taki to put on the taki
+    // cancel\replace  actionState value to null
     let shouldSwitchPlayer = !doesPileHaveSameColorCards(currentPlayerPile);
     if (shouldSwitchPlayer) {
         GameState.actionState = null;

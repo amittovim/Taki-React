@@ -1,5 +1,6 @@
 import {PileTypeEnum} from "../enums/pile-type.enum";
 import * as Server from './../../logic/main'
+import {GameState} from "../../logic/state";
 
 export function isHumanMoveLegal(card, drawPile, actionState, leadingCard, humanPile) {
     let isWithdrawingCard = (card.parentPileType === PileTypeEnum.DrawPile);

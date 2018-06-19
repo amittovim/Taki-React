@@ -1,6 +1,7 @@
 import {GameState} from "../state";
 import * as consts from "../consts";
 import * as utils from '../utils/model.utils';
+import * as GameUtils from '../utils/game.utils';
 import {CardActionEnum} from "../../app/enums/card-action-enum";
 import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import {PlayerEnum} from "../../app/enums/player.enum";
@@ -60,6 +61,7 @@ export function getDestinationPileType(sourcePileType) {
 // }
 
 export function handleCardMove() {
+
     if (GameState.gameStatus === GameStatusEnum.GameInit || GameState.gameStatus === GameStatusEnum.SettingStartingCard) {
         GameState.selectedCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length - 1];
     }
@@ -80,6 +82,11 @@ function updateLeadingCard(destinationPileType) {
 export function moveCard(sourcePileType, destinationPileType) {
     utils.pullItemFromArray(GameState.selectedCard, GameState[sourcePileType].cards);
     utils.insertToEndOfArray(GameState.selectedCard, GameState[destinationPileType].cards);
+
+    if ((  GameState.gameStatus !== GameStatusEnum.GameInit ||
+           GameState.gameStatus !== GameStatusEnum.SettingStartingCard) ) {
+        GameUtils.incrementGameMovesCounter();
+    }
     GameState.consoleMessage = `${GameState.selectedCard.display} was moved from ${sourcePileType} to ${destinationPileType}`;
 
     return {

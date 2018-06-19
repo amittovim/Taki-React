@@ -8,6 +8,7 @@ export const GameState = {
     selectedCard: null,
     actionState: null,
     turnNumber: 0,
+    consoleMessage: ''
 };
 
 // let validator = {
@@ -20,5 +21,5 @@ export const GameState = {
 //         return true;
 //     }
 // };
-
+//
 // export const GameState = new Proxy(innerGameState, validator);

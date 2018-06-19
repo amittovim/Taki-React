@@ -78,6 +78,9 @@ function updateLeadingCard(destinationPileType) {
 function moveCard(sourcePileType, destinationPileType) {
     utils.pullItemFromArray(GameState.selectedCard, GameState[sourcePileType].cards);
     utils.insertToEndOfArray(GameState.selectedCard, GameState[destinationPileType].cards);
+    debugger;
+    GameState.consoleMessage = `${GameState.selectedCard.display} was moved from ${sourcePileType} to ${destinationPileType}`;
+
     return {
         [sourcePileType]: {
             ...GameState[sourcePileType]

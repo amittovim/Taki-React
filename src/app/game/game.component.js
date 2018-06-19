@@ -5,6 +5,7 @@ import * as GameApiService from './game-api.service';
 import Board from "./board/board.component";
 import {PlayerEnum} from "../enums/player.enum";
 import {GameStatus} from "../../logic/game-status.enum";
+import Console from "./console/console.component";
 
 class Game extends Component {
 
@@ -17,6 +18,8 @@ class Game extends Component {
                        botPile={this.state.BotPile}
                        moveCardDriver={this.handlePlayMove} // TODO: replace to context
                 />
+                <Console currentPlayer={this.state.currentPlayer}
+                         message={this.state.consoleMessage} />
             </div>
         );
     }
@@ -32,7 +35,8 @@ class Game extends Component {
             actionState: null,
             currentPlayer: null,
             selectedCard: null,
-            turnNumber: 0
+            turnNumber: 0,
+            consoleMessage: ''
         };
         this.handlePlayMove = this.handlePlayMove.bind(this);
     }
@@ -46,14 +50,12 @@ class Game extends Component {
     }
 
     handlePlayMove(card) {
-        debugger;
         if (GameService.isHumanMoveLegal(card, this.state.DrawPile, this.state.actionState, this.state.leadingCard, this.state.HumanPile)) {
             console.log('move is legal');
         } else {
             console.log('move is NOT legal');
             return;
         }
-        debugger;
         GameApiService.requestMoveCard(card.id)
             .then(response => {
                 this.setState({...response.payload});
@@ -63,13 +65,11 @@ class Game extends Component {
                 if (response.message === GameStatus.ProceedPlayersTurn) {
                     console.log('Turn still not ended, go on');
                     console.log(this.state);
-                    debugger;
 
                 }
                 else if (response.message === GameStatus.UpdatedGameState) {
                     this.setState({...response.payload});
                     console.log(this.state);
-                    debugger;
                 }
             })
             .catch(error => {

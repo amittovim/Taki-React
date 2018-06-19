@@ -9,6 +9,10 @@ export class CardModel {
         this.isHidden = isHidden;
         this.parentPileType = parentPileType;
     }
+
+    get display() {
+        return `${this.color} ${this.action ? this.action : this.number}`;
+    }
 }
 
 export default CardModel;

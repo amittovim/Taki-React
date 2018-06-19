@@ -76,7 +76,9 @@ class Game extends Component {
 
 
     handleIllegalMove() {
-        console.log('illegal move');
+        this.setState({
+            consoleMessage: 'illegal move'
+        });
     }
 
     updateSelectedCard(card) {

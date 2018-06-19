@@ -25,12 +25,7 @@ function dealHands() {
 
 function drawStartingCard() {
     GameState.status = GameStatusEnum.SettingStartingCard;
-    let i = 0;
     do {
-        i++;
-        if (i === 2) {
-            // debugger;
-        }
         // It draws another card if the card drawn is change-color because you cannot start a taki with this card
         handleCardMove();
     } while (GameState.selectedCard.action &&

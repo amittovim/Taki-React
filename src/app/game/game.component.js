@@ -88,9 +88,6 @@ class Game extends Component {
     }
 
     handlePlayMove() {
-        if (this.state.currentPlayer !== PlayerEnum.Human) {
-            alert('YOU ARE currently playing instead of BOT ');
-        }
         const isMoveLegal = GameService.isHumanMoveLegal(this.state.selectedCard, this.state.DrawPile, this.state.actionState, this.state.leadingCard, this.state.HumanPile);
         if (!isMoveLegal) {
             return this.handleIllegalMove();

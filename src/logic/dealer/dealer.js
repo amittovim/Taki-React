@@ -61,7 +61,8 @@ export function getDestinationPileType(sourcePileType) {
 // }
 
 export function handleCardMove() {
-    if (GameState.gameStatus === GameStatusEnum.GameInit || GameState.status === GameStatusEnum.SettingStartingCard) {
+
+    if (GameState.gameStatus === GameStatusEnum.GameInit || GameState.gameStatus === GameStatusEnum.SettingStartingCard) {
         GameState.selectedCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length - 1];
     }
     const sourcePileType = GameState.selectedCard.parentPileType;
@@ -86,6 +87,8 @@ export function moveCard(sourcePileType, destinationPileType) {
             GameState.gameStatus === GameStatusEnum.SettingStartingCard) ) {
         GameUtils.incrementGameMovesCounter();
     }
+    GameState.consoleMessage = `${GameState.selectedCard.display} was moved from ${sourcePileType} to ${destinationPileType}`;
+
     return {
         [sourcePileType]: {
             ...GameState[sourcePileType]

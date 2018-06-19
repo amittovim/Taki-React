@@ -11,6 +11,7 @@ export const GameState = {
     movesCounter: 0,
     gameStatus: null,
     twoPlusCounter:0
+    consoleMessage: '',
 };
 
 
@@ -24,5 +25,5 @@ export const GameState = {
 //         return true;
 //     }
 // };
-
+//
 // export const GameState = new Proxy(innerGameState, validator);

@@ -5,18 +5,19 @@ import * as GameApiService from './game-api.service';
 import Board from "./board/board.component";
 import {GameStatusEnum} from "../../logic/game-status.enum";
 import Console from "./console/console.component";
+import {GameStatusEnum} from "../../logic/game-status.enum";
 import {CardActionEnum} from "../enums/card-action-enum";
 import {ModalTypeEnum} from "./modal/modal-type.enum";
 import Modal from "./modal/modal.component";
 import {PlayerEnum} from "../enums/player.enum";
 import {GameState} from "../../logic/state";
 import Player from "./test/player.component";
+import Console from "./console/console.component";
 
 class Game extends Component {
     render() {
         return (
             <div className="game-component">
-                <Player currentPlayer={this.state.currentPlayer} />
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
                        callback={this.state.modal.callback} />
@@ -27,7 +28,7 @@ class Game extends Component {
                        botPile={this.state.BotPile}
                        moveCardDriver={this.updateSelectedCard} // TODO: replace to context
                 />
-                <Console text="this is the console line" />
+                <Console message={this.state.consoleMessage} />
             </div>
         );
     }
@@ -45,6 +46,7 @@ class Game extends Component {
             actionState: null,
             leadingCard: null,
             selectedCard: null,
+            consoleMessage: '',
             turnNumber: 0,
             modal: {
                 isOpen: null,
@@ -78,7 +80,9 @@ class Game extends Component {
 
 
     handleIllegalMove() {
-        console.log('illegal move');
+        this.setState({
+            consoleMessage: 'illegal move'
+        });
     }
 
     updateSelectedCard(card) {

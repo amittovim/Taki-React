@@ -126,6 +126,7 @@ export function handleInvokedPlusState(newGameStateInfo) {
         ...newGameStateInfo,
         shouldSwitchPlayer: GameState.shouldSwitchPlayer,
         actionState: null
+
     };
     return newGameStateInfo;
 }

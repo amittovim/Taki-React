@@ -4,8 +4,6 @@ import * as GameService from './game.service';
 import * as GameApiService from './game-api.service';
 import Board from "./board/board.component";
 import {GameStatusEnum} from "../../logic/game-status.enum";
-import Console from "./console/console.component";
-import {GameStatusEnum} from "../../logic/game-status.enum";
 import {CardActionEnum} from "../enums/card-action-enum";
 import {ModalTypeEnum} from "./modal/modal-type.enum";
 import Modal from "./modal/modal.component";

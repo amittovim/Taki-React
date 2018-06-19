@@ -10,7 +10,7 @@ export const GameState = {
     turnNumber: 0,
     movesCounter: 0,
     gameStatus: null,
-    twoPlusCounter:0
+    twoPlusCounter:0,
     consoleMessage: '',
 };
 

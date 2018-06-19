@@ -78,7 +78,6 @@ export function handleInvokedTwoPlusState(newGameStateInfo) {
             actionState: GameState.actionState
         };
     }
-    debugger;
     return newGameStateInfo;
 }
 
@@ -159,7 +158,6 @@ export function handleInvokedTakiState(newGameStateInfo) {
         actionState: GameState.actionState,
         shouldSwitchPlayer : shouldSwitchPlayer
     };
-    debugger;
     return newGameStateInfo;
 
 }
@@ -184,9 +182,8 @@ function raiseActionState(newGameStateInfo) {
             };
 
             // if current activeState IS taki and player has no more cards with same color to put on it
-            // update the activeState value to the action of the card to our current card
+            // update the activeState value to the action of the card of our current card
         } else {
-            debugger;
             let matchedCard = getCardInHand(getPlayerPile(GameState.currentPlayer), [{color: GameState.leadingCard.color}]);
             if (matchedCard === undefined) {  //if (!availableMoveExist()) {
                 GameState.actionState = GameState.selectedCard.action;

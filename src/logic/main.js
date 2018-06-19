@@ -21,7 +21,9 @@ export function initGame() {
     initDrawPile();
     initDiscardPile();
     dealer.dealCards();
+    // saveGameState();
     if (GameState.currentPlayer === PlayerEnum.Bot) {
+        debugger;
         pickNextBotMove();
     }
     GameState.status = GameStatusEnum.GameStateChanged;
@@ -31,7 +33,6 @@ export function initGame() {
 ///// API
 
 export function requestCardMove(cardId) {
-    debugger;
     const stateChange = playHumanMove(cardId);
     return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -44,6 +45,8 @@ export function requestCardMove(cardId) {
 }
 
 export function requestGameStateUpdate() {
+    console.log(GameState);
+    debugger;
     pickNextBotMove();
     return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -66,7 +69,6 @@ function pickNextBotMove() {
     let actionState = GameState.actionState;
     let botPile = GameState.BotPile;
     let matchedCard;
-    debugger;
     // 4.1 if actionState is twoPlusInvoked and bot has twoPlus Card - mark it as selectedCard.
     if (actionState === CardActionEnum.TwoPlus) {
         if (matchedCard = GameUtils.getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}])) {
@@ -180,7 +182,6 @@ function processGameStep(stateChange) {
     // if TWOPLUS card was invoked in the current playmove increment twoPlusCounter by 2 and switch player
     if (GameState.actionState === CardActionEnum.TwoPlus &&
         GameState.selectedCard.action === CardActionEnum.TwoPlus) {
-        debugger;
         newGameStateInfo = GameUtils.handleInvokedTwoPlusState(newGameStateInfo);
     }
 
@@ -277,7 +278,6 @@ export function isPutCardMoveLegal(card, actionState, leadingCard) {
 export function isGetCardMoveLegal(currentPlayerPile, drawPile, actionState, leadingCard) {
     // checking if withdrawing Card From DrawPile is a legal move - only if drawPile is not empty and no
     // other move is available for player
-    debugger;
     return (!drawPile.isPileEmpty &&
         !availableMoveExist(currentPlayerPile, actionState, leadingCard));
 

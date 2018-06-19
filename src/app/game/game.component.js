@@ -88,7 +88,6 @@ class Game extends Component {
 
     handlePlayMove() {
         if (this.state.currentPlayer !== PlayerEnum.Human ) { alert('YOU ARE currently playing instead of BOT ');}
-        debugger;
         const isMoveLegal = GameService.isHumanMoveLegal(this.state.selectedCard, this.state.DrawPile, this.state.actionState, this.state.leadingCard, this.state.HumanPile);
         if (!isMoveLegal) {
             return this.handleIllegalMove();
@@ -101,7 +100,9 @@ class Game extends Component {
 
 
     processNewState() {
-        if (this.state.currentPlayer !== PlayerEnum.Human) {
+
+        while (this.state.currentPlayer !== PlayerEnum.Human) {
+            debugger;
             GameApiService.requestGameStateUpdate()
                 .then(response => {
                     this.setState({...response.body});
@@ -109,9 +110,9 @@ class Game extends Component {
                 .catch(error => {
                     console.error('Error', error);
                 });
-        } else {
+        } /*else {
             console.log('Your turn still not ended, go on');
-        }
+        }*/
     }
 
     handleRequestMoveCard() {

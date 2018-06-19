@@ -13,6 +13,7 @@ import * as Utils from "./utils/model.utils";
 import * as GameUtils from "./utils/game.utils";
 import Game from "../app/game/game.component";
 import {insertToEndOfArray} from "./utils/model.utils";
+import {insertImmutableToEndOfArray} from "./utils/model.utils";
 
 
 ///// ===== Game init functions =====
@@ -300,7 +301,7 @@ export function availableMoveExist(currentPlayerPile, actionState, leadingCard) 
 
 export function saveGameState() {
     debugger;
-    insertToEndOfArray(GameState, DB);
+    insertImmutableToEndOfArray(GameState, DB);
     console.log(DB);
 }
 
@@ -312,7 +313,7 @@ function prevGameState(){
     if( currentStateIdx < 0 ) {
         currentStateIdx = stateSet.length - 1;
     }
-    updatePicture(currentStateIdx );
+    updateState(currentStateIdx );
 }
 
 function nextGameState(){
@@ -320,10 +321,10 @@ function nextGameState(){
     if( currentStateIdx == stateSet.length ){
         currentStateIdx = 0;
     }
-    updatePicture(currentImageIdx);
+    updateState(currentStateIdx);
 }
 
 function updateState(idx){
     let stateElem = document.getElementById("sl-picture");
-    imgEle.src = imageLocation + imageSet[idx];
+    send  => stateSet[idx];
 }

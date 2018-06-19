@@ -27,6 +27,13 @@ export function insertToEndOfArray(item, array) {
     array.push(item);
 }
 
+export function insertImmutableToEndOfArray(item, array) {
+    const newState = {
+        ...item
+    }
+    array.push(newState);
+}
+
 export function pullItemFromArray(item, array) {
 
     return array.splice(findIndexOfItemInArray(item, array), 1)[0];

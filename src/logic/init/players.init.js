@@ -20,4 +20,5 @@ function createPlayers() {
 function pickFirstPlayer() {
     const randomNumber = utils.getRandomInt(0, 1);
     GameState.currentPlayer = randomNumber === 0 ? PlayerEnum.Human : PlayerEnum.Bot;
+    GameState.consoleMessage = `Play your turn`
 }

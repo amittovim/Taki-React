@@ -10,6 +10,7 @@ import {handleCardMove} from "./dealer/dealer";
 import * as GameUtils from "./utils/game.utils";
 
 
+
 ///// ===== Game init functions =====
 
 export function initGame() {
@@ -165,7 +166,6 @@ function processGameStep(stateChange) {
     if (currentPlayerPile.cards.length === 1) {
         newGameStateInfo = GameUtils.incrementSingleCardCounter(newGameStateInfo);
     }
-
     // if needed, raise game actionState
     newGameStateInfo = GameUtils.handleActionState(newGameStateInfo);
 
@@ -194,6 +194,7 @@ function processGameStep(stateChange) {
     }
 
     // if PLUS card was invoked do not switch players ( give current player another move )
+    //
     else if (GameState.actionState === CardActionEnum.Plus) {
         newGameStateInfo = GameUtils.handleInvokedPlusState(newGameStateInfo);
     }
@@ -212,6 +213,7 @@ function processGameStep(stateChange) {
 
     newGameStateInfo = handleSwitchPlayers(newGameStateInfo);
 
+    console.log(GameState);
     return {
         ...stateChange,
         ...newGameStateInfo,
@@ -223,6 +225,7 @@ function processGameStep(stateChange) {
 function handleSwitchPlayers(newGameStateInfo) {
     if (GameState.shouldSwitchPlayer) {
         switchPlayers();
+        GameUtils.incrementGameTurnNumber();
         GameState.shouldSwitchPlayer = false;
     }
     newGameStateInfo = {

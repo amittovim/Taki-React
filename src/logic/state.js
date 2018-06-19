@@ -8,8 +8,10 @@ export const GameState = {
     selectedCard: null,
     actionState: null,
     turnNumber: 0,
+    movesCounter: 0,
     gameStatus: null,
-    twoPlusCounter:0
+    twoPlusCounter:0,
+    consoleMessage: '',
 };
 
 
@@ -23,5 +25,5 @@ export const GameState = {
 //         return true;
 //     }
 // };
-
+//
 // export const GameState = new Proxy(innerGameState, validator);

@@ -4,6 +4,7 @@ import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import {CardActionEnum} from "../../app/enums/card-action-enum";
 import * as dealer from "../dealer/dealer";
 import {CardColorEnum} from "../../app/enums/card-color.enum";
+import {GameStatusEnum} from "../game-status.enum";
 
 export function pullTopOfPile(pile) {
     return utils.pullItemFromEndOfArray(pile.cards);
@@ -31,13 +32,18 @@ export function handleDrawpileRestocking(newGameStateInfo) {
 }
 
 export function handleActionState(newGameStateInfo) {
-    newGameStateInfo = raiseActionState(newGameStateInfo);
+    // if the game is in either states: GameInit or SettingStartingCard
+    // do NOT raise actionState
+    if (!(GameState.gameStatus === GameStatusEnum.GameInit ||
+          GameState.gameStatus === GameStatusEnum.SettingStartingCard )) {
+        newGameStateInfo = raiseActionState(newGameStateInfo);
+    }
     return newGameStateInfo;
 }
 
 export function incrementSingleCardCounter(newGameStateInfo) {
     const CurrentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
-    const CurrentPlayerPileName = `${GameState.currentPlayer}Pile`;
+    const CurrentPlayerPileName = getPlayerPile(GameState.currentPlayer);
     CurrentPlayerPile.singleCardCounter++;
     newGameStateInfo = {
         ...newGameStateInfo,
@@ -48,14 +54,15 @@ export function incrementSingleCardCounter(newGameStateInfo) {
 }
 
 export function handleInvokedTwoPlusState(newGameStateInfo) {
+    // only if the current card is 2+ we increment the counter by 2 and switch players
     if (GameState.leadingCard.action === CardActionEnum.TwoPlus) {
-        GameState.twoPlusCounter = +2;
+        GameState.twoPlusCounter += 2;
         GameState.shouldSwitchPlayer = true;
 
         newGameStateInfo = {
             ...newGameStateInfo,
             twoPlusCounter: GameState.twoPlusCounter,
-            shouldSwitchPlayer: true
+            shouldSwitchPlayer: GameState.shouldSwitchPlayer
         };
     } else {
         GameState.twoPlusCounter--;
@@ -66,15 +73,24 @@ export function handleInvokedTwoPlusState(newGameStateInfo) {
     }
     if (GameState.twoPlusCounter === 0) {
         GameState.actionState = null;
-        newGameStateInfo.push('actionState', null);
         newGameStateInfo = {
             ...newGameStateInfo,
-            actionState: null
+            actionState: GameState.actionState
         };
     }
     return newGameStateInfo;
 }
 
+export function handleExistingTwoPlusState(newGameStateInfo) {
+    GameState.twoPlusCounter--;
+    GameState.twoPlusCounter === 0 ? GameState.shouldSwitchPlayer = true : GameState.shouldSwitchPlayer = false;
+    newGameStateInfo = {
+        ...newGameStateInfo,
+        twoPlusCounter: GameState.twoPlusCounter,
+        shouldSwitchPlayer: GameState.shouldSwitchPlayer
+    };
+    return newGameStateInfo;
+}
 export function handleInvokedCCStateByBot(newGameStateInfo) {
     GameState.leadingCard.color = pickRandomColor();
     GameState.shouldSwitchPlayer = true;
@@ -95,7 +111,7 @@ export function handleInvokedStopState(newGameStateInfo) {
 
     newGameStateInfo = {
         ...newGameStateInfo,
-        shouldSwitchPlayer: false,
+        shouldSwitchPlayer: GameState.shouldSwitchPlayer,
         turnNumber: GameState.turnNumber
     };
     return newGameStateInfo;
@@ -105,7 +121,7 @@ export function handleInvokedPlusState(newGameStateInfo) {
     GameState.shouldSwitchPlayer = false;
     newGameStateInfo = {
         ...newGameStateInfo,
-        shouldSwitchPlayer: false
+        shouldSwitchPlayer: GameState.shouldSwitchPlayer
     };
     return newGameStateInfo;
 }
@@ -132,25 +148,28 @@ export function handleInvokedSuperTakiState(newGameStateInfo) {
 }
 
 export function handleInvokedTakiState(newGameStateInfo) {
-    let currentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
+    let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
     let shouldSwitchPlayer = !doesPileHaveSameColorCards(currentPlayerPile);
     if (shouldSwitchPlayer) {
         GameState.actionState = null;
     }
     newGameStateInfo = {
         ...newGameStateInfo,
-        actionState: null,
-        'shouldSwitchPlayer' : shouldSwitchPlayer
+        actionState: GameState.actionState,
+        shouldSwitchPlayer : shouldSwitchPlayer
     };
     return newGameStateInfo;
 
 }
 
 function raiseActionState(newGameStateInfo) {
-    // if current card isn't an action there's nothing to raise so we leave the function
+    // if current card isn't an action card there's nothing to raise so we leave
+    // the function.
+    console.log(GameState);
     if (!GameState.selectedCard.isActionCard) {
         return newGameStateInfo;
-        // if current card is an action card
+
+    // if current card is an action card
     } else {
 
         // if current activeState is DIFFERENT than TAKI then update activeState
@@ -159,24 +178,22 @@ function raiseActionState(newGameStateInfo) {
             GameState.actionState = GameState.selectedCard.action;
             newGameStateInfo = {
                 ...newGameStateInfo,
-                ['actionState']: GameState.selectedCard.action
+                actionState: GameState.selectedCard.action
             };
-            // newGameStateInfo.push('actionState', GameState.selectedCard.action);
 
             // if current activeState IS taki and player has no more cards with same color to put on it
-            // update the activeState value to the action of the card to our current card
+            // update the activeState value to the action of the card of our current card
         } else {
-            let matchedCard = getCardInHand(GameState[`${GameState.currentPlayer}Pile`].cards, [{color: GameState.leadingCard.color}]);
+            let matchedCard = getCardInHand(getPlayerPile(GameState.currentPlayer), [{color: GameState.leadingCard.color}]);
             if (matchedCard === undefined) {  //if (!availableMoveExist()) {
                 GameState.actionState = GameState.selectedCard.action;
                 newGameStateInfo = {
                     ...newGameStateInfo,
-                    ['actionState']: GameState.selectedCard.action
+                    actionState: GameState.selectedCard.action
                 };
-                //newGameStateInfo.push('actionState', GameState.selectedCard.action);
             }
+          }
         }
-    }
     return newGameStateInfo;
 }
 

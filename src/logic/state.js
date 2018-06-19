@@ -8,7 +8,10 @@ export const GameState = {
     selectedCard: null,
     actionState: null,
     turnNumber: 0,
+    gameStatus: null,
+    twoPlusCounter:0
 };
+
 
 // let validator = {
 //     set: function (obj, prop, value) {

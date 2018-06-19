@@ -3,18 +3,18 @@ import './game.component.css';
 import * as GameService from './game.service';
 import * as GameApiService from './game-api.service';
 import Board from "./board/board.component";
-import {GameStatus} from "../../logic/game-status.enum";
+import {GameStatusEnum} from "../../logic/game-status.enum";
 import Console from "./console/console.component";
 import {CardActionEnum} from "../enums/card-action-enum";
 import {ModalTypeEnum} from "./modal/modal-type.enum";
 import Modal from "./modal/modal.component";
 import {PlayerEnum} from "../enums/player.enum";
+import {GameState} from "../../logic/state";
 
 class Game extends Component {
     render() {
         return (
             <div className="game-component">
-
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
                        callback={this.state.modal.callback} />
@@ -54,7 +54,7 @@ class Game extends Component {
         this.handlePlayMove = this.handlePlayMove.bind(this);
         this.openColorPicker = this.openColorPicker.bind(this);
         this.handleChangeColor = this.handleChangeColor.bind(this);
-        this.handleRequestMoveCard = this.handleRequestMoveCard.bind(this);
+        this.requestMoveCard = this.requestMoveCard.bind(this);
         this.handleIllegalMove = this.handleIllegalMove.bind(this);
     }
 
@@ -92,34 +92,8 @@ class Game extends Component {
         } else if (this.state.selectedCard.action === CardActionEnum.ChangeColor) {
             this.openColorPicker();
         } else {
-            this.handleRequestMoveCard();
+            this.requestMoveCard();
         }
-    }
-
-
-    processNewState() {
-        if (this.state.currentPlayer !== PlayerEnum.Human) {
-            GameApiService.requestGameStateUpdate()
-                .then(response => {
-                    this.setState({...response.body});
-                })
-                .catch(error => {
-                    console.error('Error', error);
-                });
-        } else {
-            console.log('Your turn still not ended, go on');
-        }
-    }
-
-    handleRequestMoveCard() {
-        const currentPlayer = this.state.currentPlayer;
-        const selectedCardId = this.state.selectedCard.id;
-        GameApiService.requestMoveCard(selectedCardId)
-            .then(response => {
-                if (GameStatus.GameStateChanged) {
-                    this.setState({...response.body}, this.processNewState);
-                }
-            })
     }
 
     handleChangeColor(selectedColor) {
@@ -132,7 +106,30 @@ class Game extends Component {
             selectedCard: card
 
         });
-        this.handleRequestMoveCard();
+        this.requestMoveCard();
+    }
+
+
+    // API
+    requestMoveCard() {
+        GameApiService.requestMoveCard(this.state.selectedCard.id)
+            .then(response => {
+                if (GameStatusEnum.GameStateChanged) {
+                    this.setState({...response.body}, this.processNewState);
+                }
+            })
+    }
+
+    processNewState() {
+        if (this.state.currentPlayer !== PlayerEnum.Human) {
+            GameApiService.requestGameStateUpdate()
+                .then(response => {
+                    this.setState({...response.body}, this.processNewState);
+                })
+                .catch(error => {
+                    console.error('Error', error);
+                });
+        }
     }
 }
 

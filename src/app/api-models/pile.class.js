@@ -14,9 +14,10 @@ export class PileModel {
         return (this.cards[this.cards.length - 2]);
     }
 
-    isPileEmpty() {
+    get isPileEmpty() {
         return (this.cards.length === 0);
     }
 }
+
 export default PileModel;
 

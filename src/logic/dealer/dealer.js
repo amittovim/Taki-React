@@ -4,7 +4,7 @@ import * as utils from '../utils/model.utils';
 import {CardActionEnum} from "../../app/enums/card-action-enum";
 import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import {PlayerEnum} from "../../app/enums/player.enum";
-import {GameStatus} from "../game-status.enum";
+import {GameStatusEnum} from "../game-status.enum";
 import {switchPlayers} from "../main";
 
 // == Dealing Hands ==
@@ -24,7 +24,7 @@ function dealHands() {
 }
 
 function drawStartingCard() {
-    GameState.status = GameStatus.SettingStartingCard;
+    GameState.status = GameStatusEnum.SettingStartingCard;
     do {
         // It draws another card if the card drawn is change-color because you cannot start a taki with this card
         handleCardMove();
@@ -38,7 +38,7 @@ function drawStartingCard() {
 export function getDestinationPileType(sourcePileType) {
     switch (sourcePileType) {
         case PileTypeEnum.DrawPile: {
-            if (GameState.status === GameStatus.SettingStartingCard) {
+            if (GameState.status === GameStatusEnum.SettingStartingCard) {
                 return PileTypeEnum.DiscardPile;
             } else {
                 return GameState.currentPlayer === PlayerEnum.Human ? PileTypeEnum.HumanPile : PileTypeEnum.BotPile;
@@ -60,7 +60,7 @@ export function getDestinationPileType(sourcePileType) {
 // }
 
 export function handleCardMove() {
-    if (GameState.status === GameStatus.GameInit || GameState.status === GameStatus.SettingStartingCard) {
+    if (GameState.status === GameStatusEnum.GameInit || GameState.status === GameStatusEnum.SettingStartingCard) {
         GameState.selectedCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length - 1];
     }
     const sourcePileType = GameState.selectedCard.parentPileType;

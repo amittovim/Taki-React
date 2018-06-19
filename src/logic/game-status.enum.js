@@ -1,4 +1,4 @@
-export const GameStatus = {
+export const GameStatusEnum = {
     GameInit: 'GameInit',
     SettingStartingCard: 'SettingStartingCard',
     CardUpdated: 'CardUpdated',

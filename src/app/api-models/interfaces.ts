@@ -22,6 +22,7 @@ interface State {
     turnNumber: number;
     twoPlusCounter: number;
     shouldSwitchPlayer: boolean;
+    status : GameStatusEnum;
 }
 
 interface Card {
@@ -72,7 +73,7 @@ enum PlayerEnum {
     Human = 'Human'
 }
 
-enum GameStatus {
+enum GameStatusEnum {
     GameInit = 'GameInit',
     SettingStartingCard = 'SettingStartingCard',
     GameStateChanged = 'GameStateChanged'

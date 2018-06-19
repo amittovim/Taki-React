@@ -3,7 +3,7 @@ import initDrawPile from './init/draw-pile.init';
 import initDiscardPile from './init/discard-pile.init';
 import * as dealer from './dealer/dealer';
 import {GameState} from "./state";
-import {GameStatus as GameStatusMessageEnum, GameStatus} from "./game-status.enum";
+import {GameStatusEnum} from "./game-status.enum";
 import {PlayerEnum} from "../app/enums/player.enum";
 import {CardActionEnum} from "../app/enums/card-action-enum";
 import {PileTypeEnum} from "../app/enums/pile-type.enum";
@@ -16,7 +16,7 @@ import Game from "../app/game/game.component";
 ///// ===== Game init functions =====
 
 export function initGame() {
-    GameState.status = GameStatus.GameInit;
+    GameState.status = GameStatusEnum.GameInit;
     initPlayers();
     initDrawPile();
     initDiscardPile();
@@ -24,18 +24,19 @@ export function initGame() {
     if (GameState.currentPlayer === PlayerEnum.Bot) {
         pickNextBotMove();
     }
-    GameState.status = GameStatus.UpdatedGameState;
+    GameState.status = GameStatusEnum.GameStateChanged;
     return GameState;
 }
 
 ///// API
 
 export function requestCardMove(cardId) {
+    debugger;
     const stateChange = playHumanMove(cardId);
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve({
-                header: GameStatus.GameStateChanged,
+                header: GameStatusEnum.GameStateChanged,
                 body: stateChange
             });
         }, 500);
@@ -47,7 +48,7 @@ export function requestGameStateUpdate() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve({
-                header: GameStatus.GameStateChanged,
+                header: GameStatusEnum.GameStateChanged,
                 body: GameState
             });
         }, 500);
@@ -65,8 +66,9 @@ function pickNextBotMove() {
     let actionState = GameState.actionState;
     let botPile = GameState.BotPile;
     let matchedCard;
+    debugger;
     // 4.1 if actionState is twoPlusInvoked and bot has twoPlus Card - mark it as selectedCard.
-    if (actionState === `${CardActionEnum.TwoPlus}Invoked`) {
+    if (actionState === CardActionEnum.TwoPlus) {
         if (matchedCard = GameUtils.getCardInHand(botPile, [{action: CardActionEnum.TwoPlus}])) {
             selectedCard = matchedCard;
 
@@ -175,10 +177,20 @@ function processGameStep(stateChange) {
     // if needed, raise game actionState
     newGameStateInfo = GameUtils.handleActionState(newGameStateInfo);
 
-    // if TWOPLUS card was invoked increment twoPlusCounter by 2 and switch player
-    if (GameState.actionState === CardActionEnum.TwoPlus) {
+    // if TWOPLUS card was invoked in the current playmove increment twoPlusCounter by 2 and switch player
+    if (GameState.actionState === CardActionEnum.TwoPlus &&
+        GameState.selectedCard.action === CardActionEnum.TwoPlus) {
+        debugger;
         newGameStateInfo = GameUtils.handleInvokedTwoPlusState(newGameStateInfo);
     }
+
+    // if current activeState is TWO-PLUS and card isnt 2+ it means its a card widthdrawn from draw-pile
+    // which means we need to decrease two plus counter by 1 and disable switchplayer until the counter equals 0
+    if (GameState.actionState === CardActionEnum.TwoPlus &&
+        GameState.selectedCard.action !== CardActionEnum.TwoPlus) {
+        newGameStateInfo = GameUtils.handleExistingTwoPlusState(newGameStateInfo);
+    }
+
 
     // if CHANGE COLOR card was invoked and the current player is BOT, pick a random color for it
     else if (GameState.actionState === CardActionEnum.ChangeColor && currentPlayerType === PlayerEnum.Bot) {
@@ -186,7 +198,7 @@ function processGameStep(stateChange) {
     }
 
     // if STOP card was invoked switch player twice or none at all and increment turnCounter by 1
-    else if ((leadingCard.action === CardActionEnum.Stop) && (GameState.activeAction === CardActionEnum.Stop)) {
+    else if ((leadingCard.action === CardActionEnum.Stop) && (GameState.actionState === CardActionEnum.Stop)) {
         newGameStateInfo = GameUtils.handleInvokedStopState(newGameStateInfo);
     }
 
@@ -207,7 +219,7 @@ function processGameStep(stateChange) {
         newGameStateInfo = GameUtils.handleInvokedTakiState(newGameStateInfo);
     }
 
-    handleSwitchPlayers();
+    newGameStateInfo= handleSwitchPlayers(newGameStateInfo);
 
     return {
         ...stateChange,
@@ -217,12 +229,18 @@ function processGameStep(stateChange) {
     };
 }
 
-function handleSwitchPlayers() {
-    // if (shouldSwitchPlayers()) {
+function handleSwitchPlayers(newGameStateInfo) {
     if (GameState.shouldSwitchPlayer) {
         switchPlayers();
         GameState.shouldSwitchPlayer = false;
     }
+    newGameStateInfo = {
+        ...newGameStateInfo,
+        currentPlayer: GameState.currentPlayer,
+        shouldSwitchPlayer: GameState.shouldSwitchPlayer
+    };
+    return newGameStateInfo;
+
 }
 
 function shouldSwitchPlayers() {
@@ -259,8 +277,10 @@ export function isPutCardMoveLegal(card, actionState, leadingCard) {
 export function isGetCardMoveLegal(currentPlayerPile, drawPile, actionState, leadingCard) {
     // checking if withdrawing Card From DrawPile is a legal move - only if drawPile is not empty and no
     // other move is available for player
+    debugger;
     return (!drawPile.isPileEmpty &&
         !availableMoveExist(currentPlayerPile, actionState, leadingCard));
+
 }
 
 export function availableMoveExist(currentPlayerPile, actionState, leadingCard) {

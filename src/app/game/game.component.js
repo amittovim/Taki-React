@@ -3,12 +3,13 @@ import './game.component.css';
 import * as GameService from './game.service';
 import * as GameApiService from './game-api.service';
 import Board from "./board/board.component";
-import {GameStatus} from "../../logic/game-status.enum";
+import {GameStatusEnum} from "../../logic/game-status.enum";
 import Console from "./console/console.component";
 import {CardActionEnum} from "../enums/card-action-enum";
 import {ModalTypeEnum} from "./modal/modal-type.enum";
 import Modal from "./modal/modal.component";
 import {PlayerEnum} from "../enums/player.enum";
+import {GameState} from "../../logic/state";
 
 class Game extends Component {
     render() {
@@ -86,6 +87,8 @@ class Game extends Component {
     }
 
     handlePlayMove() {
+        if (this.state.currentPlayer !== PlayerEnum.Human ) { alert('YOU ARE currently playing instead of BOT ');}
+        debugger;
         const isMoveLegal = GameService.isHumanMoveLegal(this.state.selectedCard, this.state.DrawPile, this.state.actionState, this.state.leadingCard, this.state.HumanPile);
         if (!isMoveLegal) {
             return this.handleIllegalMove();
@@ -116,7 +119,7 @@ class Game extends Component {
         const selectedCardId = this.state.selectedCard.id;
         GameApiService.requestMoveCard(selectedCardId)
             .then(response => {
-                if (GameStatus.GameStateChanged) {
+                if (GameStatusEnum.GameStateChanged) {
                     this.setState({...response.body}, this.processNewState);
                 }
             })

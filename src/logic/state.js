@@ -8,7 +8,7 @@ export const GameState = {
     selectedCard: null,
     actionState: null,
     turnNumber: 0,
-    status: null,
+    gameStatus: null,
     twoPlusCounter:0
 };
 

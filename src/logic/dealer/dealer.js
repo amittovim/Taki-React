@@ -24,7 +24,7 @@ function dealHands() {
 }
 
 function drawStartingCard() {
-    GameState.status = GameStatusEnum.SettingStartingCard;
+    GameState.gameStatus = GameStatusEnum.SettingStartingCard;
     do {
         // It draws another card if the card drawn is change-color because you cannot start a taki with this card
         handleCardMove();
@@ -38,7 +38,7 @@ function drawStartingCard() {
 export function getDestinationPileType(sourcePileType) {
     switch (sourcePileType) {
         case PileTypeEnum.DrawPile: {
-            if (GameState.status === GameStatusEnum.SettingStartingCard) {
+            if (GameState.gameStatus === GameStatusEnum.SettingStartingCard) {
                 return PileTypeEnum.DiscardPile;
             } else {
                 return GameState.currentPlayer === PlayerEnum.Human ? PileTypeEnum.HumanPile : PileTypeEnum.BotPile;
@@ -60,7 +60,7 @@ export function getDestinationPileType(sourcePileType) {
 // }
 
 export function handleCardMove() {
-    if (GameState.status === GameStatusEnum.GameInit || GameState.status === GameStatusEnum.SettingStartingCard) {
+    if (GameState.gameStatus === GameStatusEnum.GameInit || GameState.gameStatus === GameStatusEnum.SettingStartingCard) {
         GameState.selectedCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length - 1];
     }
     const sourcePileType = GameState.selectedCard.parentPileType;

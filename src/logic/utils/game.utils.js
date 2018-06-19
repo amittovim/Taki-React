@@ -34,8 +34,8 @@ export function handleDrawpileRestocking(newGameStateInfo) {
 export function handleActionState(newGameStateInfo) {
     // if the game is in either states: GameInit or SettingStartingCard
     // do NOT raise actionState
-    if (!(GameState.status === GameStatusEnum.GameInit ||
-          GameState.status === GameStatusEnum.SettingStartingCard )) {
+    if (!(GameState.gameStatus === GameStatusEnum.GameInit ||
+          GameState.gameStatus === GameStatusEnum.SettingStartingCard )) {
         newGameStateInfo = raiseActionState(newGameStateInfo);
     }
     return newGameStateInfo;

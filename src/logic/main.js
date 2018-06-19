@@ -16,7 +16,7 @@ import Game from "../app/game/game.component";
 ///// ===== Game init functions =====
 
 export function initGame() {
-    GameState.status = GameStatusEnum.GameInit;
+    GameState.gameStatus = GameStatusEnum.GameInit;
     initPlayers();
     initDrawPile();
     initDiscardPile();
@@ -25,7 +25,7 @@ export function initGame() {
     if (GameState.currentPlayer === PlayerEnum.Bot) {
         pickNextBotMove();
     }
-    GameState.status = GameStatusEnum.GameStateChanged;
+    GameState.gameStatus = GameStatusEnum.GameStateChanged;
     return GameState;
 }
 
@@ -60,7 +60,6 @@ export function requestGameStateUpdate() {
 
 // Bot Player algorithm to choose next move
 function pickNextBotMove() {
-    debugger;
     GameState.currentPlayer = PlayerEnum.Bot;
     let leadingCard = GameState.leadingCard;
     let selectedCard;

@@ -16,7 +16,6 @@ class Game extends Component {
     render() {
         return (
             <div className="game-component">
-                <Player currentPlayer={this.state.currentPlayer} />
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
                        callback={this.state.modal.callback} />
@@ -114,10 +113,8 @@ class Game extends Component {
 
     // API
     requestMoveCard() {
-        debugger;
         GameApiService.requestMoveCard(this.state.selectedCard.id)
             .then(response => {
-                debugger;
                 if (GameStatusEnum.GameStateChanged) {
                     this.setState({...response.body}, this.processNewState);
                 }

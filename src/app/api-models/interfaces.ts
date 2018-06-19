@@ -20,9 +20,10 @@ interface State {
     selectedCard: Card;
     actionState: CardActionEnum;
     turnNumber: number;
+    movesCounter: number;
     twoPlusCounter: number;
     shouldSwitchPlayer: boolean;
-    status : GameStatusEnum;
+    gameStatus : GameStatusEnum;
 }
 
 interface Card {

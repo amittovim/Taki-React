@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import './console.component.css';
 
 //<PROPS>
-// currentPlayer: PlayerEnum
 // message: string
 
 class Console extends Component {
@@ -13,8 +12,7 @@ class Console extends Component {
     render() {
         return (
             <div className="console-component">
-                <span>{this.props.currentPlayer}</span>:
-                <span>{this.props.message}</span>
+                <span>CONSOLE: {this.props.message}</span>
             </div>
         );
     }

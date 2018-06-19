@@ -20,6 +20,10 @@ interface State {
     selectedCard: Card;
     actionState: CardActionEnum;
     turnNumber: number;
+    movesCounter: number;
+    twoPlusCounter: number;
+    shouldSwitchPlayer: boolean;
+    gameStatus : GameStatusEnum;
 }
 
 interface Card {
@@ -69,3 +73,10 @@ enum PlayerEnum {
     Bot = 'Bot',
     Human = 'Human'
 }
+
+enum GameStatusEnum {
+    GameInit = 'GameInit',
+    SettingStartingCard = 'SettingStartingCard',
+    GameStateChanged = 'GameStateChanged'
+}
+

@@ -13,6 +13,10 @@ export class CardModel {
     get display() {
         return `${this.color} ${this.action ? this.action : this.number}`;
     }
+
+    get isActionCard() {
+        return !!this.action;
+    }
 }
 
 export default CardModel;

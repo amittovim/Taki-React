@@ -4,7 +4,7 @@ import * as utils from '../utils/model.utils';
 import {CardActionEnum} from "../../app/enums/card-action-enum";
 import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import {PlayerEnum} from "../../app/enums/player.enum";
-import {GameStatus} from "../game-status.enum";
+import {GameStatusEnum} from "../game-status.enum";
 import {switchPlayers} from "../main";
 
 // == Dealing Hands ==
@@ -16,19 +16,21 @@ export function dealCards() {
 
 function dealHands() {
     for (let i = 1; i <= consts.NUMBER_OF_STARTING_CARDS_IN_PLAYERS_HAND; i++) {
-        handleMoveCard();
+        handleCardMove();
         switchPlayers();
-        handleMoveCard();
+        handleCardMove();
         switchPlayers();
     }
 }
 
 function drawStartingCard() {
-    GameState.status = GameStatus.SettingStartingCard;
+    GameState.gameStatus = GameStatusEnum.SettingStartingCard;
     do {
         // It draws another card if the card drawn is change-color because you cannot start a taki with this card
-        handleMoveCard();
-    } while (GameState.selectedCard.action && GameState.selectedCard.action === CardActionEnum.ChangeColor);
+        handleCardMove();
+    } while (GameState.selectedCard.action &&
+    (GameState.selectedCard.action === CardActionEnum.ChangeColor ||
+        GameState.selectedCard.action === CardActionEnum.SuperTaki));
 }
 
 // == Moving Cards ==
@@ -36,7 +38,7 @@ function drawStartingCard() {
 export function getDestinationPileType(sourcePileType) {
     switch (sourcePileType) {
         case PileTypeEnum.DrawPile: {
-            if (GameState.status === GameStatus.SettingStartingCard) {
+            if (GameState.gameStatus === GameStatusEnum.SettingStartingCard) {
                 return PileTypeEnum.DiscardPile;
             } else {
                 return GameState.currentPlayer === PlayerEnum.Human ? PileTypeEnum.HumanPile : PileTypeEnum.BotPile;
@@ -57,8 +59,8 @@ export function getDestinationPileType(sourcePileType) {
 //         || sourcePile.type === PileTypeEnum.DiscardPile);
 // }
 
-export function handleMoveCard() {
-    if (GameState.status === GameStatus.GameInit || GameState.status === GameStatus.SettingStartingCard) {
+export function handleCardMove() {
+    if (GameState.gameStatus === GameStatusEnum.GameInit || GameState.gameStatus === GameStatusEnum.SettingStartingCard) {
         GameState.selectedCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length - 1];
     }
     const sourcePileType = GameState.selectedCard.parentPileType;
@@ -75,7 +77,7 @@ function updateLeadingCard(destinationPileType) {
     }
 }
 
-function moveCard(sourcePileType, destinationPileType) {
+export function moveCard(sourcePileType, destinationPileType) {
     utils.pullItemFromArray(GameState.selectedCard, GameState[sourcePileType].cards);
     utils.insertToEndOfArray(GameState.selectedCard, GameState[destinationPileType].cards);
     debugger;

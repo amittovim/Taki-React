@@ -1,8 +1,8 @@
-export const GameStatus = {
+export const GameStatusEnum = {
     GameInit: 'GameInit',
     SettingStartingCard: 'SettingStartingCard',
     CardUpdated: 'CardUpdated',
-    ProceedPlayersTurn: 'ProceedPlayersTurn',
-    UpdatedGameState: 'UpdatedGameState'
+    PlayYourNextMove: 'PlayYourNextMove',
+    GameStateChanged: 'GameStateChanged'
 };
 

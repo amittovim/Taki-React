@@ -43,3 +43,14 @@ export function findIndexOfItemInArray(targetItem, array) {
 export function getKey(obj, index) {
     return Object.keys(obj)[index];
 }
+
+export function getFirstItemByMatchConditions(arr, conditionList) {
+    return arr.find(function (item) {       //TODO: change this to arrow function
+        return conditionList.reduce(function (accumulator, condition) {
+            let key = getKey(condition, 0);
+            let value = condition[key];
+            return accumulator && item[key] === value;
+        }, true);
+    });
+}
+

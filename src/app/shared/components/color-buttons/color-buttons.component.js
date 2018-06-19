@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class Navbar extends Component {
+class ColorButtons extends Component {
     constructor(props) {
         super(props);
 
@@ -9,11 +9,11 @@ class Navbar extends Component {
 
     render() {
         return (
-            <div>
-                <Logo />
+            <div className="color-buttons-component">
+                <button></button>
             </div>
         );
     }
 }
 
-export default Navbar;
+export default ColorButtons;

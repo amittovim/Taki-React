@@ -4,12 +4,11 @@ import * as GameService from './game.service';
 import * as GameApiService from './game-api.service';
 import Board from "./board/board.component";
 import {GameStatusEnum} from "../../logic/game-status.enum";
-import Console from "./console/console.component";
 import {CardActionEnum} from "../enums/card-action-enum";
 import {ModalTypeEnum} from "./modal/modal-type.enum";
 import Modal from "./modal/modal.component";
 import {PlayerEnum} from "../enums/player.enum";
-import {GameState} from "../../logic/state";
+import Console from "./console/console.component";
 
 class Game extends Component {
     render() {
@@ -25,7 +24,7 @@ class Game extends Component {
                        botPile={this.state.BotPile}
                        moveCardDriver={this.updateSelectedCard} // TODO: replace to context
                 />
-                <Console text="this is the console line" />
+                <Console message={this.state.consoleMessage} />
             </div>
         );
     }
@@ -43,6 +42,7 @@ class Game extends Component {
             actionState: null,
             leadingCard: null,
             selectedCard: null,
+            consoleMessage: '',
             turnNumber: 0,
             modal: {
                 isOpen: null,
@@ -76,7 +76,9 @@ class Game extends Component {
 
 
     handleIllegalMove() {
-        console.log('illegal move');
+        this.setState({
+            consoleMessage: 'illegal move'
+        });
     }
 
     updateSelectedCard(card) {

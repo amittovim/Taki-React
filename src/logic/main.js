@@ -39,7 +39,7 @@ export function requestCardMove(cardId) {
                 header: GameStatusEnum.GameStateChanged,
                 body: stateChange
             });
-        }, 500);
+        }, 1000);
     });
 }
 

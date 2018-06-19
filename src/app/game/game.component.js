@@ -57,6 +57,8 @@ class Game extends Component {
         this.handleChangeColor = this.handleChangeColor.bind(this);
         this.handleRequestMoveCard = this.handleRequestMoveCard.bind(this);
         this.handleIllegalMove = this.handleIllegalMove.bind(this);
+        this.openGameFlowPlayer = this.openGameFlowPlayer.bind(this);
+        this.handleGameFlowPlayer = this.handleGameFlowPlayer.bind(this);
     }
 
     componentWillMount() {
@@ -75,6 +77,17 @@ class Game extends Component {
         });
     }
 
+    openGameFlowPlayer() {
+        this.setState((prevState) => {
+            return {
+                modal: {
+                    isOpen: true,
+                    type: ModalTypeEnum.GameFlowPlayer,
+                    callback: this.handleGameFlowPlayer
+                }
+            };
+        });
+    }
 
     handleIllegalMove() {
         console.log('illegal move');
@@ -137,6 +150,15 @@ class Game extends Component {
 
         });
         this.handleRequestMoveCard();
+    }
+
+    handleGameFlowPlayer() {
+
+
+        this.setState({
+            modal: { isOpen: false},
+        });
+
     }
 }
 

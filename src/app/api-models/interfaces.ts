@@ -10,6 +10,12 @@ interface Pile {
     singleCardCounter: number;
 }
 
+interface GameDBLine {
+    moveIndex: number;
+    gameState: array of State;
+}
+
+
 interface State {
     discardPile: Pile;
     drawPile: Pile;
@@ -79,3 +85,8 @@ enum GameStatusEnum {
     GameStateChanged = 'GameStateChanged'
 }
 
+enum ModalTypeEnum {
+    Welcome = 'Welcome',
+    ColorPicker = 'ColorPicker',
+    GameFlowPlayer = 'GameFlowPlayer'
+}

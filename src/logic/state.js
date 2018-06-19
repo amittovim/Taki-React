@@ -12,7 +12,6 @@ export const GameState = {
     twoPlusCounter:0
 };
 
-
 // let validator = {
 //     set: function (obj, prop, value) {
 //         if (!obj.hasOwnProperty(prop)) {

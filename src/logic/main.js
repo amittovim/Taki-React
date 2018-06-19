@@ -3,6 +3,7 @@ import initDrawPile from './init/draw-pile.init';
 import initDiscardPile from './init/discard-pile.init';
 import * as dealer from './dealer/dealer';
 import {GameState} from "./state";
+import {DB} from './database';
 import {GameStatusEnum} from "./game-status.enum";
 import {PlayerEnum} from "../app/enums/player.enum";
 import {CardActionEnum} from "../app/enums/card-action-enum";
@@ -11,6 +12,7 @@ import {handleCardMove} from "./dealer/dealer";
 import * as Utils from "./utils/model.utils";
 import * as GameUtils from "./utils/game.utils";
 import Game from "../app/game/game.component";
+import {insertToEndOfArray} from "./utils/model.utils";
 
 
 ///// ===== Game init functions =====
@@ -21,7 +23,8 @@ export function initGame() {
     initDrawPile();
     initDiscardPile();
     dealer.dealCards();
-    // saveGameState();
+    debugger;
+    saveGameState();
     if (GameState.currentPlayer === PlayerEnum.Bot) {
         debugger;
         pickNextBotMove();
@@ -140,6 +143,8 @@ function playGameMove(cardId) {
 
     // side effects
     stateChange = processGameStep(stateChange);
+    debugger;
+    saveGameState();
     return stateChange;
 }
 
@@ -291,4 +296,34 @@ export function availableMoveExist(currentPlayerPile, actionState, leadingCard) 
         }
     });
     return (legalCards.length > 0);
+}
+
+export function saveGameState() {
+    debugger;
+    insertToEndOfArray(GameState, DB);
+    console.log(DB);
+}
+
+let currentStateIdx =0;
+let stateSet = DB;
+
+function prevGameState(){
+    currentStateIdx = currentStateIdx - 1;
+    if( currentStateIdx < 0 ) {
+        currentStateIdx = stateSet.length - 1;
+    }
+    updatePicture(currentStateIdx );
+}
+
+function nextGameState(){
+    currentStateIdx = currentStateIdx + 1;
+    if( currentStateIdx == stateSet.length ){
+        currentStateIdx = 0;
+    }
+    updatePicture(currentImageIdx);
+}
+
+function updateState(idx){
+    let stateElem = document.getElementById("sl-picture");
+    imgEle.src = imageLocation + imageSet[idx];
 }

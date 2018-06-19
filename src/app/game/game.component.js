@@ -17,7 +17,9 @@ class Game extends Component {
         return (
             <div className="game-component">
                 <Navbar currentPlayer={this.state.currentPlayer}
-                        turnNumber={this.state.turnNumber} />
+                        turnNumber={this.state.turnNumber}
+                        abortGameCallback={console.log('aborted')}
+                />
                 <Loader isLoading={this.state.isLoading} />
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}

@@ -34,8 +34,8 @@ export function handleDrawpileRestocking(newGameStateInfo) {
 export function handleActionState(newGameStateInfo) {
     // if the game is in either states: GameInit or SettingStartingCard
     // do NOT raise actionState
-    if (!(GameState.status === GameStatusEnum.GameInit ||
-          GameState.status === GameStatusEnum.SettingStartingCard )) {
+    if (!(GameState.gameStatus === GameStatusEnum.GameInit ||
+          GameState.gameStatus === GameStatusEnum.SettingStartingCard )) {
         newGameStateInfo = raiseActionState(newGameStateInfo);
     }
     return newGameStateInfo;
@@ -107,21 +107,25 @@ export function handleInvokedCCStateByBot(newGameStateInfo) {
 
 export function handleInvokedStopState(newGameStateInfo) {
     GameState.shouldSwitchPlayer = false;
-    GameState.turnNumber++;
+    GameState.actionState= null;
+    incrementGameTurnNumber();
 
     newGameStateInfo = {
         ...newGameStateInfo,
         shouldSwitchPlayer: GameState.shouldSwitchPlayer,
-        turnNumber: GameState.turnNumber
+        turnNumber: GameState.turnNumber,
+        actionState: null
     };
     return newGameStateInfo;
 }
 
 export function handleInvokedPlusState(newGameStateInfo) {
     GameState.shouldSwitchPlayer = false;
+    GameState.actionState= null;
     newGameStateInfo = {
         ...newGameStateInfo,
-        shouldSwitchPlayer: GameState.shouldSwitchPlayer
+        shouldSwitchPlayer: GameState.shouldSwitchPlayer,
+        actionState: null
     };
     return newGameStateInfo;
 }
@@ -222,3 +226,9 @@ export function getPlayerPile(playerType) {
     return GameState[`${playerType}Pile`];
 }
 
+export function incrementGameMovesCounter() {
+    GameState.movesCounter++;
+}
+export function incrementGameTurnNumber() {
+    GameState.turnNumber++;
+}

@@ -13,10 +13,11 @@ import * as GameUtils from "./utils/game.utils";
 import Game from "../app/game/game.component";
 
 
+
 ///// ===== Game init functions =====
 
 export function initGame() {
-    GameState.status = GameStatusEnum.GameInit;
+    GameState.gameStatus = GameStatusEnum.GameInit;
     initPlayers();
     initDrawPile();
     initDiscardPile();
@@ -25,7 +26,7 @@ export function initGame() {
     if (GameState.currentPlayer === PlayerEnum.Bot) {
         pickNextBotMove();
     }
-    GameState.status = GameStatusEnum.GameStateChanged;
+    GameState.gameStatus = GameStatusEnum.GameStateChanged;
     return GameState;
 }
 
@@ -60,7 +61,6 @@ export function requestGameStateUpdate() {
 
 // Bot Player algorithm to choose next move
 function pickNextBotMove() {
-    debugger;
     GameState.currentPlayer = PlayerEnum.Bot;
     let leadingCard = GameState.leadingCard;
     let selectedCard;
@@ -171,7 +171,6 @@ function processGameStep(stateChange) {
     if (currentPlayerPile.cards.length === 1) {
         newGameStateInfo = GameUtils.incrementSingleCardCounter(newGameStateInfo);
     }
-
     // if needed, raise game actionState
     newGameStateInfo = GameUtils.handleActionState(newGameStateInfo);
 
@@ -200,6 +199,7 @@ function processGameStep(stateChange) {
     }
 
     // if PLUS card was invoked do not switch players ( give current player another move )
+    //
     else if (GameState.actionState === CardActionEnum.Plus) {
         newGameStateInfo = GameUtils.handleInvokedPlusState(newGameStateInfo);
     }
@@ -218,6 +218,7 @@ function processGameStep(stateChange) {
 
     newGameStateInfo = handleSwitchPlayers(newGameStateInfo);
 
+    console.log(GameState);
     return {
         ...stateChange,
         ...newGameStateInfo,
@@ -229,6 +230,7 @@ function processGameStep(stateChange) {
 function handleSwitchPlayers(newGameStateInfo) {
     if (GameState.shouldSwitchPlayer) {
         switchPlayers();
+        GameUtils.incrementGameTurnNumber();
         GameState.shouldSwitchPlayer = false;
     }
     newGameStateInfo = {

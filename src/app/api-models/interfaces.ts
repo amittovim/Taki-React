@@ -22,7 +22,7 @@ interface State {
     turnNumber: number;
     twoPlusCounter: number;
     shouldSwitchPlayer: boolean;
-    status : GameStatusEnum;
+    gameStatus : GameStatusEnum;
 }
 
 interface Card {

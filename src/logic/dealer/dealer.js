@@ -25,17 +25,17 @@ function dealHands() {
 
 function drawStartingCard() {
     GameState.status = GameStatusEnum.SettingStartingCard;
-    let i=0
+    let i = 0;
     do {
         i++;
-        if (i===2) {
-            debugger;
+        if (i === 2) {
+            // debugger;
         }
         // It draws another card if the card drawn is change-color because you cannot start a taki with this card
         handleCardMove();
-    } while ( GameState.selectedCard.action &&
-             (GameState.selectedCard.action === CardActionEnum.ChangeColor ||
-              GameState.selectedCard.action === CardActionEnum.SuperTaki      ));
+    } while (GameState.selectedCard.action &&
+    (GameState.selectedCard.action === CardActionEnum.ChangeColor ||
+        GameState.selectedCard.action === CardActionEnum.SuperTaki));
 }
 
 // == Moving Cards ==

@@ -23,7 +23,6 @@ export function initGame() {
     dealer.dealCards();
     // saveGameState();
     if (GameState.currentPlayer === PlayerEnum.Bot) {
-        debugger;
         pickNextBotMove();
     }
     GameState.status = GameStatusEnum.GameStateChanged;
@@ -45,8 +44,6 @@ export function requestCardMove(cardId) {
 }
 
 export function requestGameStateUpdate() {
-    console.log(GameState);
-    debugger;
     pickNextBotMove();
     return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -63,6 +60,7 @@ export function requestGameStateUpdate() {
 
 // Bot Player algorithm to choose next move
 function pickNextBotMove() {
+    debugger;
     GameState.currentPlayer = PlayerEnum.Bot;
     let leadingCard = GameState.leadingCard;
     let selectedCard;
@@ -143,7 +141,6 @@ function playGameMove(cardId) {
     return stateChange;
 }
 
-
 function getCardById(cardId) {
     const gameCards = GameState.HumanPile.cards
         .concat(GameState.BotPile.cards)
@@ -158,7 +155,6 @@ export function switchPlayers() {
 
 //this function should run after every card movement we make
 function processGameStep(stateChange) {
-    debugger;
     let leadingCard = GameState.leadingCard;
     let currentPlayerType = GameState.currentPlayer;
     let currentPlayerPile = GameUtils.getPlayerPile(GameState.currentPlayer);
@@ -220,7 +216,7 @@ function processGameStep(stateChange) {
         newGameStateInfo = GameUtils.handleInvokedTakiState(newGameStateInfo);
     }
 
-    newGameStateInfo= handleSwitchPlayers(newGameStateInfo);
+    newGameStateInfo = handleSwitchPlayers(newGameStateInfo);
 
     return {
         ...stateChange,

@@ -10,7 +10,6 @@ import {ModalTypeEnum} from "./modal/modal-type.enum";
 import Modal from "./modal/modal.component";
 import {PlayerEnum} from "../enums/player.enum";
 import {GameState} from "../../logic/state";
-import Player from "./test/player.component";
 
 class Game extends Component {
     render() {

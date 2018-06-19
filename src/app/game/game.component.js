@@ -9,12 +9,16 @@ import {CardActionEnum} from "../enums/card-action-enum";
 import {ModalTypeEnum} from "./modal/modal-type.enum";
 import Modal from "./modal/modal.component";
 import {PlayerEnum} from "../enums/player.enum";
-import {GameState} from "../../logic/state";
+import Navbar from "./navbar/navbar.component";
+import Loader from "../shared/components/loader/loader.component";
 
 class Game extends Component {
     render() {
         return (
             <div className="game-component">
+                <Navbar currentPlayer={this.state.currentPlayer}
+                        turnNumber={this.state.turnNumber} />
+                <Loader isLoading={this.state.isLoading} />
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
                        callback={this.state.modal.callback} />
@@ -48,7 +52,8 @@ class Game extends Component {
                 isOpen: null,
                 type: null,
                 callback: null
-            }
+            },
+            isLoading: false
         };
         this.updateSelectedCard = this.updateSelectedCard.bind(this);
         this.handlePlayMove = this.handlePlayMove.bind(this);
@@ -115,21 +120,32 @@ class Game extends Component {
         GameApiService.requestMoveCard(this.state.selectedCard.id)
             .then(response => {
                 if (GameStatusEnum.GameStateChanged) {
-                    this.setState({...response.body}, this.processNewState);
+                    this.setState({
+                        ...response.body,
+                    }, this.processStateChanges);
                 }
             })
     }
 
-    processNewState() {
+    processStateChanges() {
         if (this.state.currentPlayer !== PlayerEnum.Human) {
-            GameApiService.requestGameStateUpdate()
-                .then(response => {
-                    this.setState({...response.body}, this.processNewState);
-                })
-                .catch(error => {
-                    console.error('Error', error);
-                });
+            this.setState({
+                isLoading: true
+            }, this.requestStateUpdate);
         }
+    }
+
+    requestStateUpdate() {
+        GameApiService.requestGameStateUpdate()
+            .then(response => {
+                this.setState({
+                    ...response.body,
+                    isLoading: false
+                }, this.requsetStateUpdate);
+            })
+            .catch(error => {
+                console.error('Error', error);
+            });
     }
 }
 

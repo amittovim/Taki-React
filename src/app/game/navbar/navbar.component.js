@@ -52,7 +52,6 @@ class Navbar extends Component {
                             onClick={this.handleAbortGame} />
 
                 </div>
-
             </div>
         )
     }

@@ -34,10 +34,7 @@ export function handleDrawpileRestocking(newGameStateInfo) {
 export function handleActionState(newGameStateInfo) {
     // if the game is in either states: GameInit or SettingStartingCard
     // do NOT raise actionState
-    if (!(GameState.gameStatus === GameStatusEnum.GameInit ||
-          GameState.gameStatus === GameStatusEnum.SettingStartingCard )) {
         newGameStateInfo = raiseActionState(newGameStateInfo);
-    }
     return newGameStateInfo;
 }
 
@@ -55,7 +52,10 @@ export function incrementSingleCardCounter(newGameStateInfo) {
 
 export function handleInvokedTwoPlusState(newGameStateInfo) {
     // only if the current card is 2+ we increment the counter by 2 and switch players
-    if (GameState.leadingCard.action === CardActionEnum.TwoPlus) {
+    if (GameState.actionState === CardActionEnum.TwoPlus &&
+        GameState.selectedCard === GameState.leadingCard &&
+        GameState.leadingCard.action === CardActionEnum.TwoPlus) {
+
         GameState.twoPlusCounter += 2;
         GameState.shouldSwitchPlayer = true;
 
@@ -64,33 +64,28 @@ export function handleInvokedTwoPlusState(newGameStateInfo) {
             twoPlusCounter: GameState.twoPlusCounter,
             shouldSwitchPlayer: GameState.shouldSwitchPlayer
         };
-    } else {
-        GameState.twoPlusCounter--;
-        newGameStateInfo = {
-            ...newGameStateInfo,
-            twoPlusCounter: GameState.twoPlusCounter
-        };
-    }
-    if (GameState.twoPlusCounter === 0) {
-        GameState.actionState = null;
-        newGameStateInfo = {
-            ...newGameStateInfo,
-            actionState: GameState.actionState
-        };
     }
     return newGameStateInfo;
 }
 
 export function handleExistingTwoPlusState(newGameStateInfo) {
-    GameState.twoPlusCounter--;
-    GameState.twoPlusCounter === 0 ? GameState.shouldSwitchPlayer = true : GameState.shouldSwitchPlayer = false;
+    if (GameState.twoPlusCounter>0) { GameState.twoPlusCounter--;}
+    if (GameState.twoPlusCounter === 0) {
+        GameState.shouldSwitchPlayer = true;
+        GameState.actionState = null;
+    }
+    else {
+        GameState.shouldSwitchPlayer = false;
+    }
     newGameStateInfo = {
         ...newGameStateInfo,
         twoPlusCounter: GameState.twoPlusCounter,
-        shouldSwitchPlayer: GameState.shouldSwitchPlayer
+        shouldSwitchPlayer: GameState.shouldSwitchPlayer,
+        actionState: GameState.actionState
     };
     return newGameStateInfo;
 }
+
 export function handleInvokedCCStateByBot(newGameStateInfo) {
     GameState.leadingCard.color = pickRandomColor();
     GameState.shouldSwitchPlayer = true;
@@ -170,16 +165,17 @@ export function handleInvokedTakiState(newGameStateInfo) {
 function raiseActionState(newGameStateInfo) {
     // if current card isn't an action card there's nothing to raise so we leave
     // the function.
-    console.log(GameState);
+    console.log(...GameState);
     if (!GameState.selectedCard.isActionCard) {
         return newGameStateInfo;
 
     // if current card is an action card
     } else {
 
-        // if current activeState is DIFFERENT than TAKI then update activeState
+        // if current activeState is DIFFERENT than twoplus and different than TAKI then update activeState
         // value to be the action on our current card, in memory and in newGameStateInfo.
-        if (GameState.actionState !== CardActionEnum.Taki) {
+        if (GameState.actionState !== CardActionEnum.TwoPlus &&
+            GameState.actionState !== CardActionEnum.Taki) {
             GameState.actionState = GameState.selectedCard.action;
             newGameStateInfo = {
                 ...newGameStateInfo,

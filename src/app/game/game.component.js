@@ -6,6 +6,7 @@ import Board from "./board/board.component";
 import {GameStatusEnum} from "../../logic/game-status.enum";
 import {CardActionEnum} from "../enums/card-action-enum";
 import {ModalTypeEnum} from "./modal/modal-type.enum";
+import {PileTypeEnum} from "../enums/pile-type.enum";
 import Modal from "./modal/modal.component";
 import {PlayerEnum} from "../enums/player.enum";
 import Navbar from "./navbar/navbar.component";
@@ -22,7 +23,9 @@ class Game extends Component {
                         abortGameCallback={this.handleOpenModal}
                 />
                 <Loader isLoading={this.state.isLoading} />
-                <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen} />
+                <Overlay isVisible={this.state.isLoading ||
+                                    this.state.modal.isOpen /*||
+                                    this.state.currentPlayer === PlayerEnum.Bot*/} />
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
                        callback={this.state.modal.callback}
@@ -105,7 +108,8 @@ class Game extends Component {
         const isMoveLegal = GameService.isHumanMoveLegal(this.state.selectedCard, this.state.DrawPile, this.state.actionState, this.state.leadingCard, this.state.HumanPile);
         if (!isMoveLegal) {
             return this.handleIllegalMove();
-        } else if (this.state.selectedCard.action === CardActionEnum.ChangeColor) {
+        } else if ( this.state.selectedCard.action === CardActionEnum.ChangeColor &&
+                    this.state.selectedCard.parentPileType !== PileTypeEnum.DrawPile       ){
             this.openColorPicker();
         } else {
             this.requestMoveCard();
@@ -164,6 +168,7 @@ class Game extends Component {
 
     // API
     requestMoveCard() {
+        debugger;
         GameApiService.requestMoveCard(this.state.selectedCard.id)
             .then(response => {
                 if (GameStatusEnum.GameStateChanged) {
@@ -183,12 +188,13 @@ class Game extends Component {
     }
 
     requestStateUpdate() {
+        debugger;
         GameApiService.requestGameStateUpdate()
             .then(response => {
                 this.setState({
                     ...response.body,
                     isLoading: false
-                }, this.requsetStateUpdate);
+                }, this.requestStateUpdate);
             })
             .catch(error => {
                 console.error('Error', error);

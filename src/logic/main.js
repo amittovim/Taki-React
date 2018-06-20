@@ -10,7 +10,6 @@ import {handleCardMove} from "./dealer/dealer";
 import * as GameUtils from "./utils/game.utils";
 
 
-
 ///// ===== Game init functions =====
 
 export function initGame() {
@@ -30,6 +29,7 @@ export function initGame() {
 ///// API
 
 export function requestCardMove(cardId) {
+    debugger;
     const stateChange = playHumanMove(cardId);
     return new Promise((resolve) => {
         resolve({
@@ -40,6 +40,7 @@ export function requestCardMove(cardId) {
 }
 
 export function requestGameStateUpdate() {
+    debugger;
     pickNextBotMove();
     return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -153,7 +154,7 @@ function processGameStep(stateChange) {
     let leadingCard = GameState.leadingCard;
     let currentPlayerType = GameState.currentPlayer;
     let currentPlayerPile = GameUtils.getPlayerPile(GameState.currentPlayer);
-    let shouldSwitchPlayer = GameState.shouldSwitchPlayer = true;
+    let shouldSwitchPlayer = GameState.shouldSwitchPlayer = true; // TODO: what is this line for?
     let newGameStateInfo = {};
 
     // if drawPile is empty restock it with cards from discardPile
@@ -166,6 +167,7 @@ function processGameStep(stateChange) {
     if (currentPlayerPile.cards.length === 1) {
         newGameStateInfo = GameUtils.incrementSingleCardCounter(newGameStateInfo);
     }
+
     // if needed, raise game actionState
     newGameStateInfo = GameUtils.handleActionState(newGameStateInfo);
 

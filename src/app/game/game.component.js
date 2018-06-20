@@ -164,6 +164,7 @@ class Game extends Component {
 
     // API
     requestMoveCard() {
+        debugger;
         GameApiService.requestMoveCard(this.state.selectedCard.id)
             .then(response => {
                 if (GameStatusEnum.GameStateChanged) {

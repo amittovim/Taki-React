@@ -11,6 +11,7 @@ import {PlayerEnum} from "../enums/player.enum";
 import Navbar from "./navbar/navbar.component";
 import Loader from "../shared/components/loader/loader.component";
 import Console from "./console/console.component";
+import Overlay from "../shared/components/overlay/overlay.component";
 
 class Game extends Component {
     render() {
@@ -21,6 +22,7 @@ class Game extends Component {
                         abortGameCallback={console.log('aborted')}
                 />
                 <Loader isLoading={this.state.isLoading} />
+                <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen} />
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
                        callback={this.state.modal.callback} />

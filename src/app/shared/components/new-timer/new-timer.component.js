@@ -64,7 +64,6 @@ class Timer extends Component {
 
     moveTime() {
         this.setState((prevState) => {
-            debugger;
             return {
                 seconds: prevState.seconds + 1
             };
@@ -80,7 +79,6 @@ class Timer extends Component {
     }
 
     static getTimeDisplay(value) {
-        debugger;
         value = parseInt(value);
         let display = '';
         if (value < 10) {

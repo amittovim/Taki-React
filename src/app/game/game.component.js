@@ -11,6 +11,7 @@ import {PlayerEnum} from "../enums/player.enum";
 import Navbar from "./navbar/navbar.component";
 import Loader from "../shared/components/loader/loader.component";
 import Console from "./console/console.component";
+import Overlay from "../shared/components/overlay/overlay.component";
 
 class Game extends Component {
     render() {
@@ -18,12 +19,15 @@ class Game extends Component {
             <div className="game-component">
                 <Navbar currentPlayer={this.state.currentPlayer}
                         turnNumber={this.state.turnNumber}
-                        abortGameCallback={console.log('aborted')}
+                        abortGameCallback={this.handleOpenModal}
                 />
                 <Loader isLoading={this.state.isLoading} />
+                <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen} />
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
-                       callback={this.state.modal.callback} />
+                       callback={this.state.modal.callback}
+                       closeModal={this.handleCloseModal}
+                />
 
                 <Board drawPile={this.state.DrawPile}
                        discardPile={this.state.DiscardPile}
@@ -64,6 +68,8 @@ class Game extends Component {
         this.handleChangeColor = this.handleChangeColor.bind(this);
         this.requestMoveCard = this.requestMoveCard.bind(this);
         this.handleIllegalMove = this.handleIllegalMove.bind(this);
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
     }
 
     componentWillMount() {
@@ -117,6 +123,42 @@ class Game extends Component {
 
         });
         this.requestMoveCard();
+    }
+
+    exitToTakiWiki() {
+        window.location.href = 'https://en.wikipedia.org/wiki/Taki_(card_game)';
+    }
+
+
+    // Modal
+
+    handleOpenModal(modalType) {
+        let callback = this.getModalCallback(modalType);
+        this.setState((prevState) => {
+            return {
+                modal: {
+                    isOpen: true,
+                    type: modalType,
+                    callback: callback
+                }
+            };
+        });
+    }
+
+    handleCloseModal() {
+        this.setState({
+            modal: {
+                isOpen: false
+            },
+        });
+    }
+
+    getModalCallback(modalType) {
+        switch (modalType) {
+            case ModalTypeEnum.AbortGame: {
+                return this.exitToTakiWiki;
+            }
+        }
     }
 
 

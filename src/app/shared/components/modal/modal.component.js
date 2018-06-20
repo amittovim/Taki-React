@@ -12,10 +12,7 @@ class ModalFrame extends Component {
             this.props.isOpen ?
                 (
                     <div className="modal-component">
-                        <div className="overlay"></div>
                         <div className="modal">
-                            <h1>{this.props.title}</h1>
-                            <h2>{this.props.subtitle}</h2>
                             <div>
                                 {this.props.children}
                             </div>

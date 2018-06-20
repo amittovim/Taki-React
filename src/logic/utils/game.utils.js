@@ -35,7 +35,7 @@ export function handleActionState(newGameStateInfo) {
     // if the game is in either states: GameInit or SettingStartingCard
     // do NOT raise actionState
     if (!(GameState.gameStatus === GameStatusEnum.GameInit ||
-          GameState.gameStatus === GameStatusEnum.SettingStartingCard )) {
+        GameState.gameStatus === GameStatusEnum.SettingStartingCard)) {
         newGameStateInfo = raiseActionState(newGameStateInfo);
     }
     return newGameStateInfo;
@@ -91,6 +91,7 @@ export function handleExistingTwoPlusState(newGameStateInfo) {
     };
     return newGameStateInfo;
 }
+
 export function handleInvokedCCStateByBot(newGameStateInfo) {
     GameState.leadingCard.color = pickRandomColor();
     GameState.shouldSwitchPlayer = true;
@@ -107,7 +108,7 @@ export function handleInvokedCCStateByBot(newGameStateInfo) {
 
 export function handleInvokedStopState(newGameStateInfo) {
     GameState.shouldSwitchPlayer = false;
-    GameState.actionState= null;
+    GameState.actionState = null;
     incrementGameTurnNumber();
 
     newGameStateInfo = {
@@ -121,7 +122,7 @@ export function handleInvokedStopState(newGameStateInfo) {
 
 export function handleInvokedPlusState(newGameStateInfo) {
     GameState.shouldSwitchPlayer = false;
-    GameState.actionState= null;
+    GameState.actionState = null;
     newGameStateInfo = {
         ...newGameStateInfo,
         shouldSwitchPlayer: GameState.shouldSwitchPlayer,
@@ -161,7 +162,7 @@ export function handleInvokedTakiState(newGameStateInfo) {
     newGameStateInfo = {
         ...newGameStateInfo,
         actionState: GameState.actionState,
-        shouldSwitchPlayer : shouldSwitchPlayer
+        shouldSwitchPlayer: shouldSwitchPlayer
     };
     return newGameStateInfo;
 
@@ -170,11 +171,10 @@ export function handleInvokedTakiState(newGameStateInfo) {
 function raiseActionState(newGameStateInfo) {
     // if current card isn't an action card there's nothing to raise so we leave
     // the function.
-    console.log(GameState);
     if (!GameState.selectedCard.isActionCard) {
         return newGameStateInfo;
 
-    // if current card is an action card
+        // if current card is an action card
     } else {
 
         // if current activeState is DIFFERENT than TAKI then update activeState
@@ -197,8 +197,8 @@ function raiseActionState(newGameStateInfo) {
                     actionState: GameState.selectedCard.action
                 };
             }
-          }
         }
+    }
     return newGameStateInfo;
 }
 
@@ -230,6 +230,7 @@ export function getPlayerPile(playerType) {
 export function incrementGameMovesCounter() {
     GameState.movesCounter++;
 }
+
 export function incrementGameTurnNumber() {
     GameState.turnNumber++;
 }

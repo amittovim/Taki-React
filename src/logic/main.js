@@ -213,7 +213,6 @@ function processGameStep(stateChange) {
 
     newGameStateInfo = handleSwitchPlayers(newGameStateInfo);
 
-    console.log(GameState);
     return {
         ...stateChange,
         ...newGameStateInfo,

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './board.component.css';
 import Hand from "./hand/hand.component";
 import Deck from "./deck/deck.component";
 import {PlayerEnum} from "../../enums/player.enum";
@@ -9,6 +8,7 @@ import {PlayerEnum} from "../../enums/player.enum";
 // humanPile: Pile
 // botPile: Pile
 // moveCardDriver: function
+// isGameOver: boolean
 
 class Board extends Component {
 

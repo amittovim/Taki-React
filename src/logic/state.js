@@ -14,7 +14,6 @@ export const GameState = {
     consoleMessage: '',
 };
 
-
 // let validator = {
 //     set: function (obj, prop, value) {
 //         if (!obj.hasOwnProperty(prop)) {

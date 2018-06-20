@@ -20,24 +20,24 @@ class Game extends Component {
             <div className="game-component">
                 <Navbar currentPlayer={this.state.currentPlayer}
                         turnNumber={this.state.turnNumber}
+                        isGameOver={this.state.isGameOver}
+                        abortGameCallback={this.handleOpenModal}
+                        gameHistoryCallback={this.handleGetGameHistory}
+                        restartGameCallback={this.startGame}
                         openModalCallback={this.handleOpenModal}
-                        emitAverageTime={this.updateAverageTime}
-                />
+                        emitAverageTime={this.updateAverageTime} />
                 <Loader isLoading={this.state.isLoading} />
-                <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen} />
+                <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen || this.state.isGameOver} />
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
                        callback={this.state.modal.callback}
                        data={this.getStats()}
-                       closeModal={this.handleCloseModal}
-                />
-
+                       closeModal={this.handleCloseModal} />
                 <Board drawPile={this.state.DrawPile}
                        discardPile={this.state.DiscardPile}
                        humanPile={this.state.HumanPile}
                        botPile={this.state.BotPile}
-                       moveCardDriver={this.updateSelectedCard} // TODO: replace to context
-                />
+                       moveCardDriver={this.updateSelectedCard} />
                 <Console message={this.state.consoleMessage} />
             </div>
         );
@@ -63,11 +63,12 @@ class Game extends Component {
                 type: null,
                 callback: null
             },
-            isLoading: false,
             averageMoveTime: {
                 minutes: 0,
                 seconds: 0
-            }
+            },
+            isLoading: false,
+            isGameOver: false
         };
         this.updateSelectedCard = this.updateSelectedCard.bind(this);
         this.handlePlayMove = this.handlePlayMove.bind(this);
@@ -78,9 +79,15 @@ class Game extends Component {
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.updateAverageTime = this.updateAverageTime.bind(this);
+        this.handleGetGameHistory = this.handleGetGameHistory.bind(this);
+        this.startGame = this.startGame.bind(this);
     }
 
     componentWillMount() {
+        this.startGame();
+    }
+
+    startGame() {
         this.setState(GameApiService.getInitialState());
     }
 
@@ -105,12 +112,10 @@ class Game extends Component {
             averageSeconds: this.state.averageMoveTime.seconds,
             singleCardCounter: getPlayerPile(this.state.currentPlayer).singleCardCounter // TODO,
         };
-        console.log(data);
         return data;
     }
 
     updateAverageTime(averageMoveTime) {
-        debugger;
         this.setState({
             averageMoveTime: {
                 minutes: averageMoveTime.minutes,
@@ -196,6 +201,7 @@ class Game extends Component {
 
 
     // API
+
     requestMoveCard() {
         GameApiService.requestMoveCard(this.state.selectedCard.id)
             .then(response => {
@@ -221,11 +227,20 @@ class Game extends Component {
                 this.setState({
                     ...response.body,
                     isLoading: false
-                }, this.requsetStateUpdate);
+                }, this.processStateChanges);
             })
             .catch(error => {
                 console.error('Error', error);
             });
+    }
+
+    handleGetGameHistory(getNext) {
+        GameApiService.getGameStateHistory(getNext)
+            .then(response => {
+                this.setState({
+                    ...response.body,
+                });
+            })
     }
 }
 

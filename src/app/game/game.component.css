@@ -8,6 +8,7 @@
 .game-component .navbar-component {
     display: flex;
     flex: 0.9;
+    z-index: 2;
 }
 
 .game-component .separator-component {

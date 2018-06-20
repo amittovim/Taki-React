@@ -3,3 +3,7 @@
     align-items: center;
     flex-direction: column;
 }
+
+.new-clock-component .value {
+    color: yellow;
+}

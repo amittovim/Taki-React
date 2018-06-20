@@ -36,10 +36,6 @@ class StatisticsModal extends Component {
             </div>
         );
     }
-
-    componentWillMount() {
-        console.log('test:', this.props);
-    }
 }
 
 export default StatisticsModal;

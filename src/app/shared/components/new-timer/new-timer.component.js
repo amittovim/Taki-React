@@ -6,6 +6,7 @@ import './new-timer.component.css';
 // isGameClock: boolean
 // turnNumber: number
 // label: string
+// isGameOver: boolean
 // emitAverageTime: Function
 
 class Timer extends Component {
@@ -48,6 +49,9 @@ class Timer extends Component {
     componentWillReceiveProps() {
         if (!this.props.isGameClock) {
             this.startClock();
+        }
+        if (this.props.isGameOver) {
+            this.resetClock();
         }
     }
 
@@ -111,7 +115,6 @@ class Timer extends Component {
             minutes: this.state.averageMinutes,
             seconds: this.state.averageSeconds
         };
-        debugger;
         this.props.emitAverageTime(result);
     }
 }

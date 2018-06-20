@@ -43,11 +43,6 @@ class Modal extends Component {
                 subtitle = 'Let\'s start playing!';
                 break;
             }
-            case ModalTypeEnum.ColorPicker: {
-                title = 'Color Picker';
-                subtitle = 'Please select one of the following colors:';
-                break;
-            }
             default: {
                 break;
             }

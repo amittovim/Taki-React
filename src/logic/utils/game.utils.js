@@ -31,130 +31,147 @@ export function handleDrawpileRestocking(newGameStateInfo) {
     return newGameStateInfo;
 }
 
-export function handleActionState(newGameStateInfo) {
-    // if the game is in either states: GameInit or SettingStartingCard
-    // do NOT raise actionState
-    if (!(GameState.gameStatus === GameStatusEnum.GameInit ||
-          GameState.gameStatus === GameStatusEnum.SettingStartingCard )) {
-        newGameStateInfo = raiseActionState(newGameStateInfo);
+export function handleActivatingActionState(newGameStateInfo) {
+    const currentPlayerPile = getPlayerPile(GameState.currentPlayer);
+
+    // if current activeState is DIFFERENT than TAKI then update activeState
+    // value to be the action on our current card
+    if (GameState.actionState !== CardActionEnum.Taki) {
+        GameState.actionState = GameState.leadingCard.action;
+        newGameStateInfo = {
+            ...newGameStateInfo,
+            actionState: GameState.selectedCard.action
+        };
+        // if current activeState IS taki and player has no more cards with same color to put on it
+        // update the activeState value to the action of the card of our current card
+    } else {
+        let matchedCard = getCardInHand(currentPlayerPile , [{color: GameState.leadingCard.color}]);
+        if (matchedCard === undefined) {  //if (!availableMoveExist()) {
+            GameState.actionState = GameState.selectedCard.action;
+            newGameStateInfo = {
+                ...newGameStateInfo,
+                actionState: GameState.selectedCard.action
+            };
+        }
     }
     return newGameStateInfo;
 }
 
-export function incrementSingleCardCounter(newGameStateInfo) {
-    const CurrentPlayerPile = GameState[`${GameState.currentPlayer}Pile`];
-    const CurrentPlayerPileName = getPlayerPile(GameState.currentPlayer);
-    CurrentPlayerPile.singleCardCounter++;
+export function handleDisablingActionState(newGameStateInfo) {
+    // disable actionState if need be
+    if ((GameState.actionState === CardActionEnum.Plus) ||
+        (GameState.actionState === CardActionEnum.Stop) ||
+        (GameState.actionState === CardActionEnum.ChangeColor) ||
+        (GameState.twoPlusCounter === 0)) {
+        GameState.actionState = null;
+    }
     newGameStateInfo = {
         ...newGameStateInfo,
-        [`${CurrentPlayerPileName}.singleCardCounter`]:
-        CurrentPlayerPile.singleCardCounter
+        actionState: null
+    };
+    return newGameStateInfo;
+}
+
+
+export function handleGameStatistics(newGameStateInfo) {
+
+    // if player has only 1 card left we are updating his singleCardCounter
+    if (currentPlayerPile.cards.length === 1) {
+        incrementSingleCardCounter(newGameStateInfo);
+
+        // TODO : add more statistics
+    return newGameStateInfo;
+
+}
+
+
+export function incrementSingleCardCounter(newGameStateInfo) {
+    const currentPlayerPile = getPlayerPile(GameState.currentPlayer);
+    const currentPlayerPileName = getPlayerPile(GameState.currentPlayer).name;
+    currentPlayerPile.singleCardCounter++;
+    newGameStateInfo = {
+        ...newGameStateInfo,
+        [`${currentPlayerPileName}.singleCardCounter`]:
+        currentPlayerPile.singleCardCounter
     };
     return newGameStateInfo;
 }
 
 export function handleInvokedTwoPlusState(newGameStateInfo) {
-    // only if the current card is 2+ we increment the counter by 2 and switch players
-    if (GameState.leadingCard.action === CardActionEnum.TwoPlus) {
-        GameState.twoPlusCounter += 2;
-        GameState.shouldSwitchPlayer = true;
-
-        newGameStateInfo = {
-            ...newGameStateInfo,
-            twoPlusCounter: GameState.twoPlusCounter,
-            shouldSwitchPlayer: GameState.shouldSwitchPlayer
-        };
-    } else {
-        GameState.twoPlusCounter--;
-        newGameStateInfo = {
-            ...newGameStateInfo,
-            twoPlusCounter: GameState.twoPlusCounter
-        };
-    }
-    if (GameState.twoPlusCounter === 0) {
-        GameState.actionState = null;
-        newGameStateInfo = {
-            ...newGameStateInfo,
-            actionState: GameState.actionState
-        };
-    }
+    GameState.twoPlusCounter += 2;
+    newGameStateInfo = {
+        ...newGameStateInfo,
+        twoPlusCounter: GameState.twoPlusCounter
+    };
     return newGameStateInfo;
 }
 
 export function handleExistingTwoPlusState(newGameStateInfo) {
-    GameState.twoPlusCounter--;
-    GameState.twoPlusCounter === 0 ? GameState.shouldSwitchPlayer = true : GameState.shouldSwitchPlayer = false;
+    if ( GameState.leadingCard.id !== GameState.selectedCard.id &&
+         GameState.twoPlusCounter>0 ) {
+        GameState.twoPlusCounter--;
+    }
     newGameStateInfo = {
         ...newGameStateInfo,
         twoPlusCounter: GameState.twoPlusCounter,
-        shouldSwitchPlayer: GameState.shouldSwitchPlayer
     };
     return newGameStateInfo;
 }
-export function handleInvokedCCStateByBot(newGameStateInfo) {
-    GameState.leadingCard.color = pickRandomColor();
-    GameState.shouldSwitchPlayer = true;
-    GameState.actionState = null;
 
+export function handleInvokedCCStateByBot(newGameStateInfo) {
+    if (GameState.leadingCard.id === GameState.selectedCard.id ) {
+        GameState.leadingCard.color = pickRandomColor();
+    }
     newGameStateInfo = {
         ...newGameStateInfo,
         leadingCard: GameState.leadingCard,
-        shouldSwitchPlayer: GameState.shouldSwitchPlayer,
-        actionState: GameState.actionState
     };
     return newGameStateInfo;
 }
 
 export function handleInvokedStopState(newGameStateInfo) {
-    GameState.shouldSwitchPlayer = false;
-    GameState.actionState= null;
     incrementGameTurnNumber();
 
     newGameStateInfo = {
         ...newGameStateInfo,
-        shouldSwitchPlayer: GameState.shouldSwitchPlayer,
         turnNumber: GameState.turnNumber,
-        actionState: null
     };
     return newGameStateInfo;
 }
 
 export function handleInvokedPlusState(newGameStateInfo) {
-    GameState.shouldSwitchPlayer = false;
     GameState.actionState= null;
     newGameStateInfo = {
         ...newGameStateInfo,
-        shouldSwitchPlayer: GameState.shouldSwitchPlayer,
         actionState: null
-
     };
     return newGameStateInfo;
 }
 
 export function handleInvokedSuperTakiState(newGameStateInfo) {
-    let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
     GameState.leadingCard.color = GameState.DiscardPile.getSecondCardFromTop().color;
     GameState.actionState = CardActionEnum.Taki;
-
-    // if current player has no more cards of the same color as the taki to put on the taki
-    // cancel\replace  actionState value to null
-    let shouldSwitchPlayer = !doesPileHaveSameColorCards(currentPlayerPile);
-    if (shouldSwitchPlayer) {
-        GameState.actionState = null;
-    }
 
     newGameStateInfo = {
         ...newGameStateInfo,
         leadingCard: GameState.leadingCard,
         actionState: GameState.actionState,
-        shouldSwitchPlayer: shouldSwitchPlayer
     };
+
     return newGameStateInfo;
 }
 
 export function handleInvokedTakiState(newGameStateInfo) {
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
-    let shouldSwitchPlayer = !doesPileHaveSameColorCards(currentPlayerPile);
+
+    if ( !doesPileHaveSameColorCards(currentPlayerPile) ) {
+        GameState.actionState = null;
+    }
+
+
+
+
+
     if (shouldSwitchPlayer) {
         GameState.actionState = null;
     }
@@ -167,42 +184,7 @@ export function handleInvokedTakiState(newGameStateInfo) {
 
 }
 
-function raiseActionState(newGameStateInfo) {
-    // if current card isn't an action card there's nothing to raise so we leave
-    // the function.
-    console.log(GameState);
-    if (!GameState.selectedCard.isActionCard) {
-        return newGameStateInfo;
-
-    // if current card is an action card
-    } else {
-
-        // if current activeState is DIFFERENT than TAKI then update activeState
-        // value to be the action on our current card, in memory and in newGameStateInfo.
-        if (GameState.actionState !== CardActionEnum.Taki) {
-            GameState.actionState = GameState.selectedCard.action;
-            newGameStateInfo = {
-                ...newGameStateInfo,
-                actionState: GameState.selectedCard.action
-            };
-
-            // if current activeState IS taki and player has no more cards with same color to put on it
-            // update the activeState value to the action of the card of our current card
-        } else {
-            let matchedCard = getCardInHand(getPlayerPile(GameState.currentPlayer), [{color: GameState.leadingCard.color}]);
-            if (matchedCard === undefined) {  //if (!availableMoveExist()) {
-                GameState.actionState = GameState.selectedCard.action;
-                newGameStateInfo = {
-                    ...newGameStateInfo,
-                    actionState: GameState.selectedCard.action
-                };
-            }
-          }
-        }
-    return newGameStateInfo;
-}
-
-function doesPileHaveSameColorCards(currentPlayerPile) {
+export function doesPileHaveSameColorCards(currentPlayerPile) {
     let foundSameColorCards = false;
     currentPlayerPile.cards.forEach(function (handCard) {
         if (handCard.color === GameState.selectedCard.color)

@@ -8,6 +8,7 @@ import {PlayerEnum} from "../app/enums/player.enum";
 import {CardActionEnum} from "../app/enums/card-action-enum";
 import {handleCardMove} from "./dealer/dealer";
 import * as GameUtils from "./utils/game.utils";
+import {getPlayerPile} from "./utils/game.utils";
 
 
 
@@ -132,7 +133,9 @@ function playGameMove(cardId) {
     let stateChange = handleCardMove();
 
     // side effects
-    stateChange = processGameStep(stateChange);
+    if (GameState.gameStatus === GameStatusEnum.GameStateChanged) {
+        stateChange = processGameStep(stateChange);
+    }
     return stateChange;
 }
 
@@ -150,10 +153,7 @@ export function switchPlayers() {
 
 //this function should run after every card movement we make
 function processGameStep(stateChange) {
-    let leadingCard = GameState.leadingCard;
     let currentPlayerType = GameState.currentPlayer;
-    let currentPlayerPile = GameUtils.getPlayerPile(GameState.currentPlayer);
-    let shouldSwitchPlayer = GameState.shouldSwitchPlayer = true;
     let newGameStateInfo = {};
 
     // if drawPile is empty restock it with cards from discardPile
@@ -161,24 +161,25 @@ function processGameStep(stateChange) {
         newGameStateInfo = GameUtils.handleDrawpileRestocking(newGameStateInfo);
     }
 
-    // needed for game statistics... if player has only 1 card left we are updating
-    // it in his singleCardCounter at relevant area
-    if (currentPlayerPile.cards.length === 1) {
-        newGameStateInfo = GameUtils.incrementSingleCardCounter(newGameStateInfo);
-    }
-    // if needed, raise game actionState
-    newGameStateInfo = GameUtils.handleActionState(newGameStateInfo);
+    // updating statistics
+    newGameStateInfo = GameUtils.handleGameStatistics(newGameStateInfo);
 
-    // if TWOPLUS card was invoked in the current playmove increment twoPlusCounter by 2 and switch player
+
+    // check occasions when we need to activate game activeState (if we PUT an action card on discard-pile)
+    if ( ( GameState.leadingCard.action !== null) &&
+         ( GameState.leadingCard === GameState.selectedCard) ) {
+        newGameStateInfo = GameUtils.handleActivatingActionState(newGameStateInfo);
+    }
+    // if TWOPLUS card was invoked in the current play-move, increment twoPlusCounter by 2
     if (GameState.actionState === CardActionEnum.TwoPlus &&
+       ( GameState.leadingCard === GameState.selectedCard) &&  // means that player PUT card on discardPile
+                                                               // and didn't GET card from Drawpile
         GameState.selectedCard.action === CardActionEnum.TwoPlus) {
         newGameStateInfo = GameUtils.handleInvokedTwoPlusState(newGameStateInfo);
     }
-
-    // if current activeState is TWO-PLUS and card isnt 2+ it means its a card widthdrawn from draw-pile
-    // which means we need to decrease two plus counter by 1 and disable switchplayer until the counter equals 0
-    if (GameState.actionState === CardActionEnum.TwoPlus &&
-        GameState.selectedCard.action !== CardActionEnum.TwoPlus) {
+    // if activeState is TWO-PLUS and card was withdrawn from draw-pile we need to decrease two plus counter by 1
+    else if (GameState.actionState === CardActionEnum.TwoPlus &&
+        GameState.selectedCard.id !== GameState.leadingCard.id) {
         newGameStateInfo = GameUtils.handleExistingTwoPlusState(newGameStateInfo);
     }
 
@@ -192,28 +193,21 @@ function processGameStep(stateChange) {
     else if ((leadingCard.action === CardActionEnum.Stop) && (GameState.actionState === CardActionEnum.Stop)) {
         newGameStateInfo = GameUtils.handleInvokedStopState(newGameStateInfo);
     }
-
-    // if PLUS card was invoked do not switch players ( give current player another move )
-    //
-    else if (GameState.actionState === CardActionEnum.Plus) {
-        newGameStateInfo = GameUtils.handleInvokedPlusState(newGameStateInfo);
-    }
-
     // if SuperTaki was invoked change its color to the same color
     // of the card before it and invoke Taki .
     else if (GameState.actionState === CardActionEnum.SuperTaki) {
         newGameStateInfo = GameUtils.handleInvokedSuperTakiState(newGameStateInfo);
     }
-
-    // if Taki card was invoked do not switch players until player has no cards from the
-    // same color as the taki
+    // Taki card was invoked
     if (GameState.actionState === CardActionEnum.Taki) {
         newGameStateInfo = GameUtils.handleInvokedTakiState(newGameStateInfo);
     }
 
-    newGameStateInfo = handleSwitchPlayers(newGameStateInfo);
+    handleSwitchPlayers(newGameStateInfo);
 
-    console.log(GameState);
+    newGameStateInfo = GameUtils.handleDisablingActionState(newGameStateInfo);
+
+    console.log({...GameState});
     return {
         ...stateChange,
         ...newGameStateInfo,
@@ -222,19 +216,27 @@ function processGameStep(stateChange) {
     };
 }
 
-function handleSwitchPlayers(newGameStateInfo) {
-    if (GameState.shouldSwitchPlayer) {
+function handleSwitchPlayers() {
+    let shouldSwitchPlayers = true;
+    let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
+
+    // we check all cases when we shouldn't switch player
+    if (((GameState.actionState === CardActionEnum.Taki || GameState.actionState === CardActionEnum.SuperTaki)
+        && (!GameUtils.doesPileHaveSameColorCards(currentPlayerPile)))
+
+        || (GameState.actionState === GameState.leadingCard.action === CardActionEnum.Plus)
+
+        || (GameState.actionState === GameState.leadingCard.action === CardActionEnum.Stop)
+
+        || (GameState.twoPlusCounter !== 0)
+    ) {
+        shouldSwitchPlayers = false;
+    }
+
+    if (shouldSwitchPlayers) {
         switchPlayers();
         GameUtils.incrementGameTurnNumber();
-        GameState.shouldSwitchPlayer = false;
     }
-    newGameStateInfo = {
-        ...newGameStateInfo,
-        currentPlayer: GameState.currentPlayer,
-        shouldSwitchPlayer: GameState.shouldSwitchPlayer
-    };
-    return newGameStateInfo;
-
 }
 
 function shouldSwitchPlayers() {

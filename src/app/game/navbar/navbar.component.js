@@ -9,12 +9,15 @@ import {ModalTypeEnum} from "../modal/modal-type.enum";
 //<PROPS>
 // currentPlayer: PlayerEnum
 // turnNumber: number
+// isGameOver: boolean
 // abortGameCallback: Function
+// gameHistoryCallback: Function
 
 class Navbar extends Component {
     constructor(props) {
         super(props);
         this.handleAbortGame = this.handleAbortGame.bind(this);
+        this.handleGameHistory = this.handleGameHistory.bind(this);
     }
 
     render() {
@@ -44,12 +47,12 @@ class Navbar extends Component {
                 <div className="gameStepsCarousel">
 
                     <Button label="<="
-                            isDisabled={true}
-                            onClick={this.handleAbortGame} />
+                            isDisabled={false}
+                            onClick={this.handleGameHistory(false)} />
 
                     <Button label="=>"
-                            isDisabled={true}
-                            onClick={this.handleAbortGame} />
+                            isDisabled={false}
+                            onClick={this.handleGameHistory(true)} />
 
                 </div>
             </div>
@@ -58,6 +61,10 @@ class Navbar extends Component {
 
     handleAbortGame() {
         this.props.abortGameCallback(ModalTypeEnum.AbortGame);
+    }
+
+    handleGameHistory(getNext) {
+        this.props.gameHistoryCallback(getNext);
     }
 }
 

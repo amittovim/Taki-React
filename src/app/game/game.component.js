@@ -19,7 +19,9 @@ class Game extends Component {
             <div className="game-component">
                 <Navbar currentPlayer={this.state.currentPlayer}
                         turnNumber={this.state.turnNumber}
+                        isGameOver={this.isGameOver}
                         abortGameCallback={this.handleOpenModal}
+                        gameHistoryCallback={this.gameHistoryCallback}
                 />
                 <Loader isLoading={this.state.isLoading} />
                 <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen} />
@@ -33,7 +35,7 @@ class Game extends Component {
                        discardPile={this.state.DiscardPile}
                        humanPile={this.state.HumanPile}
                        botPile={this.state.BotPile}
-                       moveCardDriver={this.updateSelectedCard} // TODO: replace to context
+                       moveCardDriver={this.updateSelectedCard}
                 />
                 <Console message={this.state.consoleMessage} />
             </div>
@@ -60,7 +62,8 @@ class Game extends Component {
                 type: null,
                 callback: null
             },
-            isLoading: false
+            isLoading: false,
+            isGameOver: false
         };
         this.updateSelectedCard = this.updateSelectedCard.bind(this);
         this.handlePlayMove = this.handlePlayMove.bind(this);
@@ -70,11 +73,23 @@ class Game extends Component {
         this.handleIllegalMove = this.handleIllegalMove.bind(this);
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.gameHistoryCallback = this.gameHistoryCallback.bind(this);
     }
 
+
     componentWillMount() {
+        debugger;
         this.setState(GameApiService.getInitialState());
     }
+
+    // componentWillMount() {
+    //     GameApiService.getInitialState()
+    //         .then((response => {
+    //             this.setState(
+    //                 ...response.body,
+    //             );
+    //         }))
+    // }
 
     openColorPicker() {
         this.setState((prevState) => {
@@ -161,6 +176,15 @@ class Game extends Component {
         }
     }
 
+    gameHistoryCallback(getNext) {
+        debugger;
+        GameApiService.getGameStateHistory(getNext)
+            .then(response => {
+                this.setState({
+                    ...response.body,
+                });
+            })
+    }
 
     // API
     requestMoveCard() {
@@ -189,7 +213,7 @@ class Game extends Component {
                 this.setState({
                     ...response.body,
                     isLoading: false
-                }, this.requsetStateUpdate);
+                }, this.requestStateUpdate);
             })
             .catch(error => {
                 console.error('Error', error);

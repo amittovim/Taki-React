@@ -14,11 +14,6 @@ export const GameState = {
     consoleMessage: '',
 };
 
-export const GameStateHistory = [];
-
-function saveGameState(gameState) {
-    GameStateHistory.push()
-}
 // let validator = {
 //     set: function (obj, prop, value) {
 //         if (!obj.hasOwnProperty(prop)) {

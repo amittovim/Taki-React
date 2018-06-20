@@ -180,10 +180,10 @@ function processGameStep(stateChange) {
         newGameStateInfo = GameUtils.handleInvokedTwoPlusState(newGameStateInfo);
     }
     // if activeState is TWO-PLUS and card was withdrawn from draw-pile we need to decrease two plus counter by 1
-    else if (GameState.actionState === CardActionEnum.TwoPlus &&
-        GameState.selectedCard.id !== GameState.leadingCard.id) {
-        newGameStateInfo = GameUtils.handleExistingTwoPlusState(newGameStateInfo);
-    }
+    // else if (GameState.actionState === CardActionEnum.TwoPlus &&
+    //     GameState.selectedCard.id !== GameState.leadingCard.id) {
+    //     newGameStateInfo = GameUtils.handleExistingTwoPlusState(newGameStateInfo);
+    // }
 
 
     // if CHANGE COLOR card was invoked and the current player is BOT, pick a random color for it

@@ -7,6 +7,7 @@ import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import {PlayerEnum} from "../../app/enums/player.enum";
 import {GameStatusEnum} from "../game-status.enum";
 import {switchPlayers} from "../main";
+import {getPlayerPile} from "../utils/game.utils";
 
 // == Dealing Hands ==
 
@@ -61,10 +62,24 @@ export function getDestinationPileType(sourcePileType) {
 // }
 
 export function handleCardMove() {
-
+    debugger;
+    // in case we are in "GameInit" or "SettingStartingCard" gameStatus our source pile is the drawpile top card
     if (GameState.gameStatus === GameStatusEnum.GameInit || GameState.gameStatus === GameStatusEnum.SettingStartingCard) {
-        GameState.selectedCard = GameState.DrawPile.cards[GameState.DrawPile.cards.length - 1];
+        GameState.selectedCard = GameState.DrawPile.getTop();
     }
+
+    // in case twoPlus action state is enabled and we dont have a two plus card
+    if ( (GameState.actionState === CardActionEnum.TwoPlus) &&
+         (GameState.selectedCard === GameState.DrawPile.getTop() ) ) {
+        let lastMoveCard;
+        for (GameState.twoPlusCounter; GameState.twoPlusCounter > 0; GameState.twoPlusCounter--) {
+            debugger;
+            lastMoveCard = moveCard(PileTypeEnum.DrawPile, getPlayerPile(GameState.currentPlayer).type);
+        }
+        return lastMoveCard;
+    }
+
+    // all other cases
     const sourcePileType = GameState.selectedCard.parentPileType;
     const destinationPileType = getDestinationPileType(sourcePileType);
     GameState.selectedCard.parentPileType = destinationPileType;

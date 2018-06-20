@@ -19,7 +19,6 @@ button.disabled {
     background: rgb(238, 238, 238);
     color: grey;
     border: 2px solid grey;
-    cursor: no-drop;
     pointer-events: none;
 }
 

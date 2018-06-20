@@ -6,11 +6,8 @@ import {GameState} from "./state";
 import {GameStatusEnum} from "./game-status.enum";
 import {PlayerEnum} from "../app/enums/player.enum";
 import {CardActionEnum} from "../app/enums/card-action-enum";
-import {PileTypeEnum} from "../app/enums/pile-type.enum";
 import {handleCardMove} from "./dealer/dealer";
-import * as Utils from "./utils/model.utils";
 import * as GameUtils from "./utils/game.utils";
-import Game from "../app/game/game.component";
 
 
 
@@ -34,13 +31,11 @@ export function initGame() {
 
 export function requestCardMove(cardId) {
     const stateChange = playHumanMove(cardId);
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve({
-                header: GameStatusEnum.GameStateChanged,
-                body: stateChange
-            });
-        }, 1000);
+    return new Promise((resolve) => {
+        resolve({
+            header: GameStatusEnum.GameStateChanged,
+            body: stateChange
+        });
     });
 }
 
@@ -52,7 +47,7 @@ export function requestGameStateUpdate() {
                 header: GameStatusEnum.GameStateChanged,
                 body: GameState
             });
-        }, 500);
+        }, 1000);
 
     });
 }

@@ -3,24 +3,18 @@ import './info-display.component.css';
 
 class InfoDisplay extends Component {
     constructor(props) {
-        super(props)
-        {
-
-        }
+        super(props);
     }
 
     render() {
         return (
             <div className="info-display-component">
-                {this.props.description === " current player"
-                    ? (<span className="value current-player record">{this.props.value}</span>)
-                    : (<span className="value record">{this.props.value}</span>)
-                }
-                <span className="label">{this.props.description}</span>
+                <span className="value">{this.props.value}</span>
+                <span className="key">{this.props.label}</span>
             </div>
         );
     }
 }
 
-export default InfoDisplay ;
+export default InfoDisplay;
 

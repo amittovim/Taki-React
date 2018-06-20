@@ -27,6 +27,10 @@ export function insertToEndOfArray(item, array) {
     array.push(item);
 }
 
+export function deepCopy(obj) {
+    return JSON.parse(JSON.stringify(obj));
+}
+
 export function pullItemFromArray(item, array) {
 
     return array.splice(findIndexOfItemInArray(item, array), 1)[0];

@@ -72,20 +72,17 @@ export function handleDisablingActionState(newGameStateInfo) {
     return newGameStateInfo;
 }
 
-
 export function handleGameStatistics(newGameStateInfo) {
-
+    const currentPlayerPile = getPlayerPile(GameState.currentPlayer);
     // if player has only 1 card left we are updating his singleCardCounter
     if (currentPlayerPile.cards.length === 1) {
         incrementSingleCardCounter(newGameStateInfo);
-
+    }
         // TODO : add more statistics
     return newGameStateInfo;
-
 }
 
-
-export function incrementSingleCardCounter(newGameStateInfo) {
+function incrementSingleCardCounter(newGameStateInfo) {
     const currentPlayerPile = getPlayerPile(GameState.currentPlayer);
     const currentPlayerPileName = getPlayerPile(GameState.currentPlayer).name;
     currentPlayerPile.singleCardCounter++;
@@ -139,15 +136,6 @@ export function handleInvokedStopState(newGameStateInfo) {
     return newGameStateInfo;
 }
 
-export function handleInvokedPlusState(newGameStateInfo) {
-    GameState.actionState= null;
-    newGameStateInfo = {
-        ...newGameStateInfo,
-        actionState: null
-    };
-    return newGameStateInfo;
-}
-
 export function handleInvokedSuperTakiState(newGameStateInfo) {
     GameState.leadingCard.color = GameState.DiscardPile.getSecondCardFromTop().color;
     GameState.actionState = CardActionEnum.Taki;
@@ -167,18 +155,9 @@ export function handleInvokedTakiState(newGameStateInfo) {
     if ( !doesPileHaveSameColorCards(currentPlayerPile) ) {
         GameState.actionState = null;
     }
-
-
-
-
-
-    if (shouldSwitchPlayer) {
-        GameState.actionState = null;
-    }
     newGameStateInfo = {
         ...newGameStateInfo,
         actionState: GameState.actionState,
-        shouldSwitchPlayer : shouldSwitchPlayer
     };
     return newGameStateInfo;
 

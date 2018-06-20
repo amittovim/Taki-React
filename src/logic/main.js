@@ -9,6 +9,7 @@ import {CardActionEnum} from "../app/enums/card-action-enum";
 import {handleCardMove} from "./dealer/dealer";
 import * as GameUtils from "./utils/game.utils";
 import {getPlayerPile} from "./utils/game.utils";
+import {deepCopy} from "./utils/model.utils";
 
 
 
@@ -21,10 +22,11 @@ export function initGame() {
     initDiscardPile();
     dealer.dealCards();
     // saveGameState();
+    GameState.gameStatus = GameStatusEnum.GameStateChanged;
     if (GameState.currentPlayer === PlayerEnum.Bot) {
         pickNextBotMove();
     }
-    GameState.gameStatus = GameStatusEnum.GameStateChanged;
+
     return GameState;
 }
 
@@ -153,6 +155,9 @@ export function switchPlayers() {
 
 //this function should run after every card movement we make
 function processGameStep(stateChange) {
+    let leadingCard = GameState.leadingCard;
+    let selectedCard = GameState.selectedCard;
+    let actionState = GameState.actionState;
     let currentPlayerType = GameState.currentPlayer;
     let newGameStateInfo = {};
 
@@ -166,40 +171,39 @@ function processGameStep(stateChange) {
 
 
     // check occasions when we need to activate game activeState (if we PUT an action card on discard-pile)
-    if ( ( GameState.leadingCard.action !== null) &&
-         ( GameState.leadingCard === GameState.selectedCard) ) {
+    if ( ( leadingCard.action !== null) &&
+         ( leadingCard === selectedCard) ) {
         newGameStateInfo = GameUtils.handleActivatingActionState(newGameStateInfo);
     }
     // if TWOPLUS card was invoked in the current play-move, increment twoPlusCounter by 2
-    if (GameState.actionState === CardActionEnum.TwoPlus &&
-       ( GameState.leadingCard === GameState.selectedCard) &&  // means that player PUT card on discardPile
-                                                               // and didn't GET card from Drawpile
-        GameState.selectedCard.action === CardActionEnum.TwoPlus) {
+    if (actionState === CardActionEnum.TwoPlus &&
+        leadingCard === selectedCard &&                  // means that player PUT card on discardPile
+        selectedCard.action === CardActionEnum.TwoPlus){   // and didn't GET card from Drawpile
         newGameStateInfo = GameUtils.handleInvokedTwoPlusState(newGameStateInfo);
     }
     // if activeState is TWO-PLUS and card was withdrawn from draw-pile we need to decrease two plus counter by 1
-    else if (GameState.actionState === CardActionEnum.TwoPlus &&
-        GameState.selectedCard.id !== GameState.leadingCard.id) {
+    else if (actionState === CardActionEnum.TwoPlus &&
+        selectedCard.id !== leadingCard.id) {
         newGameStateInfo = GameUtils.handleExistingTwoPlusState(newGameStateInfo);
     }
 
 
     // if CHANGE COLOR card was invoked and the current player is BOT, pick a random color for it
-    else if (GameState.actionState === CardActionEnum.ChangeColor && currentPlayerType === PlayerEnum.Bot) {
+    else if (actionState === CardActionEnum.ChangeColor && currentPlayerType === PlayerEnum.Bot) {
         newGameStateInfo = GameUtils.handleInvokedCCStateByBot(newGameStateInfo);
     }
 
     // if STOP card was invoked switch player twice or none at all and increment turnCounter by 1
-    else if ((leadingCard.action === CardActionEnum.Stop) && (GameState.actionState === CardActionEnum.Stop)) {
+    else if ((leadingCard.action === CardActionEnum.Stop) && (actionState === CardActionEnum.Stop)) {
         newGameStateInfo = GameUtils.handleInvokedStopState(newGameStateInfo);
     }
     // if SuperTaki was invoked change its color to the same color
     // of the card before it and invoke Taki .
-    else if (GameState.actionState === CardActionEnum.SuperTaki) {
+    else if (actionState === CardActionEnum.SuperTaki) {
         newGameStateInfo = GameUtils.handleInvokedSuperTakiState(newGameStateInfo);
     }
     // Taki card was invoked
-    if (GameState.actionState === CardActionEnum.Taki) {
+    if (actionState === CardActionEnum.Taki) {
         newGameStateInfo = GameUtils.handleInvokedTakiState(newGameStateInfo);
     }
 
@@ -207,7 +211,7 @@ function processGameStep(stateChange) {
 
     newGameStateInfo = GameUtils.handleDisablingActionState(newGameStateInfo);
 
-    console.log({...GameState});
+    console.log(deepCopy(GameState));
     return {
         ...stateChange,
         ...newGameStateInfo,

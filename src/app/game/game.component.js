@@ -21,7 +21,7 @@ class Game extends Component {
                         turnNumber={this.state.turnNumber}
                         isGameOver={this.isGameOver}
                         abortGameCallback={this.handleOpenModal}
-                        gameHistoryCallback={this.gameHistoryCallback}
+                        gameHistoryCallback={this.handleGetGameHistory}
                 />
                 <Loader isLoading={this.state.isLoading} />
                 <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen} />
@@ -73,7 +73,7 @@ class Game extends Component {
         this.handleIllegalMove = this.handleIllegalMove.bind(this);
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
-        this.gameHistoryCallback = this.gameHistoryCallback.bind(this);
+        this.handleGetGameHistory = this.handleGetGameHistory.bind(this);
     }
 
 
@@ -176,7 +176,7 @@ class Game extends Component {
         }
     }
 
-    gameHistoryCallback(getNext) {
+    handleGetGameHistory(getNext) {
         debugger;
         GameApiService.getGameStateHistory(getNext)
             .then(response => {

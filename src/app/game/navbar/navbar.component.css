@@ -53,3 +53,7 @@
 .game-over {
     color: yellow;
 }
+
+.nav-buttons {
+    display: flex;
+}

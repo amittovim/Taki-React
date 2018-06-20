@@ -13,6 +13,8 @@ import {ModalTypeEnum} from "../modal/modal-type.enum";
 // abortGameCallback: Function
 // gameHistoryCallback: Function
 // restartGameCallback: Function
+// openModalCallback: Function
+// emitAverageTime: Function
 
 class Navbar extends Component {
     constructor(props) {
@@ -21,6 +23,7 @@ class Navbar extends Component {
         this.getPreviousMove = this.getPreviousMove.bind(this);
         this.getNextMove = this.getNextMove.bind(this);
         this.handleRestartGame = this.handleRestartGame.bind(this);
+        this.handleShowStats = this.handleShowStats.bind(this);
     }
 
     render() {
@@ -43,11 +46,11 @@ class Navbar extends Component {
 
                 <Timer label="Game Timer"
                        isGameClock={true}
-                       isGameOver={!this.props.isGameOver}
                 />
 
                 <Timer label="Turn Timer"
-                       turnNumber={this.props.turnNumber} />
+                       turnNumber={this.props.turnNumber}
+                       emitAverageTime={this.props.emitAverageTime} />
 
                 {this.props.isGameOver
                     ? (<div>
@@ -64,17 +67,24 @@ class Navbar extends Component {
                             </div>
                         </div>
                     </div>)
-                    : (
-                        <Button label="Abort Game"
+                    : (<div className="nav-buttons">
+                        <Button label="Abort"
                                 onClick={this.handleAbortGame} />
-                    )
+
+                        <Button label="Stats"
+                                onClick={this.handleShowStats} />
+                    </div>)
                 }
             </div>
         )
     }
 
     handleAbortGame() {
-        this.props.abortGameCallback(ModalTypeEnum.AbortGame);
+        this.props.openModalCallback(ModalTypeEnum.AbortGame);
+    }
+
+    handleShowStats() {
+        this.props.openModalCallback(ModalTypeEnum.Statistics);
     }
 
     getPreviousMove() {

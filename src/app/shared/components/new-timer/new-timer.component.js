@@ -7,6 +7,7 @@ import './new-timer.component.css';
 // turnNumber: number
 // label: string
 // isGameOver: boolean
+// emitAverageTime: Function
 
 class Timer extends Component {
 
@@ -27,7 +28,11 @@ class Timer extends Component {
         this.state = {
             intervalId: 0,
             minutes: 0,
-            seconds: 0
+            seconds: 0,
+            totalMinutes: 0,
+            totalSeconds: 0,
+            averageMinutes: 0,
+            averageSeconds: 0,
         };
 
         this.startClock = this.startClock.bind(this);
@@ -68,17 +73,24 @@ class Timer extends Component {
 
     moveTime() {
         this.setState((prevState) => {
+            const newSeconds = prevState.seconds + 1;
             return {
-                seconds: prevState.seconds + 1
+                seconds: newSeconds,
+                totalSeconds: prevState + newSeconds
             };
         });
         if (this.state.seconds > 60) {
             this.setState((prevState) => {
+                const newMinutes = prevState.minutes + 1;
                 return {
                     minutes: prevState.minutes + 1,
-                    seconds: 0
+                    seconds: 0,
+                    totalMinutes: prevState.minutes + newMinutes,
                 }
             });
+        }
+        if (!this.props.isGameClock && this.is) {
+            this.updateAverageMoveTime();
         }
     }
 
@@ -92,12 +104,19 @@ class Timer extends Component {
         return display;
     }
 
-    // updateAverageMoveTime() {
-    //     GameState.stats.totalMoveTime.minutes += GameState.turnTime.minutes.value;
-    //     GameState.stats.totalMoveTime.seconds += GameState.turnTime.seconds.value;
-    //     GameState.stats.averageMoveTime.minutes = GameState.stats.totalMoveTime.minutes / GameState.turnNumber;
-    //     GameState.stats.averageMoveTime.seconds = GameState.stats.totalMoveTime.seconds / GameState.turnNumber;
-    // }
+    updateAverageMoveTime() {
+        this.setState((prevState) => {
+            return {
+                averageMinutes: prevState.totalMinutes / this.props.turnNumber,
+                averageSeconds: prevState.totalSeconds / this.props.turnNumber,
+            }
+        });
+        const result = {
+            minutes: this.state.averageMinutes,
+            seconds: this.state.averageSeconds
+        };
+        this.props.emitAverageTime(result);
+    }
 }
 
 export default Timer;

@@ -36,6 +36,20 @@
     color: yellow;
 }
 
-.gameStepsCarousel {
+.game-step-carousel {
     display: flex;
+    flex-direction: column;
+}
+
+.carousel-title {
+    margin-bottom: 10px;
+}
+
+.carousel-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.game-over {
+    color: yellow;
 }

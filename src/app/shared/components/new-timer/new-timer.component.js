@@ -6,6 +6,7 @@ import './new-timer.component.css';
 // isGameClock: boolean
 // turnNumber: number
 // label: string
+// isGameOver: boolean
 
 class Timer extends Component {
 
@@ -43,6 +44,9 @@ class Timer extends Component {
     componentWillReceiveProps() {
         if (!this.props.isGameClock) {
             this.startClock();
+        }
+        if (this.props.isGameOver) {
+            this.resetClock();
         }
     }
 

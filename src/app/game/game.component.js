@@ -19,11 +19,12 @@ class Game extends Component {
             <div className="game-component">
                 <Navbar currentPlayer={this.state.currentPlayer}
                         turnNumber={this.state.turnNumber}
-                        isGameOver={this.isGameOver}
+                        isGameOver={this.state.isGameOver}
                         abortGameCallback={this.handleOpenModal}
-                        gameHistoryCallback={this.handleGetGameHistory} />
+                        gameHistoryCallback={this.handleGetGameHistory}
+                        restartGameCallback={this.startGame} />
                 <Loader isLoading={this.state.isLoading} />
-                <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen} />
+                <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen || this.state.isGameOver} />
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
                        callback={this.state.modal.callback}
@@ -70,20 +71,16 @@ class Game extends Component {
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.handleGetGameHistory = this.handleGetGameHistory.bind(this);
+        this.startGame = this.startGame.bind(this);
     }
 
     componentWillMount() {
-        this.setState(GameApiService.getInitialState());
+        this.startGame();
     }
 
-    // componentWillMount() {
-    //     GameApiService.getInitialState()
-    //         .then((response => {
-    //             this.setState(
-    //                 ...response.body,
-    //             );
-    //         }))
-    // }
+    startGame() {
+        this.setState(GameApiService.getInitialState());
+    }
 
     openColorPicker() {
         this.setState((prevState) => {

@@ -13,6 +13,7 @@ import {getPlayerPile} from "./utils/game.utils";
 
 ///// Inner
 export function initGame() {
+    clearGameState();
     GameState.gameStatus = GameStatusEnum.GameInit;
     initPlayers();
     initDrawPile();
@@ -26,6 +27,11 @@ export function initGame() {
     GameState.gameStatus = GameStatusEnum.GameStateChanged;
 }
 
+export function clearGameState() {
+    for (let key in GameState) {
+        GameState[key] = null;
+    }
+}
 
 // Bot Player algorithm to choose next move
 export function pickNextBotMove() {

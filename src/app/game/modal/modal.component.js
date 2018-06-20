@@ -2,10 +2,12 @@ import React, {Component} from 'react';
 import ColorPickerModal from "./color-picker/color-picker.component";
 import {ModalTypeEnum} from "./modal-type.enum";
 import ModalFrame from "../../shared/components/modal/modal.component";
+import AbortGameModal from "./abort-game/abort-game.component";
 
 // isOpen: boolean
 // type: ModalTypeEnum
 // callback: Function
+// closeModal: Function
 
 class Modal extends Component {
     constructor(props) {
@@ -37,7 +39,7 @@ class Modal extends Component {
         switch (this.props.type) {
             case ModalTypeEnum.Welcome: {
                 title = 'Welcome to the TAKI game!';
-                subtitle = 'Let\'s start playin!';
+                subtitle = 'Let\'s start playing!';
                 break;
             }
             case ModalTypeEnum.ColorPicker: {
@@ -61,6 +63,10 @@ class Modal extends Component {
             }
             case ModalTypeEnum.ColorPicker: {
                 return (<ColorPickerModal onColorSelect={this.props.callback} />);
+            }
+            case ModalTypeEnum.AbortGame: {
+                return (<AbortGameModal onSubmit={this.props.callback}
+                                        onCancel={this.props.closeModal} />);
             }
             default: {
                 break;

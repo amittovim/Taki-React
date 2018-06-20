@@ -4,6 +4,7 @@ import TakiLogo from '../../../assets/images/logo.png';
 import InfoDisplay from '../../../app/shared/components/info-display/info-display.component';
 import Timer from "../../shared/components/new-timer/new-timer.component";
 import Button from "../../shared/components/button/button.component";
+import {ModalTypeEnum} from "../modal/modal-type.enum";
 
 //<PROPS>
 // currentPlayer: PlayerEnum
@@ -13,7 +14,7 @@ import Button from "../../shared/components/button/button.component";
 class Navbar extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.handleAbortGame = this.handleAbortGame.bind(this);
     }
 
     render() {
@@ -51,14 +52,17 @@ class Navbar extends Component {
                             onClick={this.handleAbortGame} />
 
                 </div>
-
             </div>
         )
     }
 
     handleAbortGame() {
-        this.props.abortGameCallback();
+        this.props.abortGameCallback(ModalTypeEnum.AbortGame);
     }
 }
 
 export default Navbar;
+
+
+
+

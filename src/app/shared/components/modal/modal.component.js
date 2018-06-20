@@ -13,8 +13,6 @@ class ModalFrame extends Component {
                 (
                     <div className="modal-component">
                         <div className="modal">
-                            <h1>{this.props.title}</h1>
-                            <h2>{this.props.subtitle}</h2>
                             <div>
                                 {this.props.children}
                             </div>

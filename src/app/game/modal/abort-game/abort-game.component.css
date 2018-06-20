@@ -1,0 +1,4 @@
+.abort-game-modal-component .buttons-area {
+    display: flex;
+    justify-content: center;
+}

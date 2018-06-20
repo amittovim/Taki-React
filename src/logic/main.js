@@ -9,10 +9,10 @@ import initDrawPile from "./init/draw-pile.init";
 import initDiscardPile from "./init/discard-pile.init";
 import initPlayers from "./init/players.init";
 import {saveGameState} from "./history/state-history";
+import {getPlayerPile} from "./utils/game.utils";
 
 ///// Inner
 export function initGame() {
-    debugger;
     GameState.gameStatus = GameStatusEnum.GameInit;
     initPlayers();
     initDrawPile();
@@ -101,16 +101,24 @@ export function playHumanMove(cardId) {
 function playGameMove(cardId) {
     GameState.selectedCard = getCardById(cardId);
 
-    // moving the card
+    // Moving the card
     let stateChange = handleCardMove();
 
-    // side effects
+    // Side effects
     stateChange = processGameStep(stateChange);
 
-    // save current state
+    // Checking if game ended
+    GameState.isGameOver = isGameOver();
+
+    // Save current state in history
     saveGameState();
 
     return stateChange;
+}
+
+function isGameOver() {
+    const currentPlayersPile = getPlayerPile(GameState.currentPlayer);
+    return currentPlayersPile.cards.length === 0;
 }
 
 function getCardById(cardId) {
@@ -191,7 +199,6 @@ function processGameStep(stateChange) {
 
     newGameStateInfo = handleSwitchPlayers(newGameStateInfo);
 
-    console.log(GameState);
     return {
         ...stateChange,
         ...newGameStateInfo,

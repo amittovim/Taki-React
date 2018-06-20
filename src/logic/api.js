@@ -27,7 +27,6 @@ export function requestCardMove(cardId) {
 }
 
 export function requestGameStateUpdate() {
-    debugger;
     pickNextBotMove();
     return new Promise((resolve) => {
         setTimeout(() => {

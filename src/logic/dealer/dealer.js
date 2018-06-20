@@ -7,6 +7,7 @@ import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import {PlayerEnum} from "../../app/enums/player.enum";
 import {GameStatusEnum} from "../game-status.enum";
 import {switchPlayers} from "../main";
+import {GameStateHistory} from "../history/state-history";
 
 // == Dealing Hands ==
 
@@ -83,7 +84,7 @@ export function moveCard(sourcePileType, destinationPileType) {
     utils.pullItemFromArray(GameState.selectedCard, GameState[sourcePileType].cards);
     utils.insertToEndOfArray(GameState.selectedCard, GameState[destinationPileType].cards);
 
-    if ( GameState.gameStatus === GameStatusEnum.GameStateChanged ) {
+    if (GameState.gameStatus === GameStatusEnum.GameStateChanged) {
         GameUtils.incrementGameMovesCounter();
     }
     GameState.consoleMessage = `${GameState.selectedCard.display} was moved from ${sourcePileType} to ${destinationPileType}`;

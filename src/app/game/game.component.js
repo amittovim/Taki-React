@@ -21,22 +21,18 @@ class Game extends Component {
                         turnNumber={this.state.turnNumber}
                         isGameOver={this.isGameOver}
                         abortGameCallback={this.handleOpenModal}
-                        gameHistoryCallback={this.handleGetGameHistory}
-                />
+                        gameHistoryCallback={this.handleGetGameHistory} />
                 <Loader isLoading={this.state.isLoading} />
                 <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen} />
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
                        callback={this.state.modal.callback}
-                       closeModal={this.handleCloseModal}
-                />
-
+                       closeModal={this.handleCloseModal} />
                 <Board drawPile={this.state.DrawPile}
                        discardPile={this.state.DiscardPile}
                        humanPile={this.state.HumanPile}
                        botPile={this.state.BotPile}
-                       moveCardDriver={this.updateSelectedCard}
-                />
+                       moveCardDriver={this.updateSelectedCard} />
                 <Console message={this.state.consoleMessage} />
             </div>
         );
@@ -76,9 +72,7 @@ class Game extends Component {
         this.handleGetGameHistory = this.handleGetGameHistory.bind(this);
     }
 
-
     componentWillMount() {
-        debugger;
         this.setState(GameApiService.getInitialState());
     }
 
@@ -102,7 +96,6 @@ class Game extends Component {
             };
         });
     }
-
 
     handleIllegalMove() {
         this.setState({
@@ -176,19 +169,10 @@ class Game extends Component {
         }
     }
 
-    handleGetGameHistory(getNext) {
-        debugger;
-        GameApiService.getGameStateHistory(getNext)
-            .then(response => {
-                this.setState({
-                    ...response.body,
-                });
-            })
-    }
 
     // API
+
     requestMoveCard() {
-        debugger;
         GameApiService.requestMoveCard(this.state.selectedCard.id)
             .then(response => {
                 if (GameStatusEnum.GameStateChanged) {
@@ -213,11 +197,20 @@ class Game extends Component {
                 this.setState({
                     ...response.body,
                     isLoading: false
-                }, this.requestStateUpdate);
+                }, this.processStateChanges);
             })
             .catch(error => {
                 console.error('Error', error);
             });
+    }
+
+    handleGetGameHistory(getNext) {
+        GameApiService.getGameStateHistory(getNext)
+            .then(response => {
+                this.setState({
+                    ...response.body,
+                });
+            })
     }
 }
 

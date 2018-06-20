@@ -27,11 +27,8 @@ export function insertToEndOfArray(item, array) {
     array.push(item);
 }
 
-export function insertImmutableToEndOfArray(item, array) {
-    const newState = {
-        ...item
-    };
-    array.push(newState);
+export function deepCopy(obj) {
+    return JSON.parse(JSON.stringify(obj));
 }
 
 export function pullItemFromArray(item, array) {

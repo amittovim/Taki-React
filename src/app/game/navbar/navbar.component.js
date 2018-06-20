@@ -17,7 +17,8 @@ class Navbar extends Component {
     constructor(props) {
         super(props);
         this.handleAbortGame = this.handleAbortGame.bind(this);
-        this.handleGameHistory = this.handleGameHistory.bind(this);
+        this.getPreviousMove = this.getPreviousMove.bind(this);
+        this.getNextMove = this.getNextMove.bind(this);
     }
 
     render() {
@@ -47,12 +48,12 @@ class Navbar extends Component {
                 <div className="gameStepsCarousel">
 
                     <Button label="<="
-                            isDisabled={false}
-                            onClick={this.handleGameHistory(false)} />
+                            isDisabled={!this.props.isGameOver}
+                            onClick={this.getPreviousMove} />
 
                     <Button label="=>"
-                            isDisabled={false}
-                            onClick={this.handleGameHistory(true)} />
+                            isDisabled={!this.props.isGameOver}
+                            onClick={this.getNextMove} />
 
                 </div>
             </div>
@@ -63,8 +64,12 @@ class Navbar extends Component {
         this.props.abortGameCallback(ModalTypeEnum.AbortGame);
     }
 
-    handleGameHistory(getNext) {
-        this.props.gameHistoryCallback(getNext);
+    getPreviousMove() {
+        this.props.gameHistoryCallback(false);
+    }
+
+    getNextMove() {
+        this.props.gameHistoryCallback(true);
     }
 }
 

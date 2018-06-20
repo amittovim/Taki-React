@@ -1,7 +1,7 @@
 import {GameState} from "../state";
-import {insertImmutableToEndOfArray} from "../utils/model.utils";
+import {deepCopy} from "../utils/model.utils";
 
-let GameStateHistory = [];
+export let GameStateHistory = [];
 let currentStateIdx = 0;
 
 export function getPrevGameState() {
@@ -21,5 +21,5 @@ export function getNextGameState() {
 }
 
 export function saveGameState() {
-    insertImmutableToEndOfArray(GameState, GameStateHistory);
+    GameStateHistory.push(deepCopy(GameState));
 }

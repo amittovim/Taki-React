@@ -3,6 +3,7 @@ import ColorPickerModal from "./color-picker/color-picker.component";
 import {ModalTypeEnum} from "./modal-type.enum";
 import ModalFrame from "../../shared/components/modal/modal.component";
 import AbortGameModal from "./abort-game/abort-game.component";
+import StatisticsModal from "./statistics/statistics.component";
 
 // isOpen: boolean
 // type: ModalTypeEnum
@@ -68,7 +69,11 @@ class Modal extends Component {
                 return (<AbortGameModal onSubmit={this.props.callback}
                                         onCancel={this.props.closeModal} />);
             }
-            default: {
+            case ModalTypeEnum.Statistics: {
+                return (<StatisticsModal {...this.props.data}
+                                         onCancel={this.props.closeModal} />);
+            }
+            case ModalTypeEnum.default: {
                 break;
             }
         }

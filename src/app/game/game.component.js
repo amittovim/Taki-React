@@ -12,6 +12,7 @@ import Navbar from "./navbar/navbar.component";
 import Loader from "../shared/components/loader/loader.component";
 import Console from "./console/console.component";
 import Overlay from "../shared/components/overlay/overlay.component";
+import {getPlayerPile} from "../../logic/utils/game.utils";
 
 class Game extends Component {
     render() {
@@ -19,13 +20,15 @@ class Game extends Component {
             <div className="game-component">
                 <Navbar currentPlayer={this.state.currentPlayer}
                         turnNumber={this.state.turnNumber}
-                        abortGameCallback={this.handleOpenModal}
+                        openModalCallback={this.handleOpenModal}
+                        emitAverageTime={this.updateAverageTime}
                 />
                 <Loader isLoading={this.state.isLoading} />
                 <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen} />
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
                        callback={this.state.modal.callback}
+                       data={this.getStats()}
                        closeModal={this.handleCloseModal}
                 />
 
@@ -60,7 +63,11 @@ class Game extends Component {
                 type: null,
                 callback: null
             },
-            isLoading: false
+            isLoading: false,
+            averageMoveTime: {
+                minutes: 0,
+                seconds: 0
+            }
         };
         this.updateSelectedCard = this.updateSelectedCard.bind(this);
         this.handlePlayMove = this.handlePlayMove.bind(this);
@@ -70,6 +77,7 @@ class Game extends Component {
         this.handleIllegalMove = this.handleIllegalMove.bind(this);
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.updateAverageTime = this.updateAverageTime.bind(this);
     }
 
     componentWillMount() {
@@ -88,6 +96,28 @@ class Game extends Component {
         });
     }
 
+    // Stats:
+
+    getStats() {
+        const data = {
+            turnNumber: this.state.turnNumber,
+            averageMinutes: this.state.averageMoveTime.minutes,
+            averageSeconds: this.state.averageMoveTime.seconds,
+            singleCardCounter: getPlayerPile(this.state.currentPlayer).singleCardCounter // TODO,
+        };
+        console.log(data);
+        return data;
+    }
+
+    updateAverageTime(averageMoveTime) {
+        debugger;
+        this.setState({
+            averageMoveTime: {
+                minutes: averageMoveTime.minutes,
+                seconds: averageMoveTime.seconds
+            }
+        })
+    }
 
     handleIllegalMove() {
         this.setState({
@@ -157,6 +187,9 @@ class Game extends Component {
         switch (modalType) {
             case ModalTypeEnum.AbortGame: {
                 return this.exitToTakiWiki;
+            }
+            default: {
+                return null;
             }
         }
     }

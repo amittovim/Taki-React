@@ -31,6 +31,7 @@ export function initGame() {
 export function requestCardMove(cardId) {
     debugger;
     const stateChange = playHumanMove(cardId);
+
     return new Promise((resolve) => {
         resolve({
             header: GameStatusEnum.GameStateChanged,

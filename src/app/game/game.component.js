@@ -95,8 +95,6 @@ class Game extends Component {
         this.handleCloseModal();
         this.setState(GameApiService.getInitialState(), () => {
             if (this.state.currentPlayer === PlayerEnum.Bot) {
-                debugger;
-                console.log('this.state.turnNumber = ', this.state.turnNumber);
                 this.requestStateUpdate();
             }
         });

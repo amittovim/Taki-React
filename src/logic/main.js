@@ -171,12 +171,6 @@ function processGameStep(stateChange) {
         GameState.selectedCard.action === CardActionEnum.TwoPlus) {   // and didn't GET card from Drawpile
         newGameStateInfo = GameUtils.handleInvokedTwoPlusState(newGameStateInfo);
     }
-    // if activeState is TWO-PLUS and card was withdrawn from draw-pile we need to decrease two plus counter by 1
-    // else if (GameState.actionState === CardActionEnum.TwoPlus &&
-    //     GameState.selectedCard.id !== GameState.leadingCard.id) {
-    //     newGameStateInfo = GameUtils.handleExistingTwoPlusState(newGameStateInfo);
-    // }
-
 
     // if CHANGE COLOR card was invoked and the current player is BOT, pick a random color for it
     else if (GameState.actionState === CardActionEnum.ChangeColor && currentPlayerType === PlayerEnum.Bot) {
@@ -201,7 +195,6 @@ function processGameStep(stateChange) {
 
     newGameStateInfo = GameUtils.handleDisablingActionState(newGameStateInfo);
 
-    console.log(deepCopy(GameState));
     return {
         ...stateChange,
         ...newGameStateInfo,
@@ -228,11 +221,6 @@ function handleSwitchPlayers() {
         switchPlayers();
         GameUtils.incrementGameTurnNumber();
     }
-}
-
-function shouldSwitchPlayers() {
-    // TODO: Amit move all the switch player code that is inside the handleInvoked to here
-    return true;
 }
 
 export function isPutCardMoveLegal(card, actionState, leadingCard) {

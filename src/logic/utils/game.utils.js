@@ -62,7 +62,7 @@ export function handleDisablingActionState(newGameStateInfo) {
     if ((GameState.actionState === CardActionEnum.Plus) ||
         (GameState.actionState === CardActionEnum.Stop) ||
         (GameState.actionState === CardActionEnum.ChangeColor) ||
-        (GameState.twoPlusCounter === 0)) {
+        (GameState.actionState === CardActionEnum.TwoPlus && GameState.twoPlusCounter === 0)) {
         GameState.actionState = null;
     }
     newGameStateInfo = {

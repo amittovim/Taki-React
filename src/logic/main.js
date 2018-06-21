@@ -23,7 +23,7 @@ export function initGame() {
     dealer.dealCards();
     // saveGameState();
     GameState.gameStatus = GameStatusEnum.GameStateChanged;
-    if (GameState.currentPlayer === PlayerEnum.Bot) {
+    if (GameState.currentPlayer === PlayerEnum.Bot) {       //TODO: add a while loop here so playercan pla as long as he's current player
         pickNextBotMove();
     }
 
@@ -106,6 +106,11 @@ function pickNextBotMove() {
         else if (matchedCard = GameUtils.getCardInHand(botPile, [{action: CardActionEnum.Taki}, {color: leadingCard.color}])) {
             selectedCard = matchedCard;
         }
+        // 4.7.1 if bot has a card with the same action as the leading card - mark it as the selectedCard.
+        else if (matchedCard = GameUtils.getCardInHand(botPile, [{action: leadingCard.action}])) {
+            selectedCard = matchedCard;
+        }
+
         // 4.8 if you have a card with the same color as the leading card - mark it as the selectedCard.
         else if (matchedCard = GameUtils.getCardInHand(botPile, [{color: leadingCard.color}])) {
             selectedCard = matchedCard;
@@ -120,6 +125,7 @@ function pickNextBotMove() {
             selectedCard = GameState.DrawPile.getTop();
         }
     }
+    debugger;
     playGameMove(selectedCard.id);
 }
 
@@ -218,13 +224,14 @@ function processGameStep(stateChange) {
     };
 }
 
+
 function handleSwitchPlayers() {
     let shouldSwitchPlayers = true;
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
 
     // we check all cases when we shouldn't switch player
     if (((GameState.actionState === CardActionEnum.Taki || GameState.actionState === CardActionEnum.SuperTaki)
-        && (!GameUtils.doesPileHaveSameColorCards(currentPlayerPile)))
+        && ( GameUtils.doesPileHaveSameColorCards(currentPlayerPile)))
 
         || (GameState.actionState === GameState.leadingCard.action === CardActionEnum.Plus)
 

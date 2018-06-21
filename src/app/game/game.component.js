@@ -70,6 +70,7 @@ class Game extends Component {
         this.handleIllegalMove = this.handleIllegalMove.bind(this);
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.requestAdditionalStateUpdate = this.requestAdditionalStateUpdate.bind(this);
     }
 
     componentWillMount() {
@@ -103,9 +104,11 @@ class Game extends Component {
 
     handlePlayMove() {
         const isMoveLegal = GameService.isHumanMoveLegal(this.state.selectedCard, this.state.DrawPile, this.state.actionState, this.state.leadingCard, this.state.HumanPile);
+        debugger;
         if (!isMoveLegal) {
             return this.handleIllegalMove();
-        } else if (this.state.selectedCard.action === CardActionEnum.ChangeColor) {
+        } else if ( this.state.selectedCard.action === CardActionEnum.ChangeColor &&
+                    this.state[this.state.selectedCard.parentPileType].isHand === true ) {
             this.openColorPicker();
         } else {
             this.requestMoveCard();
@@ -172,27 +175,39 @@ class Game extends Component {
                     }, this.processStateChanges);
                 }
             })
+        debugger;
     }
 
     processStateChanges() {
+        debugger;
         if (this.state.currentPlayer !== PlayerEnum.Human) {
             this.setState({
                 isLoading: true
             }, this.requestStateUpdate);
         }
+        debugger;
+    }
+
+
+    requestAdditionalStateUpdate() {
+    if (this.state.currentPlayer === PlayerEnum.Bot) {
+        this.requestStateUpdate();
+     }
     }
 
     requestStateUpdate() {
+        debugger;
         GameApiService.requestGameStateUpdate()
             .then(response => {
                 this.setState({
                     ...response.body,
                     isLoading: false
-                }, this.requsetStateUpdate);
+                }, this.requestAdditionalStateUpdate);
             })
             .catch(error => {
                 console.error('Error', error);
             });
+        debugger;
     }
 }
 

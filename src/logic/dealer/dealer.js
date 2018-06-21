@@ -56,10 +56,11 @@ export function getDestinationPileType(sourcePileType) {
     }
 }
 
-// export function isCardHidden(sourcePile, destinationPile) {
-//     return ((sourcePile.type === PileTypeEnum.DrawPile && destinationPile.type === PileTypeEnum.BotPile)
-//         || sourcePile.type === PileTypeEnum.DiscardPile);
-// }
+export function isCardHidden(sourcePile, destinationPile) {
+    return false;
+    // return ((sourcePile.type === PileTypeEnum.DrawPile && destinationPile.type === PileTypeEnum.BotPile)
+    //     || sourcePile.type === PileTypeEnum.DiscardPile);
+}
 
 export function handleCardMove() {
     debugger;
@@ -68,14 +69,19 @@ export function handleCardMove() {
         GameState.selectedCard = GameState.DrawPile.getTop();
     }
 
-    // in case twoPlus action state is enabled and we dont have a two plus card
+    // in case twoPlus action state is enabled and we don't have a two plus card
     if ( (GameState.actionState === CardActionEnum.TwoPlus) &&
          (GameState.selectedCard === GameState.DrawPile.getTop() ) ) {
         let lastMoveCard;
         for (GameState.twoPlusCounter; GameState.twoPlusCounter > 0; GameState.twoPlusCounter--) {
             debugger;
+            GameState.selectedCard.parentPileType = getPlayerPile(GameState.currentPlayer).type;
+            GameState.selectedCard.isHidden =
+                isCardHidden(PileTypeEnum.DrawPile, getPlayerPile(GameState.currentPlayer).type);
             lastMoveCard = moveCard(PileTypeEnum.DrawPile, getPlayerPile(GameState.currentPlayer).type);
+            GameState.selectedCard = GameState.DrawPile.getTop();
         }
+        GameState.selectedCard === null;
         return lastMoveCard;
     }
 
@@ -83,7 +89,7 @@ export function handleCardMove() {
     const sourcePileType = GameState.selectedCard.parentPileType;
     const destinationPileType = getDestinationPileType(sourcePileType);
     GameState.selectedCard.parentPileType = destinationPileType;
-    GameState.selectedCard.isHidden = false;
+    GameState.selectedCard.isHidden = isCardHidden(sourcePileType ,destinationPileType );
     updateLeadingCard(destinationPileType);
     return moveCard(sourcePileType, destinationPileType);
 }

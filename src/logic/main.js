@@ -22,7 +22,7 @@ export function initGame() {
     dealer.dealCards();
     saveGameState();
     GameState.gameStatus = GameStatusEnum.GameStateChanged;
-
+    debugger;
     return GameState;
 }
 
@@ -120,18 +120,16 @@ function playGameMove(cardId) {
         stateChange = processGameStep(stateChange);
     }
 
-    // Checking if game ended
-    GameState.isGameOver = isGameOver();
-
-    // Save current state in history
-    saveGameState();
 
     return stateChange;
 }
 
 function isGameOver() {
     const currentPlayersPile = getPlayerPile(GameState.currentPlayer);
-    return currentPlayersPile.cards.length === 0;
+    if ((GameState.actionState === null) ||
+       (GameState.actionState === CardActionEnum.Stop))  {
+        return currentPlayersPile.cards.length === 0;
+    }
 }
 
 function getCardById(cardId) {
@@ -143,7 +141,8 @@ function getCardById(cardId) {
 }
 
 export function switchPlayers() {
-    GameState.currentPlayer = GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot;
+    debugger;
+    GameState.currentPlayer = (GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot);
 }
 
 //this function should run after every card movement we make
@@ -197,11 +196,22 @@ function processGameStep(stateChange) {
         newGameStateInfo = GameUtils.handleInvokedTakiState(newGameStateInfo);
     }
 
-    handleSwitchPlayers(newGameStateInfo);
+    debugger;
+    const shouldSwitchPlayer = handleShouldSwitchPlayers();
 
     newGameStateInfo = GameUtils.handleDisablingActionState(newGameStateInfo);
 
+    // TODO : delete this line
     console.log(deepCopy(GameState));
+
+    // Checking if game ended
+    GameState.isGameOver = isGameOver();
+
+    // Save current state in history
+    saveGameState();
+
+    handleSwitchPlayer(shouldSwitchPlayer);
+
     return {
         ...stateChange,
         ...newGameStateInfo,
@@ -211,9 +221,10 @@ function processGameStep(stateChange) {
 }
 
 
-function handleSwitchPlayers() {
+function handleShouldSwitchPlayers() {
     let shouldSwitchPlayers = true;
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
+    debugger;
     // we check all cases when we shouldn't switch player
     if (((GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Plus))
         || ((GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Stop))
@@ -222,12 +233,16 @@ function handleSwitchPlayers() {
             && (GameUtils.doesPileHaveSameColorCards(currentPlayerPile)))) {
         shouldSwitchPlayers = false;
     }
+    return shouldSwitchPlayers;
+}
 
-    if (shouldSwitchPlayers) {
+function handleSwitchPlayer(shouldSwitchPlayer) {
+    if (shouldSwitchPlayer) {
         switchPlayers();
         GameUtils.incrementGameTurnNumber();
     }
 }
+
 
 function shouldSwitchPlayers() {
     // TODO: Amit move all the switch player code that is inside the handleInvoked to here

@@ -1,26 +1,26 @@
-import initPlayers from './init/players.init';
-import initDrawPile from './init/draw-pile.init';
-import initDiscardPile from './init/discard-pile.init';
-import * as dealer from './dealer/dealer';
 import {GameState} from "./state";
-import {GameStatusEnum} from "./game-status.enum";
 import {PlayerEnum} from "../app/enums/player.enum";
 import {CardActionEnum} from "../app/enums/card-action-enum";
 import {handleCardMove} from "./dealer/dealer";
 import * as GameUtils from "./utils/game.utils";
+import {GameStatusEnum} from "./game-status.enum";
+import * as dealer from "./dealer/dealer";
+import initDrawPile from "./init/draw-pile.init";
+import initDiscardPile from "./init/discard-pile.init";
+import initPlayers from "./init/players.init";
+import {saveGameState} from "./history/state-history";
 import {getPlayerPile} from "./utils/game.utils";
 import {deepCopy} from "./utils/model.utils";
 
-
-
-///// ===== Game init functions =====
-
+///// Inner
 export function initGame() {
+    clearGameState();
     GameState.gameStatus = GameStatusEnum.GameInit;
     initPlayers();
     initDrawPile();
     initDiscardPile();
     dealer.dealCards();
+    saveGameState();
     // saveGameState();
     GameState.gameStatus = GameStatusEnum.GameStateChanged;
     if (GameState.currentPlayer === PlayerEnum.Bot) {       //TODO: add a while loop here so playercan pla as long as he's current player
@@ -30,35 +30,14 @@ export function initGame() {
     return GameState;
 }
 
-///// API
-
-export function requestCardMove(cardId) {
-    const stateChange = playHumanMove(cardId);
-    return new Promise((resolve) => {
-        resolve({
-            header: GameStatusEnum.GameStateChanged,
-            body: stateChange
-        });
-    });
+export function clearGameState() {
+    for (let key in GameState) {
+        GameState[key] = null;
+    }
 }
-
-export function requestGameStateUpdate() {
-    pickNextBotMove();
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve({
-                header: GameStatusEnum.GameStateChanged,
-                body: GameState
-            });
-        }, 1000);
-
-    });
-}
-
-///// Inner
 
 // Bot Player algorithm to choose next move
-function pickNextBotMove() {
+export function pickNextBotMove() {
     GameState.currentPlayer = PlayerEnum.Bot;
     let leadingCard = GameState.leadingCard;
     let selectedCard;
@@ -130,7 +109,7 @@ function pickNextBotMove() {
     playGameMove(selectedCard.id);
 }
 
-function playHumanMove(cardId) {
+export function playHumanMove(cardId) {
     GameState.currentPlayer = PlayerEnum.Human;
     return playGameMove(cardId);
 }
@@ -138,14 +117,26 @@ function playHumanMove(cardId) {
 function playGameMove(cardId) {
     GameState.selectedCard = getCardById(cardId);
 
-    // moving the card
+    // Moving the card
     let stateChange = handleCardMove();
 
     // side effects
     if (GameState.gameStatus === GameStatusEnum.GameStateChanged) {
         stateChange = processGameStep(stateChange);
     }
+
+    // Checking if game ended
+    GameState.isGameOver = isGameOver();
+
+    // Save current state in history
+    saveGameState();
+
     return stateChange;
+}
+
+function isGameOver() {
+    const currentPlayersPile = getPlayerPile(GameState.currentPlayer);
+    return currentPlayersPile.cards.length === 0;
 }
 
 function getCardById(cardId) {

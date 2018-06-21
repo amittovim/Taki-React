@@ -12,6 +12,7 @@ import Navbar from "./navbar/navbar.component";
 import Loader from "../shared/components/loader/loader.component";
 import Console from "./console/console.component";
 import Overlay from "../shared/components/overlay/overlay.component";
+import {getPlayerPile} from "../../logic/utils/game.utils";
 
 class Game extends Component {
     render() {
@@ -19,16 +20,19 @@ class Game extends Component {
             <div className="game-component">
                 <Navbar currentPlayer={this.state.currentPlayer}
                         turnNumber={this.state.turnNumber}
+                        isGameOver={this.state.isGameOver}
                         abortGameCallback={this.handleOpenModal}
-                />
+                        gameHistoryCallback={this.handleGetGameHistory}
+                        restartGameCallback={this.startGame}
+                        openModalCallback={this.handleOpenModal}
+                        emitAverageTime={this.updateAverageTime} />
                 <Loader isLoading={this.state.isLoading} />
-                <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen} />
+                <Overlay isVisible={this.state.isLoading || this.state.modal.isOpen || this.state.isGameOver} />
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
                        callback={this.state.modal.callback}
-                       closeModal={this.handleCloseModal}
-                />
-
+                       data={this.getStats()}
+                       closeModal={this.handleCloseModal} />
                 <Board drawPile={this.state.DrawPile}
                        discardPile={this.state.DiscardPile}
                        humanPile={this.state.HumanPile}
@@ -60,7 +64,12 @@ class Game extends Component {
                 type: null,
                 callback: null
             },
-            isLoading: false
+            averageMoveTime: {
+                minutes: 0,
+                seconds: 0
+            },
+            isLoading: false,
+            isGameOver: false
         };
         this.updateSelectedCard = this.updateSelectedCard.bind(this);
         this.handlePlayMove = this.handlePlayMove.bind(this);
@@ -72,9 +81,16 @@ class Game extends Component {
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.requestAdditionalStateUpdate = this.requestAdditionalStateUpdate.bind(this);
         this.humanMoveCardHandler = this.humanMoveCardHandler.bind(this);
+        this.updateAverageTime = this.updateAverageTime.bind(this);
+        this.handleGetGameHistory = this.handleGetGameHistory.bind(this);
+        this.startGame = this.startGame.bind(this);
     }
 
     componentWillMount() {
+        this.startGame();
+    }
+
+    startGame() {
         this.setState(GameApiService.getInitialState());
     }
 
@@ -90,6 +106,26 @@ class Game extends Component {
         });
     }
 
+    // Stats:
+
+    getStats() {
+        const data = {
+            turnNumber: this.state.turnNumber,
+            averageMinutes: this.state.averageMoveTime.minutes,
+            averageSeconds: this.state.averageMoveTime.seconds,
+            singleCardCounter: getPlayerPile(this.state.currentPlayer).singleCardCounter // TODO,
+        };
+        return data;
+    }
+
+    updateAverageTime(averageMoveTime) {
+        this.setState({
+            averageMoveTime: {
+                minutes: averageMoveTime.minutes,
+                seconds: averageMoveTime.seconds
+            }
+        })
+    }
 
     handleIllegalMove() {
         this.setState({
@@ -168,11 +204,15 @@ class Game extends Component {
             case ModalTypeEnum.AbortGame: {
                 return this.exitToTakiWiki;
             }
+            default: {
+                return null;
+            }
         }
     }
 
 
     // API
+
     requestMoveCard() {
         GameApiService.requestMoveCard(this.state.selectedCard.id)
             .then(response => {
@@ -215,6 +255,15 @@ class Game extends Component {
                 console.error('Error', error);
             });
         debugger;
+    }
+
+    handleGetGameHistory(getNext) {
+        GameApiService.getGameStateHistory(getNext)
+            .then(response => {
+                this.setState({
+                    ...response.body,
+                });
+            })
     }
 }
 

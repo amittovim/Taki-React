@@ -12,6 +12,8 @@ class ColorPickerModal extends Component {
     render() {
         return (
             <div className="color-picker-modal-component">
+                <h1>Color Picker</h1>
+                <h2>Please select one of the following colors:</h2>
                 <div className="button-area">
                     {
                         this.state.colors.map(color => (

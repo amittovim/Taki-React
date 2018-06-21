@@ -9,20 +9,32 @@ import {ModalTypeEnum} from "../modal/modal-type.enum";
 //<PROPS>
 // currentPlayer: PlayerEnum
 // turnNumber: number
+// isGameOver: boolean
 // abortGameCallback: Function
+// gameHistoryCallback: Function
+// restartGameCallback: Function
+// openModalCallback: Function
+// emitAverageTime: Function
 
 class Navbar extends Component {
     constructor(props) {
         super(props);
         this.handleAbortGame = this.handleAbortGame.bind(this);
+        this.getPreviousMove = this.getPreviousMove.bind(this);
+        this.getNextMove = this.getNextMove.bind(this);
+        this.handleRestartGame = this.handleRestartGame.bind(this);
+        this.handleShowStats = this.handleShowStats.bind(this);
     }
 
     render() {
         return (
             <div className="navbar-component">
-                <img className="logo"
-                     src={TakiLogo}
-                     alt="Taki" />
+                {this.props.isGameOver
+                    ? (<h1 className="game-over">Game Over!</h1>)
+                    : <img className="logo"
+                           src={TakiLogo}
+                           alt="Taki" />
+                }
 
                 <InfoDisplay className="current-player"
                              label="Current Player"
@@ -33,31 +45,58 @@ class Navbar extends Component {
                              value={this.props.turnNumber} />
 
                 <Timer label="Game Timer"
-                       isGameClock={true} />
+                       isGameClock={true}
+                />
 
                 <Timer label="Turn Timer"
-                       turnNumber={this.props.turnNumber} />
+                       turnNumber={this.props.turnNumber}
+                       emitAverageTime={this.props.emitAverageTime} />
 
-                <Button label="Abort Game"
-                        onClick={this.handleAbortGame} />
+                {this.props.isGameOver
+                    ? (<div>
+                        <div className="game-step-carousel">
+                            <div className="carousel-title">Game moves carousel:</div>
+                            <div className="carousel-buttons">
+                                <Button label="prev"
+                                        onClick={this.getPreviousMove} />
+                                <Button label="next"
+                                        onClick={this.getNextMove} />
+                                <Button label="Restart"
+                                        onClick={this.handleRestartGame} />
 
-                <div className="gameStepsCarousel">
+                            </div>
+                        </div>
+                    </div>)
+                    : (<div className="nav-buttons">
+                        <Button label="Abort"
+                                onClick={this.handleAbortGame} />
 
-                    <Button label="<="
-                            isDisabled={true}
-                            onClick={this.handleAbortGame} />
-
-                    <Button label="=>"
-                            isDisabled={true}
-                            onClick={this.handleAbortGame} />
-
-                </div>
+                        <Button label="Stats"
+                                onClick={this.handleShowStats} />
+                    </div>)
+                }
             </div>
         )
     }
 
     handleAbortGame() {
-        this.props.abortGameCallback(ModalTypeEnum.AbortGame);
+        this.props.openModalCallback(ModalTypeEnum.AbortGame);
+    }
+
+    handleShowStats() {
+        this.props.openModalCallback(ModalTypeEnum.Statistics);
+    }
+
+    getPreviousMove() {
+        this.props.gameHistoryCallback(false);
+    }
+
+    getNextMove() {
+        this.props.gameHistoryCallback(true);
+    }
+
+    handleRestartGame() {
+        this.props.restartGameCallback();
     }
 }
 

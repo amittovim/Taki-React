@@ -1,5 +1,6 @@
 export const ModalTypeEnum = {
     Welcome: 'Welcome',
     ColorPicker: 'ColorPicker',
-    AbortGame: 'AbortGame'
+    AbortGame: 'AbortGame',
+    Statistics: 'Statistics'
 };

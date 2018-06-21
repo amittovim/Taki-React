@@ -67,7 +67,7 @@ export function handleDisablingActionState(newGameStateInfo) {
     }
     newGameStateInfo = {
         ...newGameStateInfo,
-        actionState: null
+        actionState: [GameState.actionState]
     };
     return newGameStateInfo;
 }
@@ -191,6 +191,7 @@ export function getPlayerPile(playerType) {
 export function incrementGameMovesCounter() {
     GameState.movesCounter++;
 }
+
 export function incrementGameTurnNumber() {
     GameState.turnNumber++;
 }

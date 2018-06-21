@@ -7,6 +7,7 @@ import {PileTypeEnum} from "../../app/enums/pile-type.enum";
 import {PlayerEnum} from "../../app/enums/player.enum";
 import {GameStatusEnum} from "../game-status.enum";
 import {switchPlayers} from "../main";
+import {GameStateHistory} from "../history/state-history";
 import {getPlayerPile} from "../utils/game.utils";
 
 // == Dealing Hands ==
@@ -89,7 +90,7 @@ export function handleCardMove() {
     const sourcePileType = GameState.selectedCard.parentPileType;
     const destinationPileType = getDestinationPileType(sourcePileType);
     GameState.selectedCard.parentPileType = destinationPileType;
-    GameState.selectedCard.isHidden = isCardHidden(sourcePileType ,destinationPileType );
+    GameState.selectedCard.isHidden = false;
     updateLeadingCard(destinationPileType);
     return moveCard(sourcePileType, destinationPileType);
 }

@@ -6,3 +6,8 @@
     height: 60%;
     align-items: center;
 }
+
+.button-area {
+    display: flex;
+    justify-content: center;
+}

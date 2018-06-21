@@ -8,7 +8,6 @@
 .deck-component .discard-pile-component,
 .deck-component .draw-pile-component {
     flex: 1;
-    border-right: 1px solid black;
     display: flex;
     justify-content: center;
     align-items: center;

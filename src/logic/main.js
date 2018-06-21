@@ -157,7 +157,8 @@ function processGameStep(stateChange) {
     let newGameStateInfo = {};
 
     // if drawPile is empty restock it with cards from discardPile
-    if (GameState.DrawPile.isEmpty) {
+    if (GameState.DrawPile.isPileEmpty) {
+
         newGameStateInfo = GameUtils.handleDrawpileRestocking(newGameStateInfo);
     }
 

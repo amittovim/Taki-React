@@ -1,8 +1,9 @@
 export const GameStatusEnum = {
     GameInit: 'GameInit',
     SettingStartingCard: 'SettingStartingCard',
-    CardUpdated: 'CardUpdated',
-    PlayYourNextMove: 'PlayYourNextMove',
+    RestockingDeckOfCard: 'RestockingDeckOfCard',
+    // CardUpdated: 'CardUpdated',
+    // PlayYourNextMove: 'PlayYourNextMove',
     GameStateChanged: 'GameStateChanged'
 };
 

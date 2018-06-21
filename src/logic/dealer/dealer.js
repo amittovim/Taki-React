@@ -8,6 +8,7 @@ import {PlayerEnum} from "../../app/enums/player.enum";
 import {GameStatusEnum} from "../game-status.enum";
 import {switchPlayers} from "../main";
 import {getPlayerPile} from "../utils/game.utils";
+import {VISIBLE_CARDS} from "../consts";
 
 // == Dealing Hands ==
 
@@ -57,8 +58,9 @@ export function getDestinationPileType(sourcePileType) {
 }
 
 export function isCardHidden(sourcePile, destinationPile) {
-    debugger;
-    return ((sourcePile === PileTypeEnum.DrawPile && destinationPile === PileTypeEnum.BotPile) || sourcePile === PileTypeEnum.DiscardPile);
+    if (!VISIBLE_CARDS) {
+        return ((sourcePile === PileTypeEnum.DrawPile && destinationPile === PileTypeEnum.BotPile) || sourcePile === PileTypeEnum.DiscardPile);
+    } else return false;
 }
 
 export function handleCardMove() {

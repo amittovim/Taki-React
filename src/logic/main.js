@@ -195,6 +195,7 @@ function processGameStep(stateChange) {
 
     newGameStateInfo = GameUtils.handleDisablingActionState(newGameStateInfo);
 
+
     return {
         ...stateChange,
         ...newGameStateInfo,

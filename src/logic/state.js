@@ -22,11 +22,7 @@ let validator = {
         if (!obj.hasOwnProperty(prop)) {
             throw new TypeError(`Object does not have a ${prop} property`);
         }
-        if (obj.twoPlusCounter === null) {
-            debugger;
-        }
         obj[prop] = value;
-        console.log(obj);
         return true;
     }
 };

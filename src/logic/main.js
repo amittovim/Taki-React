@@ -201,7 +201,6 @@ function processGameStep(stateChange) {
 
     newGameStateInfo = GameUtils.handleDisablingActionState(newGameStateInfo);
 
-    console.log(deepCopy(GameState));
     return {
         ...stateChange,
         ...newGameStateInfo,

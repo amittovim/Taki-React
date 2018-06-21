@@ -107,12 +107,13 @@ function pickNextBotMove() {
             selectedCard = matchedCard;
         }
         // 4.7.1 if bot has a card with the same action as the leading card - mark it as the selectedCard.
-        else if (matchedCard = GameUtils.getCardInHand(botPile, [{action: leadingCard.action}])) {
+        else if ((leadingCard.action !== null) &&
+                 (matchedCard = GameUtils.getCardInHand(botPile, [{action: leadingCard.action}]))) {
             selectedCard = matchedCard;
         }
-
         // 4.8 if you have a card with the same color as the leading card - mark it as the selectedCard.
-        else if (matchedCard = GameUtils.getCardInHand(botPile, [{color: leadingCard.color}])) {
+        else if ((leadingCard.color !== null) &&
+                 (matchedCard = GameUtils.getCardInHand(botPile, [{color: leadingCard.color}]))) {
             selectedCard = matchedCard;
         }
         // 4.9 if you have a card with the same number as the leading card - mark it as the selectedCard.

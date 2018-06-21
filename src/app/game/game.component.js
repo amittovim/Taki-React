@@ -33,7 +33,7 @@ class Game extends Component {
                        discardPile={this.state.DiscardPile}
                        humanPile={this.state.HumanPile}
                        botPile={this.state.BotPile}
-                       moveCardDriver={this.updateSelectedCard} // TODO: replace to context
+                       moveCardDriver={this.humanMoveCardHandler} // TODO: replace to context
                 />
                 <Console message={this.state.consoleMessage} />
             </div>
@@ -71,6 +71,7 @@ class Game extends Component {
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.requestAdditionalStateUpdate = this.requestAdditionalStateUpdate.bind(this);
+        this.humanMoveCardHandler = this.humanMoveCardHandler.bind(this);
     }
 
     componentWillMount() {
@@ -94,6 +95,12 @@ class Game extends Component {
         this.setState({
             consoleMessage: 'illegal move'
         });
+    }
+
+    humanMoveCardHandler(card) {
+        if (this.state.currentPlayer === PlayerEnum.Human) {
+            this.updateSelectedCard(card);
+        }
     }
 
     updateSelectedCard(card) {

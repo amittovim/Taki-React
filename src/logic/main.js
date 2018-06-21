@@ -21,11 +21,7 @@ export function initGame() {
     initDiscardPile();
     dealer.dealCards();
     saveGameState();
-    // saveGameState();
     GameState.gameStatus = GameStatusEnum.GameStateChanged;
-    if (GameState.currentPlayer === PlayerEnum.Bot) {       //TODO: add a while loop here so playercan pla as long as he's current player
-        pickNextBotMove();
-    }
 
     return GameState;
 }
@@ -87,12 +83,12 @@ export function pickNextBotMove() {
         }
         // 4.7.1 if bot has a card with the same action as the leading card - mark it as the selectedCard.
         else if ((leadingCard.action !== null) &&
-                 (matchedCard = GameUtils.getCardInHand(botPile, [{action: leadingCard.action}]))) {
+            (matchedCard = GameUtils.getCardInHand(botPile, [{action: leadingCard.action}]))) {
             selectedCard = matchedCard;
         }
         // 4.8 if you have a card with the same color as the leading card - mark it as the selectedCard.
         else if ((leadingCard.color !== null) &&
-                 (matchedCard = GameUtils.getCardInHand(botPile, [{color: leadingCard.color}]))) {
+            (matchedCard = GameUtils.getCardInHand(botPile, [{color: leadingCard.color}]))) {
             selectedCard = matchedCard;
         }
         // 4.9 if you have a card with the same number as the leading card - mark it as the selectedCard.
@@ -165,14 +161,14 @@ function processGameStep(stateChange) {
     newGameStateInfo = GameUtils.handleGameStatistics(newGameStateInfo);
 
     // check occasions when we need to activate game activeState (if we PUT an action card on discard-pile)
-    if ( ( GameState.leadingCard.action !== null) &&
-         ( GameState.leadingCard === GameState.selectedCard) ) {
+    if ((GameState.leadingCard.action !== null) &&
+        (GameState.leadingCard === GameState.selectedCard)) {
         newGameStateInfo = GameUtils.handleActivatingActionState(newGameStateInfo);
     }
     // if TWOPLUS card was invoked in the current play-move, increment twoPlusCounter by 2
     if (GameState.actionState === CardActionEnum.TwoPlus &&
         GameState.leadingCard === GameState.selectedCard &&                  // means that player PUT card on discardPile
-        GameState.selectedCard.action === CardActionEnum.TwoPlus){   // and didn't GET card from Drawpile
+        GameState.selectedCard.action === CardActionEnum.TwoPlus) {   // and didn't GET card from Drawpile
         newGameStateInfo = GameUtils.handleInvokedTwoPlusState(newGameStateInfo);
     }
     // if activeState is TWO-PLUS and card was withdrawn from draw-pile we need to decrease two plus counter by 1
@@ -219,11 +215,11 @@ function handleSwitchPlayers() {
     let shouldSwitchPlayers = true;
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
     // we check all cases when we shouldn't switch player
-    if (((GameState.actionState === GameState.leadingCard.action ) && (GameState.leadingCard.action === CardActionEnum.Plus))
-    ||  (( GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Stop))
-    ||  (( GameState.twoPlusCounter !== 0) && (GameState.leadingCard.id !== GameState.selectedCard.id ))
-    ||  (((GameState.actionState === CardActionEnum.Taki) || (GameState.actionState === CardActionEnum.SuperTaki))
-        && ( GameUtils.doesPileHaveSameColorCards(currentPlayerPile))) )     {
+    if (((GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Plus))
+        || ((GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Stop))
+        || ((GameState.twoPlusCounter !== 0) && (GameState.leadingCard.id !== GameState.selectedCard.id))
+        || (((GameState.actionState === CardActionEnum.Taki) || (GameState.actionState === CardActionEnum.SuperTaki))
+            && (GameUtils.doesPileHaveSameColorCards(currentPlayerPile)))) {
         shouldSwitchPlayers = false;
     }
 
@@ -267,9 +263,9 @@ export function isPutCardMoveLegal(card, actionState, leadingCard) {
 export function isGetCardMoveLegal(currentPlayerPile, drawPile, actionState, leadingCard) {
     // checking if withdrawing Card From DrawPile is a legal move - only if drawPile is not empty and no
     // other move is available for player
-    if (( !drawPile.isPileEmpty ) &&
-        ( GameState.actionState === CardActionEnum.TwoPlus ||
-            !availableMoveExist(currentPlayerPile, actionState, leadingCard)) ) {
+    if ((!drawPile.isPileEmpty) &&
+        (GameState.actionState === CardActionEnum.TwoPlus ||
+            !availableMoveExist(currentPlayerPile, actionState, leadingCard))) {
         return true;
     } else
         return false;

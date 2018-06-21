@@ -91,7 +91,11 @@ class Game extends Component {
     }
 
     startGame() {
-        this.setState(GameApiService.getInitialState());
+        this.setState(GameApiService.getInitialState(), () => {
+            if (this.state.currentPlayer === PlayerEnum.Bot) {
+                this.requestStateUpdate();
+            }
+        });
     }
 
     openColorPicker() {
@@ -245,6 +249,7 @@ class Game extends Component {
     }
 
     handleGetGameHistory(getNext) {
+        debugger;
         GameApiService.getGameStateHistory(getNext)
             .then(response => {
                 this.setState({

@@ -143,7 +143,6 @@ function getCardById(cardId) {
 }
 
 export function switchPlayers() {
-    debugger;
     GameState.currentPlayer = GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot;
 }
 

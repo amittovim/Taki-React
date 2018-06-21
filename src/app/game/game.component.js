@@ -254,6 +254,7 @@ class Game extends Component {
             .then(response => {
                 this.setState({
                     ...response.body,
+                    isGameOver: true
                 });
             })
     }

@@ -143,6 +143,7 @@ function getCardById(cardId) {
 }
 
 export function switchPlayers() {
+    debugger;
     GameState.currentPlayer = GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot;
 }
 
@@ -214,6 +215,7 @@ function processGameStep(stateChange) {
 function handleSwitchPlayers() {
     let shouldSwitchPlayers = true;
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
+
     // we check all cases when we shouldn't switch player
     if (((GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Plus))
         || ((GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Stop))

@@ -7,12 +7,6 @@ import * as gameStateHistory from './history/state-history';
 export function initGame() {
     init.initGame();
     return GameState;
-    // return new Promise((resolve) => {
-    //     resolve({
-    //         header: GameStatusEnum.GameStateChanged,
-    //         body: GameState
-    //     });
-    // });
 }
 
 export function requestCardMove(cardId) {

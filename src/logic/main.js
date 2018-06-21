@@ -231,14 +231,11 @@ function handleSwitchPlayers() {
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
     debugger;   // TODO: stop and plus doesnt get in here --> we need to figure out why
     // we check all cases when we shouldn't switch player
-    if (((GameState.actionState === CardActionEnum.Taki || GameState.actionState === CardActionEnum.SuperTaki)
-        && ( GameUtils.doesPileHaveSameColorCards(currentPlayerPile)))
-
-        || (GameState.actionState === GameState.leadingCard.action === CardActionEnum.Plus)
-
-        || (GameState.actionState === GameState.leadingCard.action === CardActionEnum.Stop)
-
-        || ( GameState.twoPlusCounter !== 0) && GameState.leadingCard.id !== GameState.selectedCard.id ) {
+    if (((GameState.actionState === GameState.leadingCard.action ) && (GameState.leadingCard.action === CardActionEnum.Plus))
+    ||  (( GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Stop))
+    ||  (( GameState.twoPlusCounter !== 0) && (GameState.leadingCard.id !== GameState.selectedCard.id ))
+    ||  (((GameState.actionState === CardActionEnum.Taki) || (GameState.actionState === CardActionEnum.SuperTaki))
+        && ( GameUtils.doesPileHaveSameColorCards(currentPlayerPile))) )     {
         shouldSwitchPlayers = false;
     }
 

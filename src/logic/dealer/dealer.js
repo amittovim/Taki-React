@@ -57,7 +57,8 @@ export function getDestinationPileType(sourcePileType) {
 }
 
 export function isCardHidden(sourcePile, destinationPile) {
-    return false;
+    debugger;
+    return ((sourcePile === PileTypeEnum.DrawPile && destinationPile === PileTypeEnum.BotPile) || sourcePile === PileTypeEnum.DiscardPile);
 }
 
 export function handleCardMove() {
@@ -72,8 +73,7 @@ export function handleCardMove() {
         let lastMoveCard;
         for (GameState.twoPlusCounter; GameState.twoPlusCounter > 0; GameState.twoPlusCounter--) {
             GameState.selectedCard.parentPileType = getPlayerPile(GameState.currentPlayer).type;
-            GameState.selectedCard.isHidden =
-                isCardHidden(PileTypeEnum.DrawPile, getPlayerPile(GameState.currentPlayer).type);
+            GameState.selectedCard.isHidden = isCardHidden(PileTypeEnum.DrawPile, getPlayerPile(GameState.currentPlayer).type);
             lastMoveCard = moveCard(PileTypeEnum.DrawPile, getPlayerPile(GameState.currentPlayer).type);
             GameState.selectedCard = GameState.DrawPile.getTop();
         }
@@ -85,7 +85,7 @@ export function handleCardMove() {
     const sourcePileType = GameState.selectedCard.parentPileType;
     const destinationPileType = getDestinationPileType(sourcePileType);
     GameState.selectedCard.parentPileType = destinationPileType;
-    GameState.selectedCard.isHidden = false;
+    GameState.selectedCard.isHidden = isCardHidden(sourcePileType, destinationPileType);
     updateLeadingCard(destinationPileType);
     return moveCard(sourcePileType, destinationPileType);
 }

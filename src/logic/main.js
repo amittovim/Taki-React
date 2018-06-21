@@ -229,7 +229,7 @@ function processGameStep(stateChange) {
 function handleSwitchPlayers() {
     let shouldSwitchPlayers = true;
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
-
+    debugger;   // TODO: stop and plus doesnt get in here --> we need to figure out why
     // we check all cases when we shouldn't switch player
     if (((GameState.actionState === CardActionEnum.Taki || GameState.actionState === CardActionEnum.SuperTaki)
         && ( GameUtils.doesPileHaveSameColorCards(currentPlayerPile)))

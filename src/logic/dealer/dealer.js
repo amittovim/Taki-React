@@ -64,7 +64,6 @@ export function isCardHidden(sourcePile, destinationPile) {
 }
 
 export function handleCardMove() {
-    debugger;
     // in case we are in "GameInit" or "SettingStartingCard" gameStatus our source pile is the drawpile top card
     if (GameState.gameStatus === GameStatusEnum.GameInit || GameState.gameStatus === GameStatusEnum.SettingStartingCard) {
         GameState.selectedCard = GameState.DrawPile.getTop();
@@ -75,7 +74,6 @@ export function handleCardMove() {
          (GameState.selectedCard === GameState.DrawPile.getTop() ) ) {
         let lastMoveCard;
         for (GameState.twoPlusCounter; GameState.twoPlusCounter > 0; GameState.twoPlusCounter--) {
-            debugger;
             GameState.selectedCard.parentPileType = getPlayerPile(GameState.currentPlayer).type;
             GameState.selectedCard.isHidden =
                 isCardHidden(PileTypeEnum.DrawPile, getPlayerPile(GameState.currentPlayer).type);

@@ -105,7 +105,6 @@ export function pickNextBotMove() {
             selectedCard = GameState.DrawPile.getTop();
         }
     }
-    debugger;
     playGameMove(selectedCard.id);
 }
 
@@ -165,13 +164,11 @@ function processGameStep(stateChange) {
     // updating statistics
     newGameStateInfo = GameUtils.handleGameStatistics(newGameStateInfo);
 
-    debugger;
     // check occasions when we need to activate game activeState (if we PUT an action card on discard-pile)
     if ( ( GameState.leadingCard.action !== null) &&
          ( GameState.leadingCard === GameState.selectedCard) ) {
         newGameStateInfo = GameUtils.handleActivatingActionState(newGameStateInfo);
     }
-    debugger;
     // if TWOPLUS card was invoked in the current play-move, increment twoPlusCounter by 2
     if (GameState.actionState === CardActionEnum.TwoPlus &&
         GameState.leadingCard === GameState.selectedCard &&                  // means that player PUT card on discardPile
@@ -221,7 +218,6 @@ function processGameStep(stateChange) {
 function handleSwitchPlayers() {
     let shouldSwitchPlayers = true;
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
-    debugger;   // TODO: stop and plus doesnt get in here --> we need to figure out why
     // we check all cases when we shouldn't switch player
     if (((GameState.actionState === GameState.leadingCard.action ) && (GameState.leadingCard.action === CardActionEnum.Plus))
     ||  (( GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Stop))

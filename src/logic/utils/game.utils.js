@@ -31,7 +31,6 @@ export function handleDrawpileRestocking(newGameStateInfo) {
             ...GameState.DiscardPile
         }
     };
-    debugger;
     return newGameStateInfo;
 }
 
@@ -49,7 +48,7 @@ export function handleActivatingActionState(newGameStateInfo) {
         // if current activeState IS taki and player has no more cards with same color to put on it
         // update the activeState value to the action of the card of our current card
     } else {
-        let matchedCard = getCardInHand(currentPlayerPile , [{color: GameState.leadingCard.color}]);
+        let matchedCard = getCardInHand(currentPlayerPile, [{color: GameState.leadingCard.color}]);
         if (matchedCard === undefined) {  //if (!availableMoveExist()) {
             GameState.actionState = GameState.selectedCard.action;
             newGameStateInfo = {
@@ -82,7 +81,7 @@ export function handleGameStatistics(newGameStateInfo) {
     if (currentPlayerPile.cards.length === 1) {
         incrementSingleCardCounter(newGameStateInfo);
     }
-        // TODO : add more statistics
+    // TODO : add more statistics
     return newGameStateInfo;
 }
 
@@ -108,8 +107,8 @@ export function handleInvokedTwoPlusState(newGameStateInfo) {
 }
 
 export function handleExistingTwoPlusState(newGameStateInfo) {
-    if ( GameState.leadingCard.id !== GameState.selectedCard.id &&
-         GameState.twoPlusCounter>0 ) {
+    if (GameState.leadingCard.id !== GameState.selectedCard.id &&
+        GameState.twoPlusCounter > 0) {
         GameState.twoPlusCounter--;
     }
     newGameStateInfo = {
@@ -120,7 +119,7 @@ export function handleExistingTwoPlusState(newGameStateInfo) {
 }
 
 export function handleInvokedCCStateByBot(newGameStateInfo) {
-    if (GameState.leadingCard.id === GameState.selectedCard.id ) {
+    if (GameState.leadingCard.id === GameState.selectedCard.id) {
         GameState.leadingCard.color = pickRandomColor();
     }
     newGameStateInfo = {
@@ -156,7 +155,7 @@ export function handleInvokedSuperTakiState(newGameStateInfo) {
 export function handleInvokedTakiState(newGameStateInfo) {
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
 
-    if ( !doesPileHaveSameColorCards(currentPlayerPile) ) {
+    if (!doesPileHaveSameColorCards(currentPlayerPile)) {
         GameState.actionState = null;
     }
     newGameStateInfo = {
@@ -178,7 +177,7 @@ export function doesPileHaveSameColorCards(currentPlayerPile) {
 
 function restockDrawPile() {
     let wasRestocked;
-    let oldSelectedCard=GameState.selectedCard;
+    let oldSelectedCard = GameState.selectedCard;
     GameState.gameStatus = GameStatusEnum.RestockingDeckOfCard;
     while (GameState.DiscardPile.cards.length > 1) {
         cleaningCards();
@@ -195,9 +194,9 @@ function restockDrawPile() {
 function cleaningCards() {
 
     GameState.selectedCard = GameState.DiscardPile.cards[0];
-    GameState.selectedCard.parentPileType=PileTypeEnum.DrawPile;
+    GameState.selectedCard.parentPileType = PileTypeEnum.DrawPile;
 
-    if ( ( GameState.selectedCard.action === CardActionEnum.ChangeColor) ||
+    if ((GameState.selectedCard.action === CardActionEnum.ChangeColor) ||
         (GameState.selectedCard.action === CardActionEnum.SuperTaki)) {
         GameState.selectedCard.color = null;
     }

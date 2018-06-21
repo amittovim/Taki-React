@@ -26,8 +26,12 @@ export function handleDrawpileRestocking(newGameStateInfo) {
         ...newGameStateInfo,
         [PileTypeEnum.DrawPile]: {
             ...GameState.DrawPile
+        },
+        [PileTypeEnum.DiscardPile]: {
+            ...GameState.DiscardPile
         }
     };
+    debugger;
     return newGameStateInfo;
 }
 
@@ -174,13 +178,28 @@ export function doesPileHaveSameColorCards(currentPlayerPile) {
 
 function restockDrawPile() {
     let wasRestocked;
-
+    let oldSelectedCard=GameState.selectedCard;
+    GameState.gameStatus = GameStatusEnum.RestockingDeckOfCard;
     while (GameState.DiscardPile.cards.length > 1) {
-        dealer.moveCard(GameState.discardPile.cards[0], GameState.discardPile, GameState.drawPile);
+        cleaningCards();
+        dealer.moveCard(PileTypeEnum.DiscardPile, PileTypeEnum.DrawPile);
         wasRestocked = true;
     }
     if (wasRestocked) {
-        shuffleArray(GameState.drawPile.cards);
+        utils.shuffleArray(GameState.DrawPile.cards);
+        GameState.selectedCard = oldSelectedCard;
+    }
+    GameState.gameStatus = GameStatusEnum.GameStateChanged;
+}
+
+function cleaningCards() {
+
+    GameState.selectedCard = GameState.DiscardPile.cards[0];
+    GameState.selectedCard.parentPileType=PileTypeEnum.DrawPile;
+
+    if ( ( GameState.selectedCard.action === CardActionEnum.ChangeColor) ||
+        (GameState.selectedCard.action === CardActionEnum.SuperTaki)) {
+        GameState.selectedCard.color = null;
     }
 }
 

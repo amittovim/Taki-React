@@ -76,6 +76,7 @@ enum PlayerEnum {
 enum GameStatusEnum {
     GameInit = 'GameInit',
     SettingStartingCard = 'SettingStartingCard',
+    RestockingDeckOfCard = 'RestockingDeckOfCard',
     GameStateChanged = 'GameStateChanged'
 }
 

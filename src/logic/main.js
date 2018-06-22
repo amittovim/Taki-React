@@ -16,13 +16,13 @@ import {deepCopy} from "./utils/model.utils";
 export function initGame() {
     clearGameState();
     GameState.gameStatus = GameStatusEnum.GameInit;
+    initGameState();
     initPlayers();
     initDrawPile();
     initDiscardPile();
     dealer.dealCards();
     saveGameState();
     GameState.gameStatus = GameStatusEnum.GameStateChanged;
-
     return GameState;
 }
 
@@ -30,6 +30,14 @@ export function clearGameState() {
     for (let key in GameState) {
         GameState[key] = null;
     }
+}
+
+function initGameState() {
+    GameState.movesCounter = 0;
+    GameState.turnNumber =0;
+    GameState.twoPlusCounter = 0;
+    GameState.consoleMessage = '';
+    GameState.isGameOver=false;
 }
 
 // Bot Player algorithm to choose next move
@@ -120,18 +128,16 @@ function playGameMove(cardId) {
         stateChange = processGameStep(stateChange);
     }
 
-    // Checking if game ended
-    GameState.isGameOver = isGameOver();
-
-    // Save current state in history
-    saveGameState();
-
     return stateChange;
 }
 
 function isGameOver() {
+    debugger;
     const currentPlayersPile = getPlayerPile(GameState.currentPlayer);
-    return currentPlayersPile.cards.length === 0;
+    if ((GameState.actionState === null) ||
+        (GameState.actionState === CardActionEnum.Stop)) {
+        return currentPlayersPile.cards.length === 0;
+    }
 }
 
 
@@ -201,8 +207,9 @@ function processGameStep(stateChange) {
     if (GameState.actionState === CardActionEnum.Taki) {
         newGameStateInfo = GameUtils.handleInvokedTakiState(newGameStateInfo);
     }
-
-    handleSwitchPlayers(newGameStateInfo);
+    debugger;
+//    handleSwitchPlayers(newGameStateInfo);
+    const shouldSwitchPlayer=handleShouldSwitchPlayers();
 
 /*
 
@@ -211,30 +218,43 @@ function processGameStep(stateChange) {
 
 */
 
-
+    // Save current state in history
+    saveGameState();
 
     newGameStateInfo = GameUtils.handleDisablingActionState(newGameStateInfo);
 
-    //
-    // // TODO : delete this line
-    // console.log(deepCopy(GameState));
-    //
-    // // Checking if game ended
-    // GameState.isGameOver = isGameOver();
-    //
-    // // Save current state in history
-    // saveGameState();
-    //
-    // handleSwitchPlayer(shouldSwitchPlayer);
-    //
 
-    console.log(deepCopy(GameState));
+    // // Checking if game ended
+    GameState.isGameOver = isGameOver();
+    //
+    handleSwitchPlayer(shouldSwitchPlayer);
+
+    // // TODO : delete this line
+     console.log(deepCopy(GameState));
+
     return {
         ...stateChange,
         ...newGameStateInfo,
         leadingCard: GameState.leadingCard,
+        isGameOver: GameState.isGameOver,
         currentPlayer: GameState.currentPlayer
     };
+}
+
+function handleShouldSwitchPlayers() {
+    let shouldSwitchPlayers = true;
+    let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
+
+    // we check all cases when we shouldn't switch player
+    if (((GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Plus))
+        || ((GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Stop))
+        || ((GameState.twoPlusCounter !== 0) && (GameState.leadingCard.id !== GameState.selectedCard.id))
+        || (((GameState.actionState === CardActionEnum.Taki) || (GameState.actionState === CardActionEnum.SuperTaki))
+            && (GameUtils.doesPileHaveSameColorCards(currentPlayerPile)))) {
+        debugger;
+        shouldSwitchPlayers = false;
+    }
+    return shouldSwitchPlayers;
 }
 
 
@@ -258,20 +278,6 @@ function handleSwitchPlayers() {
     }
 }
 
-function handleShouldSwitchPlayers() {
-    let shouldSwitchPlayers = true;
-    let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
-    debugger;
-    // we check all cases when we shouldn't switch player
-    if (((GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Plus))
-        || ((GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Stop))
-        || ((GameState.twoPlusCounter !== 0) && (GameState.leadingCard.id !== GameState.selectedCard.id))
-        || (((GameState.actionState === CardActionEnum.Taki) || (GameState.actionState === CardActionEnum.SuperTaki))
-            && (GameUtils.doesPileHaveSameColorCards(currentPlayerPile)))) {
-        shouldSwitchPlayers = false;
-    }
-    return shouldSwitchPlayers;
-}
 
 function handleSwitchPlayer(shouldSwitchPlayer) {
     if (shouldSwitchPlayer) {

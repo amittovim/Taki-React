@@ -81,7 +81,6 @@ export function handleGameStatistics(newGameStateInfo) {
     if (currentPlayerPile.cards.length === 1) {
         incrementSingleCardCounter(newGameStateInfo);
     }
-    // TODO : add more statistics
     return newGameStateInfo;
 }
 

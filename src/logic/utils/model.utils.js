@@ -19,10 +19,6 @@ export function swap(x, y, arr) {
     arr[x] = tmp;
 }
 
-// export function insertToBeginningOfArray(item, array) {
-//     array.unshift(item[0]);
-// }
-
 export function insertToEndOfArray(item, array) {
     array.push(item);
 }
@@ -49,7 +45,7 @@ export function getKey(obj, index) {
 }
 
 export function getFirstItemByMatchConditions(arr, conditionList) {
-    return arr.find(function (item) {       //TODO: change this to arrow function
+    return arr.find(function (item) {
         return conditionList.reduce(function (accumulator, condition) {
             let key = getKey(condition, 0);
             let value = condition[key];

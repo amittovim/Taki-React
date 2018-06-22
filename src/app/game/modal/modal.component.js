@@ -9,6 +9,7 @@ import StatisticsModal from "./statistics/statistics.component";
 // type: ModalTypeEnum
 // callback: Function
 // closeModal: Function
+// restart: Function
 
 class Modal extends Component {
     constructor(props) {
@@ -62,6 +63,7 @@ class Modal extends Component {
             }
             case ModalTypeEnum.AbortGame: {
                 return (<AbortGameModal onSubmit={this.props.callback}
+                                        onRestart={this.props.restartGameCallback}
                                         onCancel={this.props.closeModal} />);
             }
             case ModalTypeEnum.Statistics: {

@@ -22,7 +22,7 @@ export function initGame() {
     dealer.dealCards();
     saveGameState();
     GameState.gameStatus = GameStatusEnum.GameStateChanged;
-    debugger;
+
     return GameState;
 }
 
@@ -120,17 +120,30 @@ function playGameMove(cardId) {
         stateChange = processGameStep(stateChange);
     }
 
+    // Checking if game ended
+    GameState.isGameOver = isGameOver();
+
+    // Save current state in history
+    saveGameState();
 
     return stateChange;
 }
 
 function isGameOver() {
     const currentPlayersPile = getPlayerPile(GameState.currentPlayer);
-    if ((GameState.actionState === null) ||
-       (GameState.actionState === CardActionEnum.Stop))  {
-        return currentPlayersPile.cards.length === 0;
-    }
+    return currentPlayersPile.cards.length === 0;
 }
+
+
+// function isGameOver() {
+//     const currentPlayersPile = getPlayerPile(GameState.currentPlayer);
+//     if ((GameState.actionState === null) ||
+//         (GameState.actionState === CardActionEnum.Stop))  {
+//         return currentPlayersPile.cards.length === 0;
+//     }
+// }
+
+
 
 function getCardById(cardId) {
     const gameCards = GameState.HumanPile.cards
@@ -141,8 +154,7 @@ function getCardById(cardId) {
 }
 
 export function switchPlayers() {
-    debugger;
-    GameState.currentPlayer = (GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot);
+    GameState.currentPlayer = GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot;
 }
 
 //this function should run after every card movement we make
@@ -170,12 +182,6 @@ function processGameStep(stateChange) {
         GameState.selectedCard.action === CardActionEnum.TwoPlus) {   // and didn't GET card from Drawpile
         newGameStateInfo = GameUtils.handleInvokedTwoPlusState(newGameStateInfo);
     }
-    // if activeState is TWO-PLUS and card was withdrawn from draw-pile we need to decrease two plus counter by 1
-    // else if (GameState.actionState === CardActionEnum.TwoPlus &&
-    //     GameState.selectedCard.id !== GameState.leadingCard.id) {
-    //     newGameStateInfo = GameUtils.handleExistingTwoPlusState(newGameStateInfo);
-    // }
-
 
     // if CHANGE COLOR card was invoked and the current player is BOT, pick a random color for it
     else if (GameState.actionState === CardActionEnum.ChangeColor && currentPlayerType === PlayerEnum.Bot) {
@@ -196,22 +202,33 @@ function processGameStep(stateChange) {
         newGameStateInfo = GameUtils.handleInvokedTakiState(newGameStateInfo);
     }
 
+    handleSwitchPlayers(newGameStateInfo);
+
+/*
+
     debugger;
     const shouldSwitchPlayer = handleShouldSwitchPlayers();
 
+*/
+
+
+
     newGameStateInfo = GameUtils.handleDisablingActionState(newGameStateInfo);
 
-    // TODO : delete this line
+    //
+    // // TODO : delete this line
+    // console.log(deepCopy(GameState));
+    //
+    // // Checking if game ended
+    // GameState.isGameOver = isGameOver();
+    //
+    // // Save current state in history
+    // saveGameState();
+    //
+    // handleSwitchPlayer(shouldSwitchPlayer);
+    //
+
     console.log(deepCopy(GameState));
-
-    // Checking if game ended
-    GameState.isGameOver = isGameOver();
-
-    // Save current state in history
-    saveGameState();
-
-    handleSwitchPlayer(shouldSwitchPlayer);
-
     return {
         ...stateChange,
         ...newGameStateInfo,
@@ -220,6 +237,26 @@ function processGameStep(stateChange) {
     };
 }
 
+
+function handleSwitchPlayers() {
+    let shouldSwitchPlayers = true;
+    let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
+    // we check all cases when we shouldn't switch player
+    if (((GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Plus))
+        || ((GameState.actionState === GameState.leadingCard.action) && (GameState.leadingCard.action === CardActionEnum.Stop))
+        || ((GameState.twoPlusCounter !== 0) && (GameState.leadingCard.id !== GameState.selectedCard.id))
+        || (((GameState.actionState === CardActionEnum.Taki) || (GameState.actionState === CardActionEnum.SuperTaki))
+            && (GameUtils.doesPileHaveSameColorCards(currentPlayerPile)))) {
+        shouldSwitchPlayers = false;
+    }
+//     return shouldSwitchPlayers;
+// }
+
+    if (shouldSwitchPlayers) {
+        switchPlayers();
+        GameUtils.incrementGameTurnNumber();
+    }
+}
 
 function handleShouldSwitchPlayers() {
     let shouldSwitchPlayers = true;
@@ -243,11 +280,6 @@ function handleSwitchPlayer(shouldSwitchPlayer) {
     }
 }
 
-
-function shouldSwitchPlayers() {
-    // TODO: Amit move all the switch player code that is inside the handleInvoked to here
-    return true;
-}
 
 export function isPutCardMoveLegal(card, actionState, leadingCard) {
     let isSameColor;

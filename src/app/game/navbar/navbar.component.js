@@ -19,6 +19,10 @@ import {ModalTypeEnum} from "../modal/modal-type.enum";
 class Navbar extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            restart: false
+        };
+
         this.handleAbortGame = this.handleAbortGame.bind(this);
         this.getPreviousMove = this.getPreviousMove.bind(this);
         this.getNextMove = this.getNextMove.bind(this);
@@ -44,13 +48,21 @@ class Navbar extends Component {
                              label="Turn Number"
                              value={this.props.turnNumber} />
 
-                <Timer label="Game Timer"
-                       isGameClock={true}
-                />
+                {!this.props.isGameOver
+                    ? (<div className="clocks">
+                        <Timer label="Game Timer"
+                               isGameClock={true}
+                               isGameOver={this.state.restart}
+                        />
 
-                <Timer label="Turn Timer"
-                       turnNumber={this.props.turnNumber}
-                       emitAverageTime={this.props.emitAverageTime} />
+                        <Timer label="Turn Timer"
+                               turnNumber={this.props.turnNumber}
+                               emitAverageTime={this.props.emitAverageTime}
+                               isGameOver={this.state.restart}
+                        />
+                    </div>)
+                    : null
+                }
 
                 {this.props.isGameOver
                     ? (<div>
@@ -96,6 +108,9 @@ class Navbar extends Component {
     }
 
     handleRestartGame() {
+        this.setState({
+            restart: true
+        });
         this.props.restartGameCallback();
     }
 }

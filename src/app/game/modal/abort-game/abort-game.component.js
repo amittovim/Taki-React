@@ -14,11 +14,13 @@ class AbortGameModal extends Component {
         return (
             <div className="abort-game-modal-component">
                 <h1>Abort Game</h1>
-                <h2>Are you sure you want to exit?</h2>
+                <h2>What do you wanna do?</h2>
                 <div className='buttons-area'>
-                    <Button label="Yes"
+                    <Button label="Exit"
                             onClick={this.props.onSubmit} />
-                    <Button label="No"
+                    <Button label="Restart"
+                            onClick={this.props.onRestart} />
+                    <Button label="Cancel"
                             onClick={this.props.onCancel} />
                 </div>
             </div>

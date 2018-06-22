@@ -31,6 +31,7 @@ class Game extends Component {
                 <Modal isOpen={this.state.modal.isOpen}
                        type={this.state.modal.type}
                        callback={this.state.modal.callback}
+                       restartGameCallback={this.startGame}
                        data={this.getStats()}
                        closeModal={this.handleCloseModal} />
                 <Board drawPile={this.state.DrawPile}
@@ -91,6 +92,7 @@ class Game extends Component {
     }
 
     startGame() {
+        this.handleCloseModal();
         this.setState(GameApiService.getInitialState(), () => {
             if (this.state.currentPlayer === PlayerEnum.Bot) {
                 this.requestStateUpdate();
@@ -249,11 +251,11 @@ class Game extends Component {
     }
 
     handleGetGameHistory(getNext) {
-        debugger;
         GameApiService.getGameStateHistory(getNext)
             .then(response => {
                 this.setState({
                     ...response.body,
+                    isGameOver: true
                 });
             })
     }

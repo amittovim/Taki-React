@@ -240,15 +240,42 @@ class Game extends Component {
     requestStateUpdate() {
         GameApiService.requestGameStateUpdate()
             .then(response => {
-                this.setState({
-                    ...response.body,
-                    isLoading: false
-                }, this.processStateChanges);
+                // this.setState({
+                //     ...response.body,
+                //     isLoading: false
+                // }, this.processStateChanges);
+                this.processStateUpdateResponse(response.body);
             })
             .catch(error => {
                 console.error('Error', error);
             });
     }
+
+    processStateUpdateResponse(movesInArray) {
+        let newMoveState;
+        newMoveState = ((movesInArray.splice(0,1))[0]);
+        this.setState({
+            ...newMoveState,
+            isLoading: false
+        }, this.checkingForAdditionalMoves(movesInArray));
+    }
+
+    checkingForAdditionalMoves(movesInArray) {
+        movesInArray.length !== 0
+            ? this.computerThinkingSimulation(movesInArray)
+            : this.processStateChanges;
+    }
+    computerThinkingSimulation(movesInArray) {
+        this.setState( () => {
+            isLoading = true;
+        }, setTimeout(this.processStateUpdateResponse(movesInArray) ,1000) )
+    }
+
+
+    let updateInterval = setInterval(processRequestStateUpdate(body), 1000);
+    if (movesArray.length >1) {clearInterval(updateInterval)}
+
+
 
     handleGetGameHistory(getNext) {
         GameApiService.getGameStateHistory(getNext)

@@ -13,6 +13,7 @@ import Loader from "../shared/components/loader/loader.component";
 import Console from "./console/console.component";
 import Overlay from "../shared/components/overlay/overlay.component";
 import {getPlayerPile} from "../../logic/utils/game.utils";
+import {movesInArray} from "../../logic/state";
 
 class Game extends Component {
     render() {
@@ -222,14 +223,16 @@ class Game extends Component {
         GameApiService.requestMoveCard(this.state.selectedCard.id)
             .then(response => {
                 if (GameStatusEnum.GameStateChanged) {
-                    this.setState({
-                        ...response.body,
-                    }, this.processStateChanges);
+                    this.processStateUpdateResponse(response.body);
+                    // this.setState({
+                    //     ...response.body,
+                    // }, this.processStateChanges);
                 }
             });
     }
 
     processStateChanges() {
+        debugger;
         if (this.state.currentPlayer !== PlayerEnum.Human) {
             this.setState({
                 isLoading: true
@@ -253,7 +256,9 @@ class Game extends Component {
 
     processStateUpdateResponse(movesInArray) {
         let newMoveState;
-        newMoveState = ((movesInArray.splice(0,1))[0]);
+        debugger;
+        newMoveState = movesInArray.splice(0,1)[0];
+        debugger;
         this.setState({
             ...newMoveState,
             isLoading: false
@@ -261,24 +266,20 @@ class Game extends Component {
     }
 
     checkingForAdditionalMoves(movesInArray) {
+        debugger;
         movesInArray.length !== 0
             ? this.computerThinkingSimulation(movesInArray)
             : this.processStateChanges;
     }
     computerThinkingSimulation(movesInArray) {
-        this.setState( () => {
-            isLoading = true;
-        }, setTimeout(this.processStateUpdateResponse(movesInArray) ,1000) )
+        debugger;
+        this.setState( (prevState) => {
+            prevState.isLoading = true;
+        }, setTimeout(this.processStateUpdateResponse(movesInArray) ,10000) )
     }
 
-
-    let updateInterval = setInterval(processRequestStateUpdate(body), 1000);
-    if (movesArray.length >1) {clearInterval(updateInterval)}
-
-
-
     handleGetGameHistory(getNext) {
-        GameApiService.getGameStateHistory(getNext)
+       GameApiService.getGameStateHistory(getNext)
             .then(response => {
                 this.setState({
                     ...response.body,

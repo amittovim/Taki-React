@@ -1,4 +1,4 @@
-import {GameState} from "./state";
+import {GameState, movesInArray} from "./state";
 import {PlayerEnum} from "../app/enums/player.enum";
 import {CardActionEnum} from "../app/enums/card-action-enum";
 import {handleCardMove} from "./dealer/dealer";
@@ -11,6 +11,8 @@ import initPlayers from "./init/players.init";
 import {saveGameState} from "./history/state-history";
 import {getPlayerPile} from "./utils/game.utils";
 import {deepCopy} from "./utils/model.utils";
+
+//export const moves2BeSent = [];
 
 ///// Inner
 export function initGame() {
@@ -132,7 +134,6 @@ function playGameMove(cardId) {
 }
 
 function isGameOver() {
-    debugger;
     const currentPlayersPile = getPlayerPile(GameState.currentPlayer);
     if ((GameState.actionState === null) ||
         (GameState.actionState === CardActionEnum.Stop)) {
@@ -207,25 +208,24 @@ function processGameStep(stateChange) {
     if (GameState.actionState === CardActionEnum.Taki) {
         newGameStateInfo = GameUtils.handleInvokedTakiState(newGameStateInfo);
     }
+
+    // // Checking if game ended
+    GameState.isGameOver = isGameOver();
+
+
+    // store last move to be sent to frontend
     debugger;
-//    handleSwitchPlayers(newGameStateInfo);
-    const shouldSwitchPlayer=handleShouldSwitchPlayers();
-
-/*
-
-    debugger;
-    const shouldSwitchPlayer = handleShouldSwitchPlayers();
-
-*/
+    movesInArray.push(deepCopy(GameState));
 
     // Save current state in history
     saveGameState();
 
+    //    handleSwitchPlayers(newGameStateInfo);
+    const shouldSwitchPlayer=handleShouldSwitchPlayers();
+
+    //
     newGameStateInfo = GameUtils.handleDisablingActionState(newGameStateInfo);
 
-
-    // // Checking if game ended
-    GameState.isGameOver = isGameOver();
     //
     handleSwitchPlayer(shouldSwitchPlayer);
 
@@ -251,7 +251,6 @@ function handleShouldSwitchPlayers() {
         || ((GameState.twoPlusCounter !== 0) && (GameState.leadingCard.id !== GameState.selectedCard.id))
         || (((GameState.actionState === CardActionEnum.Taki) || (GameState.actionState === CardActionEnum.SuperTaki))
             && (GameUtils.doesPileHaveSameColorCards(currentPlayerPile)))) {
-        debugger;
         shouldSwitchPlayers = false;
     }
     return shouldSwitchPlayers;

@@ -1,8 +1,10 @@
-import {GameState} from "./state";
+import {GameState, movesInArray} from "./state";
 import {pickNextBotMove, playHumanMove} from "./main";
 import {GameStatusEnum} from "./game-status.enum";
+import {PlayerEnum} from "../app/enums/player.enum";
 import * as init from './main';
 import * as gameStateHistory from './history/state-history';
+import {deepCopy} from "./utils/model.utils";
 
 export function initGame() {
     init.initGame();
@@ -11,25 +13,32 @@ export function initGame() {
 
 export function requestCardMove(cardId) {
     const stateChange = playHumanMove(cardId);
-
+    debugger;
+    while (GameState.currentPlayer === PlayerEnum.Bot) {
+        pickNextBotMove();
+    }
+    movesInArray.push(deepCopy(GameState));
     return new Promise((resolve) => {
         resolve({
             header: GameStatusEnum.GameStateChanged,
-            body: stateChange
+            body: movesInArray
         });
     });
 }
 
 export function requestGameStateUpdate() {
-    pickNextBotMove();
+    while (GameState.currentPlayer === PlayerEnum.Bot) {
+        pickNextBotMove();
+    }
+    debugger;
+    movesInArray.push(deepCopy(GameState));
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({
                 header: GameStatusEnum.GameStateChanged,
-                body: GameState
+                body: movesInArray
             });
         }, 1000);
-
     });
 }
 

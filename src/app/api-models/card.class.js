@@ -1,7 +1,7 @@
 import {PileTypeEnum} from "../enums/pile-type.enum";
 
 export class CardModel {
-    constructor(id, color, number = null, action = null, isHidden = false, parentPileType = PileTypeEnum.DrawPile) {
+    constructor(id, color, number = null, action = null, isHidden = true, parentPileType = PileTypeEnum.DrawPile) {
         this.id = id;
         this.color = color;
         this.number = number;

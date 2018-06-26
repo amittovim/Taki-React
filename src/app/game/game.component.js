@@ -13,6 +13,7 @@ import Loader from "../shared/components/loader/loader.component";
 import Console from "./console/console.component";
 import Overlay from "../shared/components/overlay/overlay.component";
 import {getPlayerPile} from "../../logic/utils/game.utils";
+import {movesInArray} from "../../logic/state";
 
 class Game extends Component {
     render() {
@@ -221,15 +222,18 @@ class Game extends Component {
     requestMoveCard() {
         GameApiService.requestMoveCard(this.state.selectedCard.id)
             .then(response => {
+                debugger;
                 if (GameStatusEnum.GameStateChanged) {
-                    this.setState({
-                        ...response.body,
-                    }, this.processStateChanges);
+                    this.processStateUpdateResponse(response.body);
+                    // this.setState({
+                    //     ...response.body,
+                    // }, this.processStateChanges);
                 }
             });
     }
 
     processStateChanges() {
+        debugger;
         if (this.state.currentPlayer !== PlayerEnum.Human) {
             this.setState({
                 isLoading: true
@@ -240,18 +244,56 @@ class Game extends Component {
     requestStateUpdate() {
         GameApiService.requestGameStateUpdate()
             .then(response => {
-                this.setState({
-                    ...response.body,
-                    isLoading: false
-                }, this.processStateChanges);
+                // this.setState({
+                //     ...response.body,
+                //     isLoading: false
+                // }, this.processStateChanges);
+                this.processStateUpdateResponse(response.body);
             })
             .catch(error => {
                 console.error('Error', error);
             });
     }
 
+processStateUpdateResponse(movesInArray) {
+        let newMoveState;
+        debugger;
+        newMoveState = movesInArray.splice(0,1)[0];
+        debugger;
+        this.setState( prevState => {
+            return {
+                ...prevState,
+                ...newMoveState,
+                isLoading: false
+            }
+        },
+            () => {
+            movesInArray.length !== 0
+                ? this.computerThinkingSimulation(movesInArray)
+                : this.processStateChanges;
+        });
+    }
+
+    checkingForAdditionalMoves(movesInArray) {
+        debugger;
+        movesInArray.length !== 0
+            ? this.computerThinkingSimulation(movesInArray)
+            : this.processStateChanges;
+    }
+    computerThinkingSimulation(movesInArray) {
+        debugger;
+        this.setState(( (prevState) => {
+            return {
+                ...prevState,
+                isLoading : true,
+            }
+        }), console.log(setTimeout( () => {
+            this.processStateUpdateResponse(movesInArray)
+        },5000)));
+    }
+
     handleGetGameHistory(getNext) {
-        GameApiService.getGameStateHistory(getNext)
+       GameApiService.getGameStateHistory(getNext)
             .then(response => {
                 this.setState({
                     ...response.body,

@@ -6,6 +6,7 @@ import * as utils from '../utils/model.utils';
 import {GameState} from "../state";
 import PileModel from "../../app/api-models/pile.class";
 import {CardModel} from "../../app/api-models/card.class";
+import {VISIBLE_CARDS} from "../consts";
 
 // == Create Draw Pile ==
 
@@ -27,7 +28,10 @@ function createNumberCards() {
     for (const number in CardNumberEnum) {
         for (let i = 1; i <= 2; i++) {
             for (let color in CardColorEnum) {
-                const card = new CardModel(cardId++, CardColorEnum[color], CardNumberEnum[number]);
+                let card = new CardModel(cardId++, CardColorEnum[color], CardNumberEnum[number]);
+                if (VISIBLE_CARDS ) {
+                    card.isHidden = false;
+                }
                 GameState.DrawPile.cards.push(card);
             }
         }
@@ -40,16 +44,30 @@ function createActionCards() {
             (CardActionEnum[action] !== CardActionEnum.SuperTaki)) {
             for (let i = 1; i <= 2; i++) {
                 for (let color in CardColorEnum) {
-                    GameState.DrawPile.cards.push(new CardModel(cardId++, CardColorEnum[color], null, CardActionEnum[action]));
+                    if (!VISIBLE_CARDS ) {
+                        GameState.DrawPile.cards.push(new CardModel(cardId++, CardColorEnum[color], null, CardActionEnum[action]));
+                    } else{
+                        GameState.DrawPile.cards.push(new CardModel(cardId++, CardColorEnum[color], null, CardActionEnum[action], false));
+                    }
+
+
                 }
             }
         } else if (CardActionEnum[action] === CardActionEnum.ChangeColor) {
             for (let j = 1; j <= 4; j++) {
-                GameState.DrawPile.cards.push(new CardModel(cardId++, null, null, CardActionEnum.ChangeColor));
+                if (!VISIBLE_CARDS ) {
+                    GameState.DrawPile.cards.push(new CardModel(cardId++, null, null, CardActionEnum.ChangeColor));
+                } else{
+                    GameState.DrawPile.cards.push(new CardModel(cardId++, null, null, CardActionEnum.ChangeColor, false));
+                }
             }
         } else if (CardActionEnum[action] === CardActionEnum.SuperTaki) {
             for (let i = 1; i <= 2; i++) {
-                GameState.DrawPile.cards.push(new CardModel(cardId++, null, null, CardActionEnum.SuperTaki));
+                if (!VISIBLE_CARDS ) {
+                    GameState.DrawPile.cards.push(new CardModel(cardId++, null, null, CardActionEnum.SuperTaki));
+                } else{
+                    GameState.DrawPile.cards.push(new CardModel(cardId++, null, null, CardActionEnum.SuperTaki, false));
+                }
             }
         }
     }

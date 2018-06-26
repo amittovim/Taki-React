@@ -28,3 +28,5 @@ let validator = {
 };
 
 export const GameState = new Proxy(innerGameState, validator);
+
+export const movesInArray = [];

@@ -254,15 +254,23 @@ class Game extends Component {
             });
     }
 
-    processStateUpdateResponse(movesInArray) {
+processStateUpdateResponse(movesInArray) {
         let newMoveState;
         debugger;
         newMoveState = movesInArray.splice(0,1)[0];
         debugger;
-        this.setState({
-            ...newMoveState,
-            isLoading: false
-        }, this.checkingForAdditionalMoves(movesInArray));
+        this.setState( prevState => {
+            return {
+                ...prevState,
+                ...newMoveState,
+                isLoading: false
+            }
+        },
+            () => {
+            movesInArray.length !== 0
+                ? this.computerThinkingSimulation(movesInArray)
+                : this.processStateChanges;
+        });
     }
 
     checkingForAdditionalMoves(movesInArray) {
@@ -273,9 +281,14 @@ class Game extends Component {
     }
     computerThinkingSimulation(movesInArray) {
         debugger;
-        this.setState( (prevState) => {
-            prevState.isLoading = true;
-        }, setTimeout(this.processStateUpdateResponse(movesInArray) ,10000) )
+        this.setState(( (prevState) => {
+            return {
+                ...prevState,
+                isLoading : true,
+            }
+        }), console.log(setTimeout( () => {
+            this.processStateUpdateResponse(movesInArray)
+        },5000)));
     }
 
     handleGetGameHistory(getNext) {

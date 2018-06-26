@@ -47,6 +47,7 @@ class Timer extends Component {
     }
 
     componentWillReceiveProps() {
+        debugger;
         if (!this.props.isGameClock) {
             this.startClock();
         }

@@ -5,6 +5,7 @@ import {CardActionEnum} from "../../app/enums/card-action-enum";
 import * as dealer from "../dealer/dealer";
 import {CardColorEnum} from "../../app/enums/card-color.enum";
 import {GameStatusEnum} from "../game-status.enum";
+import {PlayerEnum} from "../../app/enums/player.enum";
 
 export function pullTopOfPile(pile) {
     return utils.pullItemFromEndOfArray(pile.cards);
@@ -96,7 +97,38 @@ function incrementSingleCardCounter(newGameStateInfo) {
     return newGameStateInfo;
 }
 
-export function handleInvokedTwoPlusState(newGameStateInfo) {
+export function handleAllActionInvokedCases(newGameStateInfo){
+    const currentPlayerType = GameState.currentPlayer;
+
+    // if TWOPLUS card was invoked in the current play-move, increment twoPlusCounter by 2
+    if (GameState.actionState === CardActionEnum.TwoPlus &&
+        GameState.leadingCard === GameState.selectedCard &&                  // means that player PUT card on discardPile
+        GameState.selectedCard.action === CardActionEnum.TwoPlus) {   // and didn't GET card from Drawpile
+        newGameStateInfo = handleInvokedTwoPlusState(newGameStateInfo);
+    }
+
+    // if CHANGE COLOR card was invoked and the current player is BOT, pick a random color for it
+    else if (GameState.actionState === CardActionEnum.ChangeColor && currentPlayerType === PlayerEnum.Bot) {
+        newGameStateInfo = handleInvokedCCStateByBot(newGameStateInfo);
+    }
+
+    // if STOP card was invoked switch player twice or none at all and increment turnCounter by 1
+    else if ((GameState.leadingCard.action === CardActionEnum.Stop) && (GameState.actionState === CardActionEnum.Stop)) {
+        newGameStateInfo = handleInvokedStopState(newGameStateInfo);
+    }
+    // if SuperTaki was invoked change its color to the same color
+    // of the card before it and invoke Taki .
+    else if (GameState.actionState === CardActionEnum.SuperTaki) {
+        newGameStateInfo = handleInvokedSuperTakiState(newGameStateInfo);
+    }
+    // Taki card was invoked
+    if (GameState.actionState === CardActionEnum.Taki) {
+        newGameStateInfo = handleInvokedTakiState(newGameStateInfo);
+    }
+    return newGameStateInfo;
+}
+
+function handleInvokedTwoPlusState(newGameStateInfo) {
     GameState.twoPlusCounter += 2;
     newGameStateInfo = {
         ...newGameStateInfo,
@@ -117,7 +149,7 @@ export function handleExistingTwoPlusState(newGameStateInfo) {
     return newGameStateInfo;
 }
 
-export function handleInvokedCCStateByBot(newGameStateInfo) {
+function handleInvokedCCStateByBot(newGameStateInfo) {
     if (GameState.leadingCard.id === GameState.selectedCard.id) {
         GameState.leadingCard.color = pickRandomColor();
     }
@@ -128,7 +160,7 @@ export function handleInvokedCCStateByBot(newGameStateInfo) {
     return newGameStateInfo;
 }
 
-export function handleInvokedStopState(newGameStateInfo) {
+function handleInvokedStopState(newGameStateInfo) {
     incrementGameTurnNumber();
 
     newGameStateInfo = {
@@ -138,7 +170,7 @@ export function handleInvokedStopState(newGameStateInfo) {
     return newGameStateInfo;
 }
 
-export function handleInvokedSuperTakiState(newGameStateInfo) {
+function handleInvokedSuperTakiState(newGameStateInfo) {
     GameState.leadingCard.color = GameState.DiscardPile.getSecondCardFromTop().color;
     GameState.actionState = CardActionEnum.Taki;
 
@@ -151,7 +183,7 @@ export function handleInvokedSuperTakiState(newGameStateInfo) {
     return newGameStateInfo;
 }
 
-export function handleInvokedTakiState(newGameStateInfo) {
+function handleInvokedTakiState(newGameStateInfo) {
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
 
     if (!doesPileHaveSameColorCards(currentPlayerPile)) {

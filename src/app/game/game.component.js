@@ -221,15 +221,17 @@ class Game extends Component {
     requestMoveCard() {
         GameApiService.requestMoveCard(this.state.selectedCard.id)
             .then(response => {
+                debugger;
                 if (GameStatusEnum.GameStateChanged) {
                     this.setState({
                         ...response.body,
-                    }, this.processStateChanges);
+                    }, console.log(setTimeout(this.processStateChanges,1000)));
                 }
             });
     }
 
     processStateChanges() {
+        debugger;
         if (this.state.currentPlayer !== PlayerEnum.Human) {
             this.setState({
                 isLoading: true

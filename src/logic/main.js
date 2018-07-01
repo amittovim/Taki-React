@@ -17,12 +17,12 @@ export function initGame() {
     clearGameState();
     GameState.gameStatus = GameStatusEnum.GameInit;
     initPlayers();
+    initGameState();
     initDrawPile();
     initDiscardPile();
     dealer.dealCards();
     saveGameState();
     GameState.gameStatus = GameStatusEnum.GameStateChanged;
-
     return GameState;
 }
 
@@ -30,6 +30,14 @@ export function clearGameState() {
     for (let key in GameState) {
         GameState[key] = null;
     }
+}
+
+function initGameState() {
+    GameState.movesCounter = 0;
+    GameState.turnNumber =0;
+    GameState.twoPlusCounter = 0;
+    GameState.consoleMessage = '';
+    GameState.isGameOver=false;
 }
 
 // Bot Player algorithm to choose next move
@@ -101,7 +109,7 @@ export function pickNextBotMove() {
             selectedCard = GameState.DrawPile.getTop();
         }
     }
-    playGameMove(selectedCard.id);
+    return (selectedCard.id);
 }
 
 export function playHumanMove(cardId) {
@@ -109,7 +117,7 @@ export function playHumanMove(cardId) {
     return playGameMove(cardId);
 }
 
-function playGameMove(cardId) {
+export function playGameMove(cardId) {
     GameState.selectedCard = getCardById(cardId);
 
     // Moving the card
@@ -119,19 +127,15 @@ function playGameMove(cardId) {
     if (GameState.gameStatus === GameStatusEnum.GameStateChanged) {
         stateChange = processGameStep(stateChange);
     }
-
-    // Checking if game ended
-    GameState.isGameOver = isGameOver();
-
-    // Save current state in history
-    saveGameState();
-
     return stateChange;
 }
 
 function isGameOver() {
     const currentPlayersPile = getPlayerPile(GameState.currentPlayer);
-    return currentPlayersPile.cards.length === 0;
+    if ((GameState.actionState === null) ||
+        (GameState.actionState === CardActionEnum.Stop)) {
+        return currentPlayersPile.cards.length === 0;
+    }
 }
 
 function getCardById(cardId) {
@@ -146,14 +150,11 @@ export function switchPlayers() {
     GameState.currentPlayer = GameState.currentPlayer === PlayerEnum.Bot ? PlayerEnum.Human : PlayerEnum.Bot;
 }
 
-//this function should run after every card movement we make
 function processGameStep(stateChange) {
-    let currentPlayerType = GameState.currentPlayer;
     let newGameStateInfo = {};
 
     // if drawPile is empty restock it with cards from discardPile
     if (GameState.DrawPile.isPileEmpty) {
-
         newGameStateInfo = GameUtils.handleDrawpileRestocking(newGameStateInfo);
     }
 
@@ -165,47 +166,53 @@ function processGameStep(stateChange) {
         (GameState.leadingCard === GameState.selectedCard)) {
         newGameStateInfo = GameUtils.handleActivatingActionState(newGameStateInfo);
     }
-    // if TWOPLUS card was invoked in the current play-move, increment twoPlusCounter by 2
-    if (GameState.actionState === CardActionEnum.TwoPlus &&
-        GameState.leadingCard === GameState.selectedCard &&                  // means that player PUT card on discardPile
-        GameState.selectedCard.action === CardActionEnum.TwoPlus) {   // and didn't GET card from Drawpile
-        newGameStateInfo = GameUtils.handleInvokedTwoPlusState(newGameStateInfo);
-    }
 
-    // if CHANGE COLOR card was invoked and the current player is BOT, pick a random color for it
-    else if (GameState.actionState === CardActionEnum.ChangeColor && currentPlayerType === PlayerEnum.Bot) {
-        newGameStateInfo = GameUtils.handleInvokedCCStateByBot(newGameStateInfo);
-    }
+    // in case some action state was invoked , act accordingly
+    newGameStateInfo = GameUtils.handleAllActionInvokedCases(newGameStateInfo);
 
-    // if STOP card was invoked switch player twice or none at all and increment turnCounter by 1
-    else if ((GameState.leadingCard.action === CardActionEnum.Stop) && (GameState.actionState === CardActionEnum.Stop)) {
-        newGameStateInfo = GameUtils.handleInvokedStopState(newGameStateInfo);
-    }
-    // if SuperTaki was invoked change its color to the same color
-    // of the card before it and invoke Taki .
-    else if (GameState.actionState === CardActionEnum.SuperTaki) {
-        newGameStateInfo = GameUtils.handleInvokedSuperTakiState(newGameStateInfo);
-    }
-    // Taki card was invoked
-    if (GameState.actionState === CardActionEnum.Taki) {
-        newGameStateInfo = GameUtils.handleInvokedTakiState(newGameStateInfo);
-    }
+    // // Checking if game ended
+    GameState.isGameOver = isGameOver();
 
-    handleSwitchPlayers(newGameStateInfo);
 
+    // store last move to be sent to frontend
+    // todo: decide which is the best option to transfer this state to the frontEnd. here or after changing the next player
+    // i beleive there should be two parts to send here show this information prt one with just a player movement and second
+    // with the next turn player state
+    // option 1:
+    // movesInArray.push(deepCopy(GameState));
+    // option 2:
+    stateChange = deepCopy(GameState);
+
+    // Save current state in history
+    saveGameState();
+
+    //    handleSwitchPlayers(newGameStateInfo);
+    const shouldSwitchPlayer=handleShouldSwitchPlayers();
+
+    //
     newGameStateInfo = GameUtils.handleDisablingActionState(newGameStateInfo);
 
+    //+++++++++++++++   Import : This is the point where one game move has ended +++++++++++++++++++++++++++
+    //in charge of switching turns
+    handleSwitchPlayer(shouldSwitchPlayer);
+
+    //+++++++++++++++   Import : here we are either in a new game turn or in a new game move +++++++++++++++++++++++++++
+
+    // // TODO : delete this line
+    console.log(deepCopy(GameState));
 
     return {
         ...stateChange,
-        ...newGameStateInfo,
-        leadingCard: GameState.leadingCard,
-        currentPlayer: GameState.currentPlayer
+//        ...newGameStateInfo,
+//        leadingCard: GameState.leadingCard,
+//        isGameOver: GameState.isGameOver,
+        currentPlayer: GameState.currentPlayer,
+        actionState  : GameState.actionState,
+        turnNumber   : GameState.turnNumber
     };
 }
 
-
-function handleSwitchPlayers() {
+function handleShouldSwitchPlayers() {
     let shouldSwitchPlayers = true;
     let currentPlayerPile = getPlayerPile(GameState.currentPlayer);
 
@@ -217,8 +224,11 @@ function handleSwitchPlayers() {
             && (GameUtils.doesPileHaveSameColorCards(currentPlayerPile)))) {
         shouldSwitchPlayers = false;
     }
+    return shouldSwitchPlayers;
+}
 
-    if (shouldSwitchPlayers) {
+function handleSwitchPlayer(shouldSwitchPlayer) {
+    if (shouldSwitchPlayer) {
         switchPlayers();
         GameUtils.incrementGameTurnNumber();
     }

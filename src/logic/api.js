@@ -1,5 +1,5 @@
 import {GameState} from "./state";
-import {pickNextBotMove, playHumanMove} from "./main";
+import {pickNextBotMove, playGameMove, playHumanMove} from "./main";
 import {GameStatusEnum} from "./game-status.enum";
 import * as init from './main';
 import * as gameStateHistory from './history/state-history';
@@ -21,7 +21,7 @@ export function requestCardMove(cardId) {
 }
 
 export function requestGameStateUpdate() {
-    pickNextBotMove();
+    playGameMove(pickNextBotMove());
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({

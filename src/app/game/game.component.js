@@ -225,7 +225,7 @@ class Game extends Component {
                 if (GameStatusEnum.GameStateChanged) {
                     this.setState({
                         ...response.body,
-                    }, console.log(setTimeout(this.processStateChanges,1000)));
+                    }, () => {this.interval = setTimeout(this.processStateChanges,1000)});
                 }
             });
     }

@@ -19,10 +19,12 @@ class Deck extends Component {
             <div className="deck-component">
                 <DiscardPile name="discardPile"
                              discardPile={this.props.discardPile}
+                             shift={{left: 2, top: 16/16}}
                              moveCardDriver1={this.moveCardDriver1}
                 />
                 <DrawPile name="drawPile"
                           drawPile={this.props.drawPile}
+                          shift={{left: 1.25, top: 0.25}}
                           moveCardDriver1={this.moveCardDriver1}
                 />
             </div>

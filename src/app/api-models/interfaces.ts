@@ -1,5 +1,15 @@
 // These are just for documentation and are not used as part of the logic
 
+interface User {
+    name: string;
+
+}
+
+interface Game {
+    name: string;
+
+}
+
 interface Player {
     playerType: PlayerEnum;
     pile: Pile;

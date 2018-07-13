@@ -15,13 +15,11 @@ userManagement.use(function log (req, res, next) {
 
 // define the home page route
 userManagement.get('/', auth.userAuthentication, (req, res) => {
-    debugger;
     const userName = auth.getUserInfo(req.session.id).name;
     res.json({name:userName});
 });
 
 userManagement.get('/allUsers', auth.userAuthentication, (req, res) => {
-    debugger;
     const usersList = _.cloneDeep(auth.usersList);
 
     res.json(usersList);
@@ -34,20 +32,17 @@ userManagement.get('/allUsers', auth.userAuthentication, (req, res) => {
 });
 
 userManagement.post('/addUser', auth.addUserToAuthList, (req, res) => {
-    debugger;
     res.sendStatus(200);
 });
 
 userManagement.get('/logout', [
     (req, res, next) => {
-        debugger;
         const userinfo = auth.getUserInfo(req.session.id);
         lobbyManagement.appendUserLogoutMessage(userinfo);
         next();
     },
     auth.removeUserFromAuthList,
     (req, res) => {
-    debugger;
         res.sendStatus(200);
     }]
 );

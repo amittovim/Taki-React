@@ -44,7 +44,6 @@ export default class LoginModal extends Component {
     }
 
     handleLogin(e) {
-        debugger;
         e.preventDefault();
         const userName = e.target.elements.userName.value;
         fetch('/users/addUser', {method:'POST', body: userName, credentials: 'include'})

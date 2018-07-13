@@ -1,7 +1,6 @@
 const usersList= {};
 
 function userAuthentication(req, res, next) {
-    debugger;
     if (usersList[req.session.id] === undefined) {
         res.sendStatus(401);
     } else {
@@ -10,12 +9,10 @@ function userAuthentication(req, res, next) {
 }
 
 function addUserToAuthList(req, res, next) {
-    debugger;
     if (usersList[req.session.id] !== undefined) {
         res.status(403).send('user already exist');
     } else {
 /*        for (sessionid in userList) {
-            debugger;
             console.log('test1');
             const name = usersList[sessionid];
             if (name === req.body) {
@@ -29,7 +26,6 @@ function addUserToAuthList(req, res, next) {
 }
 
 function removeUserFromAuthList(req, res, next) {
-    debugger;
     if (usersList[req.session.id] === undefined) {
         res.status(403).send('user does not exist');
     } else {
@@ -39,7 +35,6 @@ function removeUserFromAuthList(req, res, next) {
 }
 
 function getUserInfo(id)  {
-    debugger;
     return {name: usersList[id]};
 }
 module.exports = {userAuthentication, addUserToAuthList, removeUserFromAuthList, getUserInfo, usersList}

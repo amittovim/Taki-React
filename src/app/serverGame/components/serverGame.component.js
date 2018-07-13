@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import ModalFrame from "../../shared/components/modal/modal.component";
 import Button from "../../shared/components/button/button.component";
-import LoginModal from './loginModal'
+import LoginModal from './login-modal.component';
+import ChatContainer from './chat-container.component';
 
 export default class ServerGame extends Component {
 
@@ -49,7 +50,7 @@ export default class ServerGame extends Component {
                     Hello {this.state.currentUser.name}
                     <Button className="logout btn" label={'Logout'} onClick={this.handleLogout} isDisabled={false} />
                 </div>
-                <ChatContainer />
+                <ChatContainer/>
             </div>
         )
     }
@@ -84,6 +85,7 @@ export default class ServerGame extends Component {
                 if (!response.ok) {
                     console.log(`'Failed to logout user ${this.state.currentUser.name} `, response)
                 }
+                this.setState(()=>({currentUser: {name:''}, showLogin: true}));
             })
     }
 

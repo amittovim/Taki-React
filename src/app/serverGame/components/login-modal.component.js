@@ -1,21 +1,12 @@
 import React, {Component} from 'react';
 import takiImage from '../../../assets/images/super-taki.jpg';
-
+import './login-modal.component.css';
 // <PROPS>
 // loginSuccessHandler: function
 // loginErrorHandler  : function
 //
 
 export default class LoginModal extends Component {
-    constructor(props) {
-        super(props);
-        this.state ={
-            errMessage: ''
-        }
-
-        this.handleLogin = this.handleLogin.bind(this);
-    }
-
     render() {
         return (
             <div className="login-modal-component">
@@ -31,6 +22,16 @@ export default class LoginModal extends Component {
         );
     }
 
+    constructor(props) {
+        super(props);
+        this.state ={
+            errMessage: ''
+        }
+
+        this.handleLogin = this.handleLogin.bind(this);
+    }
+
+
     renderErrorMessage() {
         if (this.state.errMessage) {
             return (
@@ -43,6 +44,7 @@ export default class LoginModal extends Component {
     }
 
     handleLogin(e) {
+        debugger;
         e.preventDefault();
         const userName = e.target.elements.userName.value;
         fetch('/users/addUser', {method:'POST', body: userName, credentials: 'include'})

@@ -1,0 +1,35 @@
+.login-modal-component {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-modal-component .taki-logo {
+    width: 250px;
+    margin: 16px 0;
+}
+
+.login-modal-component .username-label {
+    margin: 0 5px;
+    font-size: 18px;
+}
+
+.login-modal-component .username-input {
+    font-size: 16px;
+    line-height: 16px;
+    margin: 1px;
+    border: 1px solid #ccc;
+}
+
+.login-modal-component .submit-btn:hover {
+    background-color: #cadcff;
+    border-color: #cadcff;
+}
+
+.login-modal-component .login-error-message {
+    color: red;
+    font-weight: 600;
+}

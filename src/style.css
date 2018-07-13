@@ -1,2 +1,32 @@
 @import 'styles/base.css';
 @import "styles/colors.css";
+
+.btn {
+    font-size: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
+    cursor: pointer;
+    border-style: solid;
+    background-color: #d0f3e8;
+    border-color: #d0f3e8;
+    margin: 0 3px;
+}
+
+.lobby-room-component{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 500px;
+}
+
+.lobby-room-component .user-info-area {
+    margin: 8px;
+    font-size: 16px;
+}
+
+

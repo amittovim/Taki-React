@@ -1,20 +1,60 @@
 const express = require('express');
-const router = express.Router();
+const userManagement = express.Router();
+const auth =require('./authentication');
+const lobbyManagement = require('./lobby');
+const _ = require('lodash');
+
+
 
 // middleware that is specific to this router
-router.use(function log (req, res, next) {
+userManagement.use(function log (req, res, next) {
     console.log(`log: ${req.originalUrl}`);
     next()
 });
 
+
 // define the home page route
-router.get('/', function (req, res) {
-    res.send('Users Main page');
+userManagement.get('/', auth.userAuthentication, (req, res) => {
+    debugger;
+    const userName = auth.getUserInfo(req.session.id).name;
+    res.json({name:userName});
 });
 
+userManagement.get('/allUsers', auth.userAuthentication, (req, res) => {
+    debugger;
+    const usersList = _.cloneDeep(auth.usersList);
+
+    res.json(usersList);
+    /*
+        // TODO: somewhere show the list of users currently online like this :
+        _.map(auth.usersList, user => {
+            return (<li>{user.name}</li>);
+        });
+    */
+});
+
+userManagement.post('/addUser', auth.addUserToAuthList, (req, res) => {
+    debugger;
+    res.sendStatus(200);
+});
+
+userManagement.get('/logout', [
+    (req, res, next) => {
+        debugger;
+        const userinfo = auth.getUserInfo(req.session.id);
+        lobbyManagement.appendUserLogoutMessage(userinfo);
+        next();
+    },
+    auth.removeUserFromAuthList,
+    (req, res) => {
+    debugger;
+        res.sendStatus(200);
+    }]
+);
+
 // define the about route
-router.get('/about', function (req, res) {
+userManagement.get('/about', function (req, res) {
     res.send('About users');
 });
 
-module.exports = router;
+module.exports = userManagement;

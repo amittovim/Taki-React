@@ -5,7 +5,7 @@ const session = require('express-session');
 
 //router files
 const userManagement = require('./server/users');
-const lobbyManagement = require('./server/lobby');
+const lobbyManagement= require('./server/lobby');
 const gameManagement = require('./server/game');
 
 const app = express();
@@ -14,9 +14,7 @@ const app = express();
 app.use(session({secret: `Who's The Man Now... Mother $ucker!`, cookie: {maxAge:269999999999}}));
 
 //bodyParser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-// OTHER option is instead these 2 lines it could be : app.use(bodyParser.text());
+app.use(bodyParser.text());
 
 // static
 app.use(express.static(path.resolve(__dirname, "..", "public")));

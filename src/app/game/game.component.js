@@ -13,6 +13,7 @@ import Loader from "../shared/components/loader/loader.component";
 import Console from "./console/console.component";
 import Overlay from "../shared/components/overlay/overlay.component";
 import {getPlayerPile} from "../../logic/utils/game.utils";
+import * as ReactDom from "react-dom";
 
 class Game extends Component {
     render() {
@@ -35,9 +36,11 @@ class Game extends Component {
                        data={this.getStats()}
                        closeModal={this.handleCloseModal} />
                 <Board drawPile={this.state.DrawPile}
+                       ref={"board"}
                        discardPile={this.state.DiscardPile}
                        humanPile={this.state.HumanPile}
                        botPile={this.state.BotPile}
+                       discardPileCoordinates={ this.discardPileCoordinates}
                        moveCardDriver={this.humanMoveCardHandler} // TODO: replace to context
                 />
                 <Console message={this.state.consoleMessage} />
@@ -89,6 +92,20 @@ class Game extends Component {
 
     componentWillMount() {
         this.startGame();
+    }
+
+    componentWillUpdate() {
+/*
+        debugger;
+        const cardDOM = ReactDom.findDOMNode(this.refs.board).getBoundingClientRect();
+        const cardDOM1 = this.refs.myCard;
+        let oldX = cardDOM.x;
+        let oldY = cardDOM.y;
+        console.log('('+oldX+','+oldY+')');
+        debugger;
+        let discardPileCoordinates = { x:oldX,y:oldY};
+        this.discardPileCoordinates = discardPileCoordinates;
+*/
     }
 
     startGame() {

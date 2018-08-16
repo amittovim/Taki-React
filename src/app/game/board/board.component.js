@@ -18,15 +18,18 @@ class Board extends Component {
                 <Hand owner={PlayerEnum.Bot}
                       pile={this.props.botPile}
                       moveCardDriver1={this.moveCardDriver_1}
+                      discardPileCoordinates={ this.props.discardPileCoordinates}
                 />
                 <Deck drawPile={this.props.drawPile}
                       discardPile={this.props.discardPile}
                       moveCardDriver0={this.moveCardDriver_1}
+                      ref={"deck"}
 
                 />
                 <Hand owner={PlayerEnum.Human}
                       pile={this.props.humanPile}
                       moveCardDriver1={this.moveCardDriver_1}
+                      discardPileCoordinates={ this.props.discardPileCoordinates}
                 />
             </div>
         );

@@ -17,6 +17,7 @@ class Hand extends Component {
                         return (<Card key={card.id}
                                       card={card}
                                       hoverEnabled={this.props.owner === PlayerEnum.Human}
+                                      discardPileCoordinates={ this.props.discardPileCoordinates}
                                       moveCardDriver2={this.moveCardDriver2}
                         />)
                     })

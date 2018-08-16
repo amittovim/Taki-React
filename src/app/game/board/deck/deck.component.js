@@ -17,7 +17,8 @@ class Deck extends Component {
     render() {
         return (
             <div className="deck-component">
-                <DiscardPile name="discardPile"
+                <DiscardPile ref="discardPile"
+                             name="discardPile"
                              discardPile={this.props.discardPile}
                              shift={{left: 2, top: 16/16}}
                              moveCardDriver1={this.moveCardDriver1}

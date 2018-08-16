@@ -14,14 +14,14 @@ class Card extends Component {
 
     render() {
         return (
-            <div className={`card-component${this.props.hoverEnabled ? ' hover-enabled' : ''}`}
+            <div ref="myCard" className={`card-component${this.props.hoverEnabled ? ' hover-enabled' : ''}`}
                  id={`card-${this.props.card.id}`}
                  onClick={this.handleClick}
                  style = {
                      {
 
                          transform: `translate(${this.state.currentPositionX}px, ${this.state.currentPositionY}px)`,
-                         transition: 'all 2s ease-in-out',
+                         transition: 'all 0.3s ease-in-out',
                          left: 0,
                          opacity: this.state.opacity
                      }
@@ -92,13 +92,24 @@ class Card extends Component {
         debugger;
         let self = this;
         const cardDOM = ReactDom.findDOMNode(this);
+        const cardDOMM = ReactDom.findDOMNode(this).parentNode;
+        const cardDOMMM = ReactDom.findDOMNode(this).parentNode.parentNode;
+        const cardDOMMMM = ReactDom.findDOMNode(this).parentNode.parentNode.firstChild;
+        const cardDOMMMMM = ReactDom.findDOMNode(this).parentNode.parentNode.childNodes[1];
+        const cardDOMMMMMM = ReactDom.findDOMNode(this).parentNode.parentNode.childNodes[1].firstChild.lastChild;
+        const cardDOMMMMMM1 = ReactDom.findDOMNode(this).parentNode.parentNode.childNodes[1].firstChild.lastChild.getBoundingClientRect();
+        const cardDOM1 = ReactDom.findDOMNode(this.refs.myCard);
+        const cardDOM2 = ReactDom.findDOMNode(this).getBoundingClientRect();
+        debugger;
         let oldX = cardDOM.offsetLeft;
         let oldY = cardDOM.offsetTop;
+        let newX = cardDOMMMMMM.offsetLeft;
+        let newY = cardDOMMMMMM.offsetTop;
         console.log('('+oldX+','+oldY+')');
         debugger;
         this.setState({
-            currentPositionX: (this.state.currentPositionX -oldX),
-            currentPositionY: (this.state.currentPositionY -oldY)
+            currentPositionX: (this.state.currentPositionX -oldX +newX),
+            currentPositionY: (this.state.currentPositionY -oldY +newY)
         }, () => setTimeout( () => {
                                     console.log('('+this.state.currentPositionX+','+this.state.currentPositionY+')');
                                     debugger;

@@ -14,10 +14,10 @@ class Card extends Component {
 
     render() {
         return (
-            <div ref="myCard" className={`card-component${this.props.hoverEnabled ? ' hover-enabled' : ''}`}
+            <div className={`card-component${this.props.hoverEnabled ? ' hover-enabled' : ''}`}
                  id={`card-${this.props.card.id}`}
                  onClick={this.handleClick}
-                 style = {
+                 style={
                      {
 
                          transform: `translate(${this.state.currentPositionX}px, ${this.state.currentPositionY}px)`,
@@ -29,7 +29,7 @@ class Card extends Component {
             >
                 <img className={`${this.props.card.isHidden ? 'back-card-img' : 'front-card-img'}`}
                      src={this.imageSrc}
-                     alt={this.display} />
+                     alt={this.display}/>
             </div>
         );
     }
@@ -41,6 +41,7 @@ class Card extends Component {
             currentPositionY: 0,
             opacity: 0
         }
+        this.flag=false;
         this.handleClick = this.handleClick.bind(this);
 
     }
@@ -60,13 +61,24 @@ class Card extends Component {
         }), 1000);
 
     }
+
     componentWillReceiveProps(nextProps) {
-        debugger;
+        //debugger;
     }
 
+    componentDidUpdate() {
+/*
+        debugger;
+        if (this.flag) {
+        }
+*/
+
+    }
     componentWillUnmount() {
         debugger;
+
     }
+
     get display() {
         return this.props.card.action ? this.props.card.action : this.props.card.number;
     };
@@ -89,14 +101,14 @@ class Card extends Component {
     }
 
     handleClick() {
-        debugger;
-        let self = this;
+    let self = this;
         const cardDOM = ReactDom.findDOMNode(this);
+        const cardDOMMMMMM = ReactDom.findDOMNode(this).parentNode.parentNode.childNodes[1].firstChild.lastChild;
+
         const cardDOMM = ReactDom.findDOMNode(this).parentNode;
         const cardDOMMM = ReactDom.findDOMNode(this).parentNode.parentNode;
         const cardDOMMMM = ReactDom.findDOMNode(this).parentNode.parentNode.firstChild;
         const cardDOMMMMM = ReactDom.findDOMNode(this).parentNode.parentNode.childNodes[1];
-        const cardDOMMMMMM = ReactDom.findDOMNode(this).parentNode.parentNode.childNodes[1].firstChild.lastChild;
         const cardDOMMMMMM1 = ReactDom.findDOMNode(this).parentNode.parentNode.childNodes[1].firstChild.lastChild.getBoundingClientRect();
         const cardDOM1 = ReactDom.findDOMNode(this.refs.myCard);
         const cardDOM2 = ReactDom.findDOMNode(this).getBoundingClientRect();
@@ -105,16 +117,18 @@ class Card extends Component {
         let oldY = cardDOM.offsetTop;
         let newX = cardDOMMMMMM.offsetLeft;
         let newY = cardDOMMMMMM.offsetTop;
-        console.log('('+oldX+','+oldY+')');
-        debugger;
+        console.log('(' + oldX + ',' + oldY + ')');
         this.setState({
-            currentPositionX: (this.state.currentPositionX -oldX +newX),
-            currentPositionY: (this.state.currentPositionY -oldY +newY)
-        }, () => setTimeout( () => {
-                                    console.log('('+this.state.currentPositionX+','+this.state.currentPositionY+')');
-                                    debugger;
-                                    this.props.moveCardDriver2(this.props.card);
-                                    } , 1000) );
+            currentPositionX: (this.state.currentPositionX - oldX + newX),
+            currentPositionY: (this.state.currentPositionY - oldY + newY)
+        });
+
+//        this.flag=true;
+        setTimeout(() => {
+            console.log('(' + this.state.currentPositionX + ',' + this.state.currentPositionY + ')');
+            debugger;
+            this.props.moveCardDriver2(this.props.card);
+        }, 1000);
         // ;
     };
 }

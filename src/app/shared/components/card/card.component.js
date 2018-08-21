@@ -104,7 +104,7 @@ class Card extends Component {
     let self = this;
         const cardDOM = ReactDom.findDOMNode(this);
         const cardDOMMMMMM = ReactDom.findDOMNode(this).parentNode.parentNode.childNodes[1].firstChild.lastChild;
-
+        const testDOM1 = ReactDom.findDOMNode(
         const cardDOMM = ReactDom.findDOMNode(this).parentNode;
         const cardDOMMM = ReactDom.findDOMNode(this).parentNode.parentNode;
         const cardDOMMMM = ReactDom.findDOMNode(this).parentNode.parentNode.firstChild;
